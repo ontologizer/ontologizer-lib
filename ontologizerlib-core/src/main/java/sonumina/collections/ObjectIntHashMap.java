@@ -1,5 +1,6 @@
 package sonumina.collections;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -9,9 +10,11 @@ import java.util.Arrays;
  *
  * @param <K> defines the type of the keys.
  */
-public class ObjectIntHashMap<K>
+public class ObjectIntHashMap<K> implements Serializable
 {
-   public static final int EMPTY_VALUE = 0;
+	private static final long serialVersionUID = 1L;
+
+	public static final int EMPTY_VALUE = 0;
 
    private static final int OCCUPIED_DATA_RATIO = 2;
    private static final int DEFAULT_INITIAL_CAPACITY = 8;

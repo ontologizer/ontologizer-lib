@@ -1,5 +1,6 @@
 package sonumina.math.graph;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,8 +13,10 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.Map.Entry;
 
-final class VertexAttributes<VertexType>
+final class VertexAttributes<VertexType> implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/** All edges where the vertex is appearing as dest */
 	public ArrayList<Edge<VertexType>> inEdges = new ArrayList<Edge<VertexType>>();
 
@@ -28,8 +31,10 @@ final class VertexAttributes<VertexType>
  * @author sebastiankohler
  *
  */
-public class DirectedGraph<VertexType> extends AbstractGraph<VertexType> implements Iterable<VertexType>
+public class DirectedGraph<VertexType> extends AbstractGraph<VertexType> implements Iterable<VertexType>, Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/** Contains the vertices associated to meta information (edges) */
 	private LinkedHashMap<VertexType,VertexAttributes<VertexType>> vertices;
 

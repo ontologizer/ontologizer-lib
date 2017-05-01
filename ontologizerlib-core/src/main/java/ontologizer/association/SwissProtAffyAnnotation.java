@@ -1,5 +1,6 @@
 package ontologizer.association;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -13,8 +14,10 @@ import ontologizer.types.ByteString;
  * @author sba
  *
  */
-public class SwissProtAffyAnnotation
+public class SwissProtAffyAnnotation implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	private ByteString swissProtID;
 	private HashSet<ByteString> affyIDs;
 	private HashSet<TermID> goIDs;

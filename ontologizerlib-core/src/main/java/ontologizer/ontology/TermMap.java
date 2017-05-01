@@ -1,5 +1,6 @@
 package ontologizer.ontology;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -9,8 +10,10 @@ import java.util.Map;
  *
  * @author Sebastian Bauer
  */
-public class TermMap implements Iterable<Term>
+public class TermMap implements Iterable<Term>, Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/** The set of terms */
 	private Map<TermID, Term> map = new HashMap<TermID, Term>();
 

@@ -1,5 +1,6 @@
 package sonumina.collections;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
@@ -10,8 +11,10 @@ import java.util.HashMap;
  *
  * @param <T>
  */
-public class ReferencePool<T>
+public class ReferencePool<T> implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * The container for all refs. Have to use a HashMap here,
 	 * as it is not possible to retrieve the reference

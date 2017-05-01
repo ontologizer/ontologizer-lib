@@ -1,5 +1,7 @@
 package ontologizer.ontology;
 
+import java.io.Serializable;
+
 /**
  * This class is used to specify a parent accompanied with
  * the kind of relationship. Note that the term "parent" is
@@ -8,8 +10,10 @@ package ontologizer.ontology;
  *
  * @author Sebastian Bauer
  */
-public class ParentTermID
+public class ParentTermID implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/** The id of the related term */
 	public TermID termid;
 

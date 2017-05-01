@@ -1,5 +1,6 @@
 package ontologizer.ontology;
 
+import java.io.Serializable;
 import ontologizer.types.ByteString;
 
 /**
@@ -8,8 +9,9 @@ import ontologizer.types.ByteString;
  *
  * @author Sebastian Bauer
  */
-public class Subset
+public class Subset implements Serializable
 {
+	private static final long serialVersionUID = 1L;
 	private ByteString name;
 	private ByteString desc;
 

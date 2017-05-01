@@ -6,6 +6,7 @@
  */
 package ontologizer.ontology;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import ontologizer.types.ByteString;
@@ -15,8 +16,10 @@ import ontologizer.types.ByteString;
  *
  * @author Sebastian Bauer
  */
-public class Namespace
+public class Namespace implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/* This static mapping stuff is for historical reasons. This enum should be removed very soon */
 	static public enum NamespaceEnum
 	{

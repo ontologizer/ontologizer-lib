@@ -1,5 +1,6 @@
 package ontologizer.ontology;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,8 +9,10 @@ import java.util.Map;
  *
  * @author Sebastian Bauer
  */
-public class TermAltMap
+public class TermAltMap implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	private Map<TermID, TermID> altMap = new HashMap<TermID, TermID>();
 
 	public TermAltMap()
