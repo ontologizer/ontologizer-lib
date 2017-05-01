@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import ontologizer.association.AnnotationContext;
 import ontologizer.association.Association;
@@ -158,8 +159,9 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 			currentTerm = altTermID2Term.get(currentTermID);
 			if (currentTerm == null)
 			{
-				System.err.println("Skipping association of item \"" + assoc.getObjectSymbol() + "\" to " + currentTermID + " because the term was not found!");
-				System.err.println("(Are the obo file and the association " + "file both up-to-date?)");
+				logger.log(Level.WARNING, "Skipping association of the item \"{}\" t {} because the term was not found! "
+						+ "Are the OBO file and the association file both up-to-date?",
+						new Object[] { assoc.getObjectSymbol(), currentTermID });
 				skipped++;
 				return true;
 			} else
@@ -179,8 +181,9 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 
 		if (currentTerm.isObsolete())
 		{
-			System.err.println("Skipping association of item \"" + assoc.getObjectSymbol() + "\" to " + currentTermID + " because term is obsolete!");
-			System.err.println("(Are the obo file and the association file in sync?)");
+			logger.log(Level.WARNING, "Skipping association of the item \"{}\" t {} because the term was not found! "
+					+ "Are the OBO file and the association file both up-to-date?",
+					new Object[] { assoc.getObjectSymbol(), currentTermID });
 			skipped++;
 			obsolete++;
 			return true;

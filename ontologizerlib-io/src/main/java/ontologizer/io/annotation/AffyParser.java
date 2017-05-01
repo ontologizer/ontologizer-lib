@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import ontologizer.association.Association;
 import ontologizer.association.SwissProtAffyAnnotation;
@@ -256,7 +257,7 @@ public class AffyParser
 			}
 		}
 
-		System.err.println("Skipped " + skipped + " annotations");
+		logger.log(Level.INFO, "skipped {} annotations", new Object[] { skipped });
 	}
 
 	public ArrayList<Association> getAssociations()

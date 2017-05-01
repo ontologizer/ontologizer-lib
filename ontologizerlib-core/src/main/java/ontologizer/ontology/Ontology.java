@@ -1244,7 +1244,9 @@ public class Ontology implements Iterable<Term>, Serializable
 			TermID redundant = findARedundantISARelation(t);
 			if (redundant != null)
 			{
-				System.out.println(t.getName() + " (" + t.getIDAsString() + ") -> " + getTerm(redundant).getName() + "(" + redundant.toString() +")");
+				logger.log(Level.INFO, "{} ({}) -> {} ({})",  new Object[] {
+						t.getName(), t.getIDAsString(), getTerm(redundant).getName(),
+						redundant.toString() });
 			}
 		}
 	}
