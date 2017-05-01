@@ -13,7 +13,6 @@ public class ObjectIntHashMap<K>
 {
    public static final int EMPTY_VALUE = 0;
 
-   private static final long serialVersionUID = 1L;
    private static final int OCCUPIED_DATA_RATIO = 2;
    private static final int DEFAULT_INITIAL_CAPACITY = 8;
 
@@ -139,6 +138,7 @@ public class ObjectIntHashMap<K>
            return false;
        }
 
+       @SuppressWarnings("unchecked")
        ObjectIntHashMap<K> other = (ObjectIntHashMap<K>) obj;
 
        if (this.size() != other.size())
@@ -296,9 +296,9 @@ public class ObjectIntHashMap<K>
        }
    }
 
-   public void remove(Object key)
+   public void remove(K key)
    {
-       this.removeKey((K) key);
+       this.removeKey(key);
    }
 
    public int removeKeyIfAbsent(K key, int value)
@@ -563,9 +563,10 @@ public class ObjectIntHashMap<K>
        return key != null && !isRemovedKey(key);
    }
 
+   @SuppressWarnings("unchecked")
    private K toNonSentinel(Object key)
    {
-       return key == NULL_KEY ? null : (K) key;
+       return (K) (key == NULL_KEY ? null : key);
    }
 
    private static Object toSentinelIfNull(Object key)
