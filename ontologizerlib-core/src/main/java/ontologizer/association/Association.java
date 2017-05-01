@@ -238,7 +238,7 @@ public class Association
 	 *
 	 * @param termID
 	 */
-	void setTermID(TermID termID)
+	public void setTermID(TermID termID)
 	{
 		this.termID = termID;
 	}

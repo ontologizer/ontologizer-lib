@@ -13,7 +13,7 @@ import ontologizer.types.ByteString;
  * @author sba
  *
  */
-class SwissProtAffyAnnotation
+public class SwissProtAffyAnnotation
 {
 	private ByteString swissProtID;
 	private HashSet<ByteString> affyIDs;
