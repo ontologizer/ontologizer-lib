@@ -1,28 +1,6 @@
+sudo: false
 language: java
+
 jdk:
-    - oraclejdk8
-    - oraclejdk7
-
-before_install:
-    - sudo apt-get update -qq
-    - sudo apt-get install -qq pandoc
-
-before_script:
-    - cd ontologizer.parent
-
-script:
-    - mvn package -B
-
-env:
-  global:
-  - secure: "OCvZ848O0mvPMC1S44fZfwWjWuFDH0vred6NuvWCgV9/moEx9Uo+hBkdbLNprHqnC6RSgup0eGl1Xf+e8r+H2VqCW+tvAki89kEMIcINAhJQiBmyce/JHW0eTCY94mYnFcKcPM4GjdtlT7jaEYwAOyA+T76a+eMp7OiKxkb8F/c="
-  - secure: "Y6gC70co9u2h5aJ9Xlsisuq8DbVEas94bAAqSA1j2oDztffc+xTFyI0N2ucc0idrpREEDAUaEezUBP1aX66QGljfMnW19bWrmFi4RjQeH1RQol4hP3z5ETn1Zdn1sro6YnIxxk3rNF3auNOtbMDd3ncJ7NJGAF3+aQW0wTGN8SQ="
-
-# FIXME: Use deploy
-after_success:
-    - cd ../ontologizer.cmdline/target
-    - java -version
-    - export
-    - export JAVA_VERSION=$(java -version 2>&1 | awk '/version/{print $NF}')
-    - export
-    - test "$TRAVIS_JDK_VERSION" == "oraclejdk7" && ../../deploy
+- oraclejdk8
+- oraclejdk7
