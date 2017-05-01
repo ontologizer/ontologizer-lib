@@ -21,7 +21,8 @@ import ontologizer.types.ByteString;
 public class OBOParserTest
 {
 	/* internal fields */
-	public static final String GOtermsOBOFile = "data/gene_ontology.1_2.obo.gz";
+	public static final String GOtermsOBOFile = OBOParserTest.class.
+			getClassLoader().getResource("gene_ontology.1_2.obo.gz").getPath();
 	private static final int nTermCount = 35520;
 	private static final int nRelations = 63105;
 	private static final ByteString formatVersion = b("1.2");

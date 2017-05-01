@@ -18,15 +18,18 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import ontologizer.linescanner.AbstractByteLineScanner;
+import ontologizer.ontology.OntologyTest;
 
 public class AbstractByteLineScannerTest
 {
 	@Test
 	public void testBigFile() throws FileNotFoundException, IOException
 	{
-		InputStream	is = new GZIPInputStream(new FileInputStream("data/gene_ontology.1_2.obo.gz"));
+		String oboPath = OntologyTest.class.
+				getClassLoader().getResource("gene_ontology.1_2.obo.gz").getPath();
+		InputStream	is = new GZIPInputStream(new FileInputStream(oboPath));
 
-		final BufferedReader br = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream("data/gene_ontology.1_2.obo.gz"))));
+		final BufferedReader br = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(oboPath))));
 
 		class TestByteLineScanner extends AbstractByteLineScanner
 		{

@@ -7,11 +7,11 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import ontologizer.BuildInfo;
 import ontologizer.ontology.Ontology;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermID;
 import ontologizer.ontology.TermRelation;
+import ontologizer.util.VersionInfo;
 import sonumina.math.graph.AbstractGraph.DotAttributesProvider;
 import sonumina.math.graph.DOTWriter;
 
@@ -131,7 +131,7 @@ public class GODOTWriter
 						public String getDotGraphAttributes() { return graphAttrs; }
 
 						@Override
-						public String getDotHeader(){ return "/* Generated with Ontologizer " + BuildInfo.getVersion() + " build " + BuildInfo.getBuildString() + " */"; }
+						public String getDotHeader(){ return "/* Generated with OntologizerLib " + VersionInfo.getVersion() + " */"; }
 
 						@Override
 						public String getDotEdgeAttributes(Term src, Term dest)
