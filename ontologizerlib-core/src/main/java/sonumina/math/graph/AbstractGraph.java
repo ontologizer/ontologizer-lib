@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Stack;
-
 import sonumina.collections.TinyQueue;
 
 /**
@@ -402,40 +401,4 @@ abstract public class AbstractGraph<VertexType>
 	 */
 	abstract public Iterable<VertexType> getVertices();
 
-	/**
-	 * Writes out the graph as a dot file.
-	 *
-	 * @param fos specifies the output
-	 * @param provider specifies the attribute provider.
-	 */
-	public void writeDOT(OutputStream fos, DotAttributesProvider<VertexType> provider)
-	{
-		writeDOT(fos,getVertices(),provider);
-	}
-
-	/**
-	 * Writes out the graph as a dot file.
-	 *
-	 * @param fos specifies the output
-	 * @param nodeSet specifies the subset of nodes to be written out.
-	 * @param provider specifies the attribute provider
-	 * @param nodeSep specifies the space between nodes of the same rank.
-	 * @param rankSep specifies the space between two nodes of subsequent ranks.
-	 */
-	public void writeDOT(OutputStream fos, Iterable<VertexType> nodeSet, final DotAttributesProvider<VertexType> provider, final double nodeSep, final double rankSep)
-	{
-		DOTWriter.write(this, fos, nodeSet, provider, nodeSep, rankSep);
-	}
-
-	/**
-	 * Writes out the graph as a dot file.
-	 *
-	 * @param fos specifies the output
-	 * @param nodeSet specifies the subset of nodes to be written out.
-	 * @param provider specifies the attribute provider
-	 */
-	public void writeDOT(OutputStream fos, Iterable<VertexType> nodeSet, DotAttributesProvider<VertexType> provider)
-	{
-		DOTWriter.write(this, fos, nodeSet, provider);
-	}
 }

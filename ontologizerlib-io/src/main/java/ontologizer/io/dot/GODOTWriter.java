@@ -13,7 +13,6 @@ import ontologizer.ontology.TermID;
 import ontologizer.ontology.TermRelation;
 import ontologizer.util.VersionInfo;
 import sonumina.math.graph.AbstractGraph.DotAttributesProvider;
-import sonumina.math.graph.DOTWriter;
 
 public class GODOTWriter
 {

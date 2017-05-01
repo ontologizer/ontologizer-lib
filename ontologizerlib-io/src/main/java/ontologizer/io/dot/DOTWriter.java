@@ -1,11 +1,11 @@
-package sonumina.math.graph;
+package ontologizer.io.dot;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
-
+import sonumina.math.graph.AbstractGraph;
 import sonumina.math.graph.AbstractGraph.DotAttributesProvider;
 
 public class DOTWriter
