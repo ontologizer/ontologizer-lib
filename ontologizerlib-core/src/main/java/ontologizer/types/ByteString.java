@@ -1,5 +1,6 @@
 package ontologizer.types;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -13,8 +14,10 @@ import java.util.ArrayList;
  *
  * @author Sebastian Bauer
  */
-public final class ByteString
+public final class ByteString implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	public static final ByteString EMPTY = b("");
 
 	private byte [] bytes;

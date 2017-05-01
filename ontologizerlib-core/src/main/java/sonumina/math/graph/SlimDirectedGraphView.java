@@ -1,5 +1,6 @@
 package sonumina.math.graph;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -15,8 +16,10 @@ import sonumina.math.graph.AbstractGraph.IVisitor;
  *
  * @author Sebastian Bauer, Sebastian Koehler
  */
-public final class SlimDirectedGraphView<VertexType>
+public final class SlimDirectedGraphView<VertexType> implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	private IntMapper<VertexType> mapper;
 
 	/** Contains all the ancestors of the terms (and the terms itself).

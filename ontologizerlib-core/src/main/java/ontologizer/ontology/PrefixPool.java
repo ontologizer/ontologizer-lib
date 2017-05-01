@@ -1,5 +1,6 @@
 package ontologizer.ontology;
 
+import java.io.Serializable;
 import sonumina.collections.ReferencePool;
 
 /**
@@ -7,8 +8,10 @@ import sonumina.collections.ReferencePool;
  *
  * @author Sebastian Bauer
  */
-public class PrefixPool
+public class PrefixPool implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	private ReferencePool<Prefix> prefixPool = new ReferencePool<Prefix>();
 
 	public Prefix map(Prefix ref)

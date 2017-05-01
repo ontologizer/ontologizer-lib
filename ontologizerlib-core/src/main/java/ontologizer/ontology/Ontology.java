@@ -1,5 +1,6 @@
 package ontologizer.ontology;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,8 +24,10 @@ import sonumina.math.graph.DirectedGraph.IDistanceVisitor;
  *
  * @author Sebastian Bauer
  */
-class OntologyEdge extends Edge<Term>
+class OntologyEdge extends Edge<Term> implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/** Relation always to the parent (source) */
 	private TermRelation relation;
 
@@ -52,8 +55,10 @@ class OntologyEdge extends Edge<Term>
  *
  * @author Sebastian Bauer
  */
-public class Ontology implements Iterable<Term>
+public class Ontology implements Iterable<Term>, Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	private static Logger logger = Logger.getLogger(Ontology.class.getName());
 
 	/** This is used to identify Gene Ontology until a better way is found */

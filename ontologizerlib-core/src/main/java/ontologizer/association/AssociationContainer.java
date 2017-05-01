@@ -1,5 +1,6 @@
 package ontologizer.association;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -13,8 +14,10 @@ import ontologizer.types.ByteString;
  * After AssociationParser was used to parse the gene_association.XXX file, this
  * class is used to store and process the information about Associations.
  */
-public class AssociationContainer implements Iterable<Gene2Associations>
+public class AssociationContainer implements Iterable<Gene2Associations>, Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/** Associations keys by the unique id */
 	private Gene2Associations [] associations;
 

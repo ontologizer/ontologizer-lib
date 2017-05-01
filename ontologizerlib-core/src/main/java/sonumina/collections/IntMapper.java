@@ -1,5 +1,6 @@
 package sonumina.collections;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -11,8 +12,10 @@ import java.util.Collection;
  *
  * @param <T>
  */
-public final class IntMapper<T>
+public final class IntMapper<T> implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/** An array of all items */
 	private Object [] item;
 

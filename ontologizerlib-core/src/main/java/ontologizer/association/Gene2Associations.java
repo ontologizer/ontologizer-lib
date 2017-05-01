@@ -1,5 +1,6 @@
 package ontologizer.association;
 
+import java.io.Serializable;
 import java.util.*;
 
 import ontologizer.ontology.TermID;
@@ -22,8 +23,10 @@ import ontologizer.types.ByteString;
  * @author Peter Robinson, Sebastian Bauer
  */
 
-public class Gene2Associations implements Iterable<Association>
+public class Gene2Associations implements Iterable<Association>, Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/** Name of the gene for which this object stores 0 - n associations */
 	private ByteString gene;
 

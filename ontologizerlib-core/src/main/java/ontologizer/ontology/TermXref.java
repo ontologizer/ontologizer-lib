@@ -1,8 +1,10 @@
 package ontologizer.ontology;
 
-public class TermXref {
+import java.io.Serializable;
 
+public class TermXref implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	/**
 	 * The external database name, e.g. MeSH, ICD-10, UMLS
 	 */

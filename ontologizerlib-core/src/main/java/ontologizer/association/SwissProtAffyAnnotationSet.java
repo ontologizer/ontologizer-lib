@@ -1,5 +1,6 @@
 package ontologizer.association;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -12,8 +13,10 @@ import ontologizer.types.ByteString;
  *
  * @author Sebastian Bauer
  */
-public class SwissProtAffyAnnotationSet implements Iterable<SwissProtAffyAnnotation>
+public class SwissProtAffyAnnotationSet implements Iterable<SwissProtAffyAnnotation>, Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	private HashMap<ByteString,SwissProtAffyAnnotation> map;
 
 	public SwissProtAffyAnnotationSet()

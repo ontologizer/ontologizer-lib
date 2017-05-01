@@ -1,5 +1,7 @@
 package sonumina.collections;
 
+import java.io.Serializable;
+
 /**
  * This is an implementation of a tiny queue avoiding bloat as much as possible.
  * It minimizes the allocation of entries as it marks the memory of
@@ -9,11 +11,15 @@ package sonumina.collections;
  *
  * @author Sebastian Bauer
  */
-public class TinyQueue<Type>
+public class TinyQueue<Type> implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/** Structure used for the embedding of the elements */
-	static final private class TinyElement<Type>
+	static final private class TinyElement<Type> implements Serializable
 	{
+		private static final long serialVersionUID = 1L;
+
 		TinyElement<Type> next;
 		Type t;
 	}

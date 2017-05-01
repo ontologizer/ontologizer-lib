@@ -6,8 +6,12 @@
  */
 package sonumina.math.graph;
 
-public class Edge<Type>
+import java.io.Serializable;
+
+public class Edge<Type> implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	private Type source;
 	private Type dest;
 

@@ -1,5 +1,6 @@
 package ontologizer.association;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,8 +12,10 @@ import ontologizer.types.ByteString;
 import sonumina.collections.ObjectIntHashMap;
 import sonumina.collections.ObjectIntHashMap.ObjectIntProcedure;
 
-public class AnnotationContext
+public class AnnotationContext implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/** The symbols */
 	private ByteString[] symbols;
 

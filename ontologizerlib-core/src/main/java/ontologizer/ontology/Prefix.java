@@ -1,5 +1,6 @@
 package ontologizer.ontology;
 
+import java.io.Serializable;
 import ontologizer.types.ByteString;
 
 /**
@@ -10,8 +11,10 @@ import ontologizer.types.ByteString;
  * @author Sebastian Bauer
  *
  */
-public class Prefix
+public class Prefix implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/** The prefix as byte string */
 	private ByteString prefix;
 

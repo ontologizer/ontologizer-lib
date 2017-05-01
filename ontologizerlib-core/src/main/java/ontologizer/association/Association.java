@@ -3,6 +3,7 @@ package ontologizer.association;
 import static ontologizer.types.ByteString.b;
 import static ontologizer.types.ByteString.EMPTY;
 
+import java.io.Serializable;
 import java.util.regex.*;
 
 import ontologizer.ontology.PrefixPool;
@@ -52,8 +53,10 @@ import ontologizer.types.ByteString;
  * @author Peter Robinson, Sebastian Bauer
  */
 
-public class Association
+public class Association implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/** A unique identifier in the database such as an accession number */
 	private ByteString DB_Object;
 

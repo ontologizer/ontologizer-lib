@@ -1,5 +1,6 @@
 package ontologizer.ontology;
 
+import java.io.Serializable;
 import java.util.*;
 
 import ontologizer.types.ByteString;
@@ -16,8 +17,10 @@ import ontologizer.types.ByteString;
  * @author Peter N. Robinson, Sebastian Bauer, Steffen Grossmann
  */
 
-public class TermContainer extends TermMap implements Iterable<Term>
+public class TermContainer extends TermMap implements Iterable<Term>, Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/** To allow easy iteration over all GO terms */
 	private List<Term> termList;
 

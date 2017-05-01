@@ -1,5 +1,6 @@
 package sonumina.math.graph;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,8 +15,10 @@ import sonumina.collections.TinyQueue;
  *
  * @author Sebastian Bauer
  */
-abstract public class AbstractGraph<VertexType>
+abstract public class AbstractGraph<VertexType> implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * This interface is used as a callback mechanism by different search
 	 * methods.
