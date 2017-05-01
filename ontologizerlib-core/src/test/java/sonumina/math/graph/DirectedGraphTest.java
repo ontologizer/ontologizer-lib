@@ -185,19 +185,6 @@ public class DirectedGraphTest
 		sub.add(e);
 		sub.add(f);
 
-		DirectedGraph<TestData> subGraph = graph.pathMaintainingSubGraph(sub);
-		try {
-			subGraph.writeDOT(new FileOutputStream(new File("sub.dot")), new DotAttributesProvider<TestData>(){
-				@Override
-				public String getDotNodeAttributes(TestData vt) {
-					return "label=\""+vt.id + "\"";
-				}
-			});
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
 		final HashSet<TestData> visited = new HashSet<TestData>();
 
 		final INeighbourGrabber<TestData> childGrabber = getChildNodeNeighbourGrabber(graph);
