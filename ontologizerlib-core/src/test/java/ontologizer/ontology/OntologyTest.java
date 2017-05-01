@@ -35,7 +35,8 @@ public class OntologyTest
 	@Before
 	public void setUp() throws Exception
 	{
-		String GOtermsOBOFile = "data/gene_ontology.1_2.obo.gz";
+		String GOtermsOBOFile = OntologyTest.class.
+				getClassLoader().getResource("gene_ontology.1_2.obo.gz").getPath();
 
 		/* Parse file and create term container */
 		System.out.println("Parse OBO file");

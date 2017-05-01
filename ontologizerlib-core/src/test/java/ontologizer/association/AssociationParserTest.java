@@ -30,8 +30,10 @@ import ontologizer.types.ByteString;
 
 public class AssociationParserTest
 {
-	private static final String OBO_FILE = "data/gene_ontology.1_2.obo.gz";
-	private static final String ASSOCIATION_FILE = "data/gene_association.sgd.gz";
+	private static final String OBO_FILE = AssociationParserTest.class.
+			getClassLoader().getResource("gene_ontology.1_2.obo.gz").getPath();
+	private static final String ASSOCIATION_FILE = AssociationParserTest.class.
+			getClassLoader().getResource("gene_association.sgd.gz").getPath();
 
 	@Rule
 	public TemporaryFolder tmpFolder = new TemporaryFolder();
