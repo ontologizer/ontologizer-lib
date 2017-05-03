@@ -14,6 +14,15 @@ import ontologizer.ontology.Term;
 import ontologizer.ontology.TermContainer;
 import ontologizer.ontology.TermID;
 
+/**
+ * Demo application <code>obo2dot</code> for OntologizerLib
+ *
+ * <p>
+ * Loads an OBO file and write out the graph representation to DOT.
+ * </p>
+ *
+ * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
+ */
 public class App {
 
 	public static void main(String[] args) {

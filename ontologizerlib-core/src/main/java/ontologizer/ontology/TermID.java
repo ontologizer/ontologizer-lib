@@ -15,7 +15,7 @@ import ontologizer.util.Util;
  * @author Sebastian Bauer
  *
  */
-public class TermID implements Serializable
+public class TermID implements Comparable<TermID>, Serializable
 {
 	private static final long serialVersionUID = 1L;
 
@@ -279,5 +279,13 @@ public class TermID implements Serializable
 	public static TermID tid(String id)
 	{
 		return new TermID(id);
+	}
+
+	/**
+	 * Compare two terms based on their numeric ID, neglecting the prefix.
+	 */
+	@Override
+	public int compareTo(TermID o) {
+		return this.id - o.id;
 	}
 }
