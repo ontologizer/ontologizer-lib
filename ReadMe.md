@@ -7,10 +7,25 @@ Core components from [Ontologizer](http://ontologizer.de) for
 - Ontology representation
 - I/O of OBO files
 
-# Use Library
+## Use Library
 
-TODO: Write me!
+Use the following snippet for your `pom.xml`
 
-# Development
+```
+<!-- https://mvnrepository.com/artifact/de.ontologizer/ontologizerlib-core -->
+<dependency>
+    <groupId>de.ontologizer</groupId>
+    <artifactId>ontologizerlib-core</artifactId>
+    <version>0.1</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/de.ontologizer/ontologizerlib-io -->
+<dependency>
+    <groupId>de.ontologizer</groupId>
+    <artifactId>ontologizerlib-io</artifactId>
+    <version>0.1</version>
+</dependency>
+```
 
-TODO: Write me!
+## Development
+
+See the [OntologizerLib Manual](http://ontologizerlib.rtfd.io) on how to get started with using or developing OntoligizerLib.
