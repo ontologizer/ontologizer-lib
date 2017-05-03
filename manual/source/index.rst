@@ -17,10 +17,16 @@ You can use the following XML fragment for usage with Maven
 
 .. code-block:: xml
 
-    <!-- https://mvnrepository.com/artifact/de.ontologizer/OntologizerLib -->
+    <!-- https://mvnrepository.com/artifact/de.ontologizer/ontologizerlib-core -->
     <dependency>
         <groupId>de.ontologizer</groupId>
-        <artifactId>OntologizerLib</artifactId>
+        <artifactId>ontologizerlib-core</artifactId>
+        <version>0.1</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/de.ontologizer/ontologizerlib-io -->
+    <dependency>
+        <groupId>de.ontologizer</groupId>
+        <artifactId>ontologizerlib-io</artifactId>
         <version>0.1</version>
     </dependency>
 
@@ -29,11 +35,20 @@ You can use the following XML fragment for usage with Maven
 Java Example
 ------------
 
-Here is, in short, how to load an OBO file and iterate over it.
+Here is, in short, how to load an OBO file into an ``Ontology`` object.
 
 .. code-block:: java
 
-    /** TODO */
+    // Parse file and construct TermContainer
+    String pathObo = "path/to/file.obo";
+    OBOParser parser = new OBOParser(new OBOParserFileInput(pathObo));
+    parser.doParse();
+    TermContainer termContainer =
+            new TermContainer(parser.getTermMap(),
+                              parser.getFormatVersion(),
+                              parser.getDate());
+    // Create Ontology object from this
+    Ontology ontology = Ontology.create(termContainer);
 
 
 ------------------
@@ -44,18 +59,16 @@ Here are some more resources besides this manual:
 
 - `Github Project <https://github.com/ontologizer/OntologizerLib>`_
 - API Javadoc
-    - `ontologizerlib-core <http://javadoc.io/doc/de.ontologizer/ontologizerlib-core/0.20>`_
-    - `ontologizerlib-io <http://javadoc.io/doc/de.ontologizer/ontologizerlib-io/0.20>`_
+    - basic data structures are located in `ontologizerlib-core <http://javadoc.io/doc/de.ontologizer/ontologizerlib-core/0.20>`_
+    - I/O code can be found in `ontologizerlib-io <http://javadoc.io/doc/de.ontologizer/ontologizerlib-io/0.20>`_
 
 
-.. toctree::
-    :caption: Installation & Getting Started
-    :name: getting-started
-    :maxdepth: 1
-    :hidden:
+--------------
+Project Status
+--------------
 
-    quickstart
-    install
+OntologizerLib is currently under active development and being refactored.
+However, we are successfully using OntologizerLib in a number of our projects.
 
 
 .. toctree::
@@ -64,8 +77,7 @@ Here are some more resources besides this manual:
     :maxdepth: 1
     :hidden:
 
-    loading_ontologies
-    iterating_ontologies
+    quickstart
 
 
 .. toctree::

@@ -36,7 +36,7 @@ public class App {
 	public static void main(String[] args) {
 		if (args.length != 3) {
 			System.err.println("Error: incorrect number of arguments");
-			System.err.println("Usage: java -jar obo2dot.jar IN.obo IN.gaf OUT.dot");
+			System.err.println("Usage: java -jar obo2dot.jar IN.obo IN.gaf OUT.tsv");
 			System.exit(1);
 		}
 
