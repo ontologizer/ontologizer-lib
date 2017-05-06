@@ -16,7 +16,7 @@
 
 	<properties>
 		<!-- JMH version to use with this project. -->
-		<jmh.version>1.15</jmh.version>
+		<jmh.version>1.19</jmh.version>
 
 		<!-- Name of the benchmark Uber-JAR to generate. -->
 		<uberjar.name>OntologizerJMH</uberjar.name>
