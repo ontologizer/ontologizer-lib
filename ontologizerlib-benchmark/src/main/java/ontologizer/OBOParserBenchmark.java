@@ -8,13 +8,14 @@ import org.openjdk.jmh.annotations.Fork;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Warmup;
 
-import ontologizer.ontology.OBOParser;
-import ontologizer.ontology.OBOParserException;
-import ontologizer.ontology.OBOParserFileInput;
+import ontologizer.io.obo.OBOParser;
+import ontologizer.io.obo.OBOParserException;
+import ontologizer.io.obo.OBOParserFileInput;
 
 public class OBOParserBenchmark
 {
-	private static final String obofile = "../../ontologizer.tests/data/gene_ontology.1_2.obo.gz";
+	// FIXME: Bundle that resource
+	private static final String obofile = "../../ontologizerlib-io/src/test/resources/gene_ontology.1_2.obo.gz";
 
 	@Benchmark
 	@Warmup(iterations=5)

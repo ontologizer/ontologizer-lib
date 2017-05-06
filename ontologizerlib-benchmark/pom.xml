@@ -2,17 +2,19 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>ontologizer.jmh</artifactId>
-	<parent>
-		<groupId>ontologizer</groupId>
-		<artifactId>ontologizer.parent</artifactId>
-		<version>0.0.3-SNAPSHOT</version>
-		<relativePath>../ontologizer.parent</relativePath>
-	</parent>
+        <artifactId>ontologizerlib-benchmark</artifactId>
+        <packaging>jar</packaging>
+
+        <name>${project.groupId}:${project.artifactId}</name>
+
+        <parent>
+                <groupId>de.ontologizer</groupId>
+                <artifactId>OntologizerLib</artifactId>
+                <version>0.1-SNAPSHOT</version>
+        </parent>
+
 
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
 		<!-- JMH version to use with this project. -->
 		<jmh.version>1.15</jmh.version>
 
@@ -33,8 +35,8 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>ontologizer</groupId>
-			<artifactId>ontologizer</artifactId>
+			<groupId>de.ontologizer</groupId>
+			<artifactId>ontologizerlib-io</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

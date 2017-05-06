@@ -18,6 +18,7 @@
 	<modules>
 		<module>ontologizerlib-core</module>
 		<module>ontologizerlib-io</module>
+		<module>ontologizerlib-benchmark</module>
 	</modules>
 
 	<!-- Inherit artifact from SonaType OSS pom.xml Following this article: 
