@@ -194,7 +194,7 @@
 			</plugin>
 		</plugins>
 
-		<!-- Ignore maven-enforce-plugin in Eclipse/m2e -->
+		<!-- Ignore various plugins in Eclipse/m2e -->
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -211,6 +211,23 @@
 										<versionRange>[1.0.0,)</versionRange>
 										<goals>
 											<goal>enforce</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.jacoco</groupId>
+										<artifactId>
+											jacoco-maven-plugin
+										</artifactId>
+										<versionRange>
+											[0.7.2.201409121644,)
+										</versionRange>
+										<goals>
+											<goal>prepare-agent</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>
