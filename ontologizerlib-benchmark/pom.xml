@@ -39,6 +39,13 @@
 			<artifactId>ontologizerlib-io</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- Also depend on the test, primarily for the shared resources -->
+		<dependency>
+			<groupId>de.ontologizer</groupId>
+			<artifactId>ontologizerlib-io</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+		</dependency>
 	</dependencies>
 
 	<build>
