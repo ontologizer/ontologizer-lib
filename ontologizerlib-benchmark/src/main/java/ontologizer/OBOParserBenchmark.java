@@ -21,9 +21,10 @@ public class OBOParserBenchmark
 	@Warmup(iterations=5)
 	@Fork(value=1)
 	@Measurement(time=2,timeUnit=TimeUnit.SECONDS)
-	public void benchmarkOBOParser() throws IOException, OBOParserException
+	public OBOParser benchmarkOBOParser() throws IOException, OBOParserException
 	{
 		OBOParser oboParser = new OBOParser(new OBOParserFileInput(obofile));
 		oboParser.doParse();
+		return oboParser;
 	}
 }
