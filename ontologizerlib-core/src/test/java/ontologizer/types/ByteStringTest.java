@@ -11,6 +11,13 @@ import ontologizer.types.ByteString;
 public class ByteStringTest
 {
 	@Test
+	public void testToString()
+	{
+		byte [] txt = new byte[]{'h', 'e', 'l', 'l', 'o'};
+		assertEquals("hello", ByteString.toString(new ByteString(txt)));
+	}
+
+	@Test
 	public void testParseInteger()
 	{
 		assertEquals(1234, ByteString.parseFirstInt(new ByteString("1234")));
