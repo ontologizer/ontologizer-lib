@@ -1,6 +1,7 @@
 package ontologizer.types;
 
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 /**
@@ -8,7 +9,8 @@ import java.util.ArrayList;
  * java String class but stores the string using bytes rather
  * than chars and so require less memory.
  *
- * Note that the supplied strings should be ascii-7 only.
+ * Note that while the ByteString encoding is UTF-8 and it can be converted
+ * back to a proper String, collation etc. is only supported in ASCII range.
  *
  * Like java's String class objects of this class are immutable.
  *
@@ -17,6 +19,8 @@ import java.util.ArrayList;
 public final class ByteString implements Serializable
 {
 	private static final long serialVersionUID = 1L;
+
+	private static Charset UTF8 = Charset.forName("UTF-8");
 
 	public static final ByteString EMPTY = b("");
 
@@ -69,13 +73,14 @@ public final class ByteString implements Serializable
 		return bytes.length;
 	}
 
+	/**
+	 * Returns the String representation of this ByteString. It is assumed that
+	 * the ByteString is proper UTF8.
+	 */
 	@Override
 	public String toString()
 	{
-		StringBuilder str = new StringBuilder();
-		for (int i = 0; i < bytes.length; i++)
-			str.append((char)bytes[i]);
-		return str.toString();
+		return new String(bytes, UTF8);
 	}
 
 	public boolean startsWith(String string)

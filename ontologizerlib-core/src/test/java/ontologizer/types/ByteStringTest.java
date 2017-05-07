@@ -6,8 +6,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Assert;
 import org.junit.Test;
 
-import ontologizer.types.ByteString;
-
 public class ByteStringTest
 {
 	@Test
@@ -15,6 +13,20 @@ public class ByteStringTest
 	{
 		byte [] txt = new byte[]{'h', 'e', 'l', 'l', 'o'};
 		assertEquals("hello", ByteString.toString(new ByteString(txt)));
+	}
+
+	@Test
+	public void testToStringUTF8()
+	{
+		byte [] txt = new byte[]{'h', 'a', 'l', 'l', (byte)0xc3, (byte)0xb6};
+		assertEquals("hall\u00f6", ByteString.toString(new ByteString(txt)));
+	}
+
+	@Test
+	public void testIdempotency()
+	{
+		String txt = "hall\u00f6";
+		assertEquals(txt, new ByteString(txt).toString(), txt);
 	}
 
 	@Test
