@@ -25,7 +25,9 @@ public interface VertexVisitor<Vertex> {
 	 *            {@link DirectedGraph} that <code>v</code> belongs to
 	 * @param v
 	 *            currently visited <code>Vertex</code>
+	 * @return <code>false</code> if the outer algorithm is to be stopped,
+	 *         <code>true</code> if it is to be continued.
 	 */
-	public void visit(DirectedGraph<Vertex> g, Vertex v);
+	public boolean visit(DirectedGraph<Vertex> g, Vertex v);
 
 }

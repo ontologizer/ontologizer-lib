@@ -1,7 +1,12 @@
 package de.ontologizer.immutable.graph;
 
 import com.google.common.collect.ImmutableList;
+import de.ontologizer.immutable.graph.algorithms.BreadthFirstSearch;
+import de.ontologizer.immutable.graph.algorithms.VertexVisitor;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import sonumina.collections.IntMapper;
 
@@ -55,17 +60,84 @@ public final class ImmutableFastDirectedGraphView<Vertex>
 	 */
 	public static <Vertex> ImmutableFastDirectedGraphView<Vertex> construct(
 			DirectedGraph<Vertex> g) {
-		return null;  // TODO: continue here
+		final IntMapper<Vertex> mapper = IntMapper.create(g.getVertices(),
+				g.countVertices());
+
+		// Collect parents for each vertex
+		final ArrayList<List<Integer>> vertexParents = new ArrayList<List<Integer>>();
+		for (int i = 0; i < mapper.getSize(); i++) {
+			vertexParents.add(createIndicesFromIter(mapper,
+					g.parentVertexIterator(mapper.get(i))));
+		}
+
+		// Collect ancestors for each vertex
+		final ArrayList<ArrayList<Integer>> vertexAncestors = new ArrayList<ArrayList<Integer>>();
+		for (int i = 0; i < mapper.getSize(); i++) {
+			Vertex v = mapper.get(i);
+			final List<Vertex> ancestors = new ArrayList<Vertex>();
+			final BreadthFirstSearch<Vertex, DirectedGraph<Vertex>> bfs = new BreadthFirstSearch<Vertex, DirectedGraph<Vertex>>();
+			bfs.startFrom(g, v, new VertexVisitor<Vertex>() {
+				@Override
+				public boolean visit(DirectedGraph<Vertex> g, Vertex v) {
+					ancestors.add(v);
+					return true;
+				}
+			});
+
+			Collections.sort(vertexAncestors.get(vertexAncestors.size() - 1));
+		}
+
+		// Collect children for each vertex
+		final ArrayList<List<Integer>> vertexChildren = new ArrayList<List<Integer>>();
+		for (int i = 0; i < mapper.getSize(); i++) {
+			vertexChildren.add(createIndicesFromIter(mapper,
+					g.childVertexIterator(mapper.get(i))));
+		}
+
+		/* Term descendants stuff */
+		final ArrayList<List<Integer>> vertexDescendants = new ArrayList<List<Integer>>();
+		for (int i = 0; i < mapper.getSize(); i++) {
+			Vertex v = mapper.get(i);
+			final List<Vertex> descendants = new ArrayList<Vertex>();
+			final BreadthFirstSearch<Vertex, DirectedGraph<Vertex>> bfs = new BreadthFirstSearch<Vertex, DirectedGraph<Vertex>>();
+			bfs.startFrom(g, v, new VertexVisitor<Vertex>() {
+				@Override
+				public boolean visit(DirectedGraph<Vertex> g, Vertex v) {
+					descendants.add(v);
+					return true;
+				}
+			});
+
+			Collections.sort(vertexAncestors.get(vertexAncestors.size() - 1));
+		}
+
+		return new ImmutableFastDirectedGraphView<Vertex>(g, mapper, vertexParents,
+				vertexAncestors, vertexChildren, vertexDescendants);
+	}
+
+	private static <Vertex> List<Integer> createIndicesFromIter(
+			IntMapper<Vertex> mapper, Iterator<Vertex> iterator) {
+		final List<Integer> result = new ArrayList<Integer>();
+
+		while (iterator.hasNext()) {
+			final Vertex p = iterator.next();
+			final int idx = mapper.getIndex(p);
+			if (idx != -1) {
+				result.add(idx);
+			}
+		}
+
+		return result;
 	}
 
 	private ImmutableFastDirectedGraphView(DirectedGraph<Vertex> graph,
-			Collection<? extends Collection<Integer>> vertexAncestors,
+			IntMapper<Vertex> mapper,
 			Collection<? extends Collection<Integer>> vertexParents,
+			Collection<? extends Collection<Integer>> vertexAncestors,
 			Collection<? extends Collection<Integer>> vertexChildren,
 			Collection<? extends Collection<Integer>> vertexDescendants) {
 		this.graph = graph;
-		this.mapper = IntMapper.create(graph.getVertices(),
-				graph.countVertices());
+		this.mapper = mapper;
 
 		ImmutableList.Builder<ImmutableList<Integer>> vertexAncestorBuilder = ImmutableList
 				.builder();

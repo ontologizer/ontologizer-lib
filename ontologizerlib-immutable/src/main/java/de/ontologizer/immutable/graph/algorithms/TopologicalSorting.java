@@ -55,7 +55,9 @@ public class TopologicalSorting<Vertex, Graph>
 			}
 			unmarked.remove(v);
 			tmpMarked.remove(v);
-			visitor.visit(graph, v);
+			if (!visitor.visit(graph, v)) {
+				return;
+			}
 		}
 	}
 

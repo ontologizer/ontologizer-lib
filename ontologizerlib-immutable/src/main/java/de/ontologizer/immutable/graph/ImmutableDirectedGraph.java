@@ -192,7 +192,7 @@ public final class ImmutableDirectedGraph<Vertex>
 			}
 		}
 
-		// TODO: ensure the graph is simple
+		// TODO: ensure the graph is simple?
 	}
 
 	@Override

@@ -27,7 +27,9 @@ public class BreadthFirstSearch<Vertex, Graph>
 			v = queue.poll();
 			if (!seen.contains(v)) { // skip seen ones
 				seen.add(v);
-				visitor.visit(graph, v);
+				if (!visitor.visit(graph, v)) {
+					break;
+				}
 				final Iterator<Vertex> it = graph.childVertexIterator(v);
 				while (it.hasNext()) {
 					queue.add(it.next());

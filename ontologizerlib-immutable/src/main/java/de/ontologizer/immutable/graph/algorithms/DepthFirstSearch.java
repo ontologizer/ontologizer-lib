@@ -27,7 +27,9 @@ public class DepthFirstSearch<Vertex, Graph>
 			v = stack.pop();
 			if (!seen.contains(v)) { // skip seen ones
 				seen.add(v);
-				visitor.visit(graph, v);
+				if (!visitor.visit(graph, v)) {
+					return;
+				}
 				final Iterator<Vertex> it = graph.childVertexIterator(v);
 				while (it.hasNext()) {
 					stack.push(it.next());
