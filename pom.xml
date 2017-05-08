@@ -4,10 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>de.ontologizer</groupId>
-	<artifactId>OntologizerLib</artifactId>
+	<artifactId>ontologizerlib</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>OntologizerLib</name>
+	<name>ontologizerlib</name>
 	<description>Library with data structures for ontologies and I/O for OBO files</description>
 
 	<properties>
@@ -54,9 +54,9 @@
 
 	<!-- SCM Information for Maven Central -->
 	<scm>
-		<connection>scm:git:git@github.com:ontologizer/OntologizerLib.git</connection>
-		<developerConnection>scm:git:git@github.com:connection/OntologizerLib.git</developerConnection>
-		<url>scm:git:git@github.com:ontologizer/OntologizerLib.git</url>
+		<connection>scm:git:git@github.com:ontologizer/ontologizerlib.git</connection>
+		<developerConnection>scm:git:git@github.com:connection/ontologizerlib.git</developerConnection>
+		<url>scm:git:git@github.com:ontologizer/ontologizerlib.git</url>
 	</scm>
 
 	<dependencies>
