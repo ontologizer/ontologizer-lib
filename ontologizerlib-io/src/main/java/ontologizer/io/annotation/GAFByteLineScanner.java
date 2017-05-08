@@ -27,6 +27,8 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 {
 	private static Logger logger = Logger.getLogger(GAFByteLineScanner.class.getName());
 
+	private static final byte PIPE = (byte)'|';
+
 	/** The wrapped input */
 	private IParserInput input;
 
@@ -195,7 +197,7 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 		if (assoc.getSynonym() != null && assoc.getSynonym().length() > 2)
 		{
 			/* Note that there can be multiple synonyms, separated by a pipe */
-			synonyms = assoc.getSynonym().splitBySingleChar('|');
+			synonyms = assoc.getSynonym().split(PIPE);
 		} else
 			synonyms = null;
 

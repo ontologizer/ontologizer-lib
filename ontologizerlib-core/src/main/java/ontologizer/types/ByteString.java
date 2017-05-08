@@ -272,7 +272,13 @@ public final class ByteString implements Serializable
 		return hashVal;
 	}
 
-	public ByteString[] splitBySingleChar(char c)
+	/**
+	 * Splits this string by a single byte.
+	 *
+	 * @param c the byte that should be used as a split marker. This should be an ASCII value.
+	 * @return the array of ByteStrings.
+	 */
+	public ByteString[] split(byte c)
 	{
 		int from = 0;
 		int to;
@@ -281,7 +287,7 @@ public final class ByteString implements Serializable
 
 		for (to = 0;to<bytes.length;to++)
 		{
-			if (bytes[to] == (byte)c)
+			if (bytes[to] == c)
 			{
 				ByteString bs = new ByteString(bytes,from,to);
 				bl.add(bs);

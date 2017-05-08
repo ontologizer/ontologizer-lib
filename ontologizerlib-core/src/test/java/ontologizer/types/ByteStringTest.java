@@ -8,6 +8,8 @@ import org.junit.Test;
 
 public class ByteStringTest
 {
+	private static final byte PIPE = (byte)'|';
+
 	@Test
 	public void testToString()
 	{
@@ -64,24 +66,24 @@ public class ByteStringTest
 	@Test
 	public void testSplit()
 	{
-		ByteString [] split = new ByteString("str1|str2|str3").splitBySingleChar('|');
+		ByteString [] split = new ByteString("str1|str2|str3").split(PIPE);
 		Assert.assertEquals(3,split.length);
 		Assert.assertEquals("str1", split[0].toString());
 		Assert.assertEquals("str2", split[1].toString());
 		Assert.assertEquals("str3", split[2].toString());
 
-		split = new ByteString("str1|str2|str3|").splitBySingleChar('|');
+		split = new ByteString("str1|str2|str3|").split(PIPE);
 		Assert.assertEquals(4,split.length);
 		Assert.assertEquals("str1", split[0].toString());
 		Assert.assertEquals("str2", split[1].toString());
 		Assert.assertEquals("str3", split[2].toString());
 		Assert.assertEquals("", split[3].toString());
 
-		split = new ByteString("str1").splitBySingleChar('|');
+		split = new ByteString("str1").split(PIPE);
 		Assert.assertEquals(1,split.length);
 		Assert.assertEquals("str1", split[0].toString());
 
-		split = new ByteString("str1||str3").splitBySingleChar('|');
+		split = new ByteString("str1||str3").split(PIPE);
 		Assert.assertEquals(3,split.length);
 		Assert.assertEquals("str1", split[0].toString());
 		Assert.assertEquals("", split[1].toString());
