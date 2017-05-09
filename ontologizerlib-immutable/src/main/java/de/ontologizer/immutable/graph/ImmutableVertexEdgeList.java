@@ -1,21 +1,25 @@
-package de.ontologizer.immutable.graph.impl;
+package de.ontologizer.immutable.graph;
 
 import com.google.common.collect.ImmutableList;
-import de.ontologizer.immutable.graph.ImmutableEdge;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 /**
  * Implementation detail for storing in- and out-edge lists.
+ * 
+ * <p>
+ * This class is not part of the public API of ontologizerlib and can change
+ * without notices.
+ * </p>
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public final class ImmutableVertexEdgeList<Vertex> {
+final class ImmutableVertexEdgeList<Vertex> {
 
 	private final ImmutableList<ImmutableEdge<Vertex>> inEdges;
 	private final ImmutableList<ImmutableEdge<Vertex>> outEdges;
-	
+
 	public static <Vertex> Builder<Vertex> builder() {
 		return new Builder<Vertex>();
 	}
@@ -37,7 +41,8 @@ public final class ImmutableVertexEdgeList<Vertex> {
 	/**
 	 * Internal helper for construction of VertexEdgeList objects.
 	 *
-	 * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
+	 * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel
+	 *         Holtgrewe</a>
 	 */
 	public static final class Builder<Vertex> {
 		private final List<ImmutableEdge<Vertex>> inEdges = new ArrayList<ImmutableEdge<Vertex>>();

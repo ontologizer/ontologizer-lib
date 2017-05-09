@@ -3,7 +3,6 @@ package de.ontologizer.immutable.graph;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.UnmodifiableIterator;
-import de.ontologizer.immutable.graph.impl.ImmutableVertexEdgeList;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
