@@ -12,14 +12,12 @@ import java.util.Set;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public class BreadthFirstSearch<Vertex, Graph>
+public class BreadthFirstSearch<Vertex, Graph extends DirectedGraph<Vertex>>
 		implements
 			GraphVertexStartFromIteration<Vertex, Graph> {
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void startFrom(Graph g, Vertex v, VertexVisitor<Vertex> visitor) {
-		final DirectedGraph<Vertex> graph = (DirectedGraph<Vertex>) g; // XXX?
 		final Set<Vertex> seen = new HashSet<Vertex>();
 		final Queue<Vertex> queue = new ArrayDeque<Vertex>();
 		queue.add(v);
@@ -27,10 +25,10 @@ public class BreadthFirstSearch<Vertex, Graph>
 			v = queue.poll();
 			if (!seen.contains(v)) { // skip seen ones
 				seen.add(v);
-				if (!visitor.visit(graph, v)) {
+				if (!visitor.visit(g, v)) {
 					break;
 				}
-				final Iterator<Vertex> it = graph.childVertexIterator(v);
+				final Iterator<Vertex> it = g.childVertexIterator(v);
 				while (it.hasNext()) {
 					queue.add(it.next());
 				}

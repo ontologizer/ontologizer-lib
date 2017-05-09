@@ -200,43 +200,6 @@ public final class ImmutableDirectedGraph<Vertex>
 		return subGraph(edgeLists.keySet());
 	}
 
-	/**
-	 * Not supported.
-	 *
-	 * <p>
-	 * Use {@link MutableDirectedGraph} which allows for adding vertices or use
-	 * {@link #Builder}.
-	 * </p>
-	 *
-	 * @throws UnsupportedOperationException
-	 *             always
-	 * @deprecated Use {@link MutableDirectedGraph} which allows for adding
-	 *             vertices or use {@link #Builder}.
-	 */
-	@Override
-	@Deprecated
-	public void addVertex(Vertex v) {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * Not supported.
-	 *
-	 * <p>
-	 * Use {@link MutableDirectedGraph} which allows for removing vertices.
-	 * </p>
-	 *
-	 * @throws UnsupportedOperationException
-	 *             always
-	 * @deprecated Use {@link MutableDirectedGraph} which allows for removing
-	 *             vertices.
-	 */
-	@Override
-	@Deprecated
-	public void removeVertex(Vertex v) {
-		throw new UnsupportedOperationException();
-	}
-
 	@Override
 	public boolean containsVertex(Vertex v) {
 		return edgeLists.containsKey(v);
@@ -255,44 +218,6 @@ public final class ImmutableDirectedGraph<Vertex>
 	@Override
 	public Collection<Vertex> getVertices() {
 		return edgeLists.keySet();
-	}
-
-
-	/**
-	 * Not supported.
-	 *
-	 * <p>
-	 * Use {@link MutableDirectedGraph} which allows for adding edges or use
-	 * {@link #Builder}.
-	 * </p>
-	 *
-	 * @throws UnsupportedOperationException
-	 *             always
-	 * @deprecated Use {@link MutableDirectedGraph} which allows for adding
-	 *             edges or use {@link #Builder}.
-	 */
-	@Override
-	@Deprecated
-	public void addEdge(Edge<Vertex> edge) {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * Not supported.
-	 *
-	 * <p>
-	 * Use {@link MutableDirectedGraph} which allows for removing edges or use
-	 * {@link #Builder}.
-	 * </p>
-	 *
-	 * @throws UnsupportedOperationException
-	 *             always
-	 * @deprecated Use {@link MutableDirectedGraph} which allows for removing
-	 *             edges or use {@link #Builder}.
-	 */
-	@Override
-	public boolean removeEdgeBetween(Vertex source, Vertex dest) {
-		throw new UnsupportedOperationException();
 	}
 
 	@Override

@@ -13,7 +13,8 @@ public final class ImmutableEdge<Vertex> implements Edge<Vertex> {
 	private final Vertex dest;
 
 	/**
-	 * Construct <code>ImmutableEdge</code> with the given source and destination vertices.
+	 * Construct <code>ImmutableEdge</code> with the given source and
+	 * destination vertices.
 	 *
 	 * @param source
 	 *            <code>Vertex</code> to use for the edge foot vertex
@@ -30,62 +31,14 @@ public final class ImmutableEdge<Vertex> implements Edge<Vertex> {
 		return source;
 	}
 
-	/**
-	 * Not supported.
-	 *
-	 * <p>
-	 * Use {@link MutableEdge} which allows for setting the source vertex.
-	 * </p>
-	 *
-	 * @throws UnsupportedOperationException
-	 *             always
-	 * @deprecated Use {@link MutableEdge} which allows for setting the source vertex.
-	 */
-	@Override
-	public void setSource(Object source) {
-	}
-
 	@Override
 	public Vertex getDest() {
 		return dest;
 	}
 
-	/**
-	 * Not supported.
-	 *
-	 * <p>
-	 * Use {@link MutableEdge} which allows for setting the destination vertex.
-	 * </p>
-	 *
-	 * @throws UnsupportedOperationException
-	 *             always
-	 * @deprecated Use {@link MutableEdge} which allows for setting the source vertex.
-	 */
-	@Override
-	@Deprecated
-	public void setDest(Object dest) {
-		throw new UnsupportedOperationException();
-	}
-
 	@Override
 	public int getWeight() {
 		return 1;
-	}
-
-	/**
-	 * Not supported.
-	 *
-	 * <p>
-	 * Use {@link MutableEdge} which allows for setting the edge weight.
-	 * </p>
-	 *
-	 * @throws UnsupportedOperationException
-	 *             always
-	 * @deprecated Use {@link MutableEdge} which allows for setting the edge weight.
-	 */
-	@Override
-	public void setWeight(int weight) {
-		throw new UnsupportedOperationException();
 	}
 
 }

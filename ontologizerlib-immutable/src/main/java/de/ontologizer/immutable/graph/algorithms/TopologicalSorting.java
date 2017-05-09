@@ -10,22 +10,20 @@ import java.util.Set;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public class TopologicalSorting<Vertex, Graph>
+public class TopologicalSorting<Vertex, Graph extends DirectedGraph<Vertex>>
 		implements
 			GraphVertexAllIteration<Vertex, Graph> {
 
 	/**
 	 * Implementation of Tarjan's algorithm for topological sorting.
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void start(Graph g, VertexVisitor<Vertex> visitor) {
-		DirectedGraph<Vertex> graph = (DirectedGraph<Vertex>) g;
 		final Set<Vertex> tmpMarked = new HashSet<Vertex>();
 
 		// Collect unmarked vertices
 		final Set<Vertex> unmarked = new HashSet<Vertex>();
-		final Iterator<Vertex> vertexIterator = graph.vertexIterator();
+		final Iterator<Vertex> vertexIterator = g.vertexIterator();
 		while (vertexIterator.hasNext()) {
 			unmarked.add(vertexIterator.next());
 		}
@@ -34,28 +32,27 @@ public class TopologicalSorting<Vertex, Graph>
 		while (!unmarked.isEmpty()) {
 			final Vertex v = unmarked.iterator().next();
 			unmarked.remove(v);
-			startFrom(graph, unmarked, tmpMarked, v, visitor);
+			startFrom(g, unmarked, tmpMarked, v, visitor);
 		}
 	}
 
 	/**
 	 * Tarjan's <code>visit()</code>.
 	 */
-	private void startFrom(DirectedGraph<Vertex> graph, Set<Vertex> unmarked,
-			Set<Vertex> tmpMarked, Vertex v, VertexVisitor<Vertex> visitor) {
+	private void startFrom(Graph g, Set<Vertex> unmarked, Set<Vertex> tmpMarked,
+			Vertex v, VertexVisitor<Vertex> visitor) {
 		if (tmpMarked.contains(v)) {
 			throw new GraphNotDagException("Graph is not a DAG");
 		}
 		if (unmarked.contains(v)) {
 			tmpMarked.add(v);
-			Iterator<Vertex> nextVertices = graph.childVertexIterator(v);
+			Iterator<Vertex> nextVertices = g.childVertexIterator(v);
 			while (nextVertices.hasNext()) {
-				startFrom(graph, unmarked, tmpMarked, nextVertices.next(),
-						visitor);
+				startFrom(g, unmarked, tmpMarked, nextVertices.next(), visitor);
 			}
 			unmarked.remove(v);
 			tmpMarked.remove(v);
-			if (!visitor.visit(graph, v)) {
+			if (!visitor.visit(g, v)) {
 				return;
 			}
 		}

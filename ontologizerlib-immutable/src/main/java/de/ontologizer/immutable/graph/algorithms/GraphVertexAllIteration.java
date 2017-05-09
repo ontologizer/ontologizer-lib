@@ -8,8 +8,7 @@ import de.ontologizer.immutable.graph.DirectedGraph;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-@SuppressWarnings("hiding")
-public interface GraphVertexAllIteration<Vertex, DirectedGraph> {
+public interface GraphVertexAllIteration<Vertex, Graph extends DirectedGraph<Vertex>> {
 
 	/**
 	 * Iterate all vertices in topological order.
@@ -25,6 +24,6 @@ public interface GraphVertexAllIteration<Vertex, DirectedGraph> {
 	 *            {@link VertexVisitor} to use for notifying about reaching a
 	 *            vertex
 	 */
-	public void start(DirectedGraph g, VertexVisitor<Vertex> visitor);
+	public void start(Graph g, VertexVisitor<Vertex> visitor);
 
 }

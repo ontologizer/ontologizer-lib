@@ -8,8 +8,7 @@ import de.ontologizer.immutable.graph.DirectedGraph;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-@SuppressWarnings("hiding")
-public interface GraphVertexStartFromIteration<Vertex, DirectedGraph> {
+public interface GraphVertexStartFromIteration<Vertex, Graph extends DirectedGraph<Vertex>> {
 
 	/**
 	 * Start iterating vertices starting from <code>v</code>.
@@ -27,7 +26,6 @@ public interface GraphVertexStartFromIteration<Vertex, DirectedGraph> {
 	 *            {@link VertexVisitor} to use for notifying about reaching a
 	 *            vertex
 	 */
-	public void startFrom(DirectedGraph g, Vertex v,
-			VertexVisitor<Vertex> visitor);
+	public void startFrom(Graph g, Vertex v, VertexVisitor<Vertex> visitor);
 
 }

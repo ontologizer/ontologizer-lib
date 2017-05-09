@@ -12,14 +12,12 @@ import java.util.Stack;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public class DepthFirstSearch<Vertex, Graph>
+public class DepthFirstSearch<Vertex, Graph extends DirectedGraph<Vertex>>
 		implements
 			GraphVertexStartFromIteration<Vertex, Graph> {
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void startFrom(Graph g, Vertex v, VertexVisitor<Vertex> visitor) {
-		final DirectedGraph<Vertex> graph = (DirectedGraph<Vertex>) g; // XXX?
 		final Set<Vertex> seen = new HashSet<Vertex>();
 		final Stack<Vertex> stack = new Stack<Vertex>();
 		stack.push(v);
@@ -27,10 +25,10 @@ public class DepthFirstSearch<Vertex, Graph>
 			v = stack.pop();
 			if (!seen.contains(v)) { // skip seen ones
 				seen.add(v);
-				if (!visitor.visit(graph, v)) {
+				if (!visitor.visit(g, v)) {
 					return;
 				}
-				final Iterator<Vertex> it = graph.childVertexIterator(v);
+				final Iterator<Vertex> it = g.childVertexIterator(v);
 				while (it.hasNext()) {
 					stack.push(it.next());
 				}

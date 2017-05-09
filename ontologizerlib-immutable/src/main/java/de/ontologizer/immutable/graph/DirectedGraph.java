@@ -5,38 +5,24 @@ import java.util.Collection;
 import java.util.Iterator;
 
 /**
- * Interface for directed graph classes.
+ * Interface for directed graph classes with read access.
  *
  * <p>
- * All graphs in OntologizerLib are simple, having two edges in the same direction between two
- * vertices are not allowed.
+ * All graphs in OntologizerLib are simple, having two edges in the same
+ * direction between two vertices are not allowed.
  * </p>
  *
  * <p>
- * Vertices must implement <code>equals()</code> and <code>hashValue()</code>. Vertices with the
- * same value (by <code>equals</code>) are not allowed.
+ * Vertices must implement <code>equals()</code> and <code>hashValue()</code>.
+ * Vertices with the same value (by <code>equals</code>) are not allowed.
  * </p>
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public interface DirectedGraph<Vertex>
-		extends Serializable, ShallowCopyable<DirectedGraph<Vertex>> {
-
-	/**
-	 * Insert <code>Vertex</code> into graph.
-	 *
-	 * @param v
-	 *            <code>Vertex</code> to insert
-	 */
-	public void addVertex(Vertex v);
-
-	/**
-	 * Remove <code>Vertex</code> from graph.
-	 *
-	 * @param v
-	 *            <code>Vertex</code> to remove
-	 */
-	public void removeVertex(Vertex v);
+		extends
+			Serializable,
+			ShallowCopyable<DirectedGraph<Vertex>> {
 
 	/**
 	 * Query whether the given vertex is contained in the graph.
@@ -60,7 +46,7 @@ public interface DirectedGraph<Vertex>
 	 * @return {@link Collection} of vertices.
 	 */
 	public Collection<Vertex> getVertices();
-	
+
 	/**
 	 * Build and return iterator over all vertices in the graph.
 	 *
@@ -69,33 +55,14 @@ public interface DirectedGraph<Vertex>
 	public Iterator<Vertex> vertexIterator();
 
 	/**
-	 * Add {@link Edge} to the graph.
-	 *
-	 * @param edge
-	 *            {@link Edge} to add to the graph.
-	 */
-	public void addEdge(Edge<Vertex> edge);
-
-	/**
-	 * Remove the edge between <code>source</code> and <code>dest</code>.
-	 *
-	 * @param source
-	 *            source <code>Vertex</code> of edge to remove
-	 * @param dest
-	 *            destination <code>Vertex</code> of edge to remove
-	 * @return <code>true</code> if the edge could be found and was removed, <code>false</code>
-	 *         otherwise
-	 */
-	public boolean removeEdgeBetween(Vertex source, Vertex dest);
-
-	/**
 	 * Query for an edge being in in the graph.
 	 *
 	 * @param source
 	 *            source <code>Vertex</code> of edge to query for
 	 * @param dest
 	 *            destination <code>Vertex</code> of edge to query for
-	 * @return <code>true</code> if the edge could be found, <code>false</code> otherwise
+	 * @return <code>true</code> if the edge could be found, <code>false</code>
+	 *         otherwise
 	 */
 	public boolean containsEdge(Vertex source, Vertex dest);
 
@@ -106,8 +73,8 @@ public interface DirectedGraph<Vertex>
 	 *            source <code>Vertex</code> of edge to query for
 	 * @param dest
 	 *            destination <code>Vertex</code> of the edge to query for
-	 * @return {@link Edge} between <code>source</code> and <code>dest</code>, <code>null</code> if
-	 *         no such edge could be found
+	 * @return {@link Edge} between <code>source</code> and <code>dest</code>,
+	 *         <code>null</code> if no such edge could be found
 	 */
 	public Edge<Vertex> getEdge(Vertex source, Vertex dest);
 
@@ -158,7 +125,8 @@ public interface DirectedGraph<Vertex>
 	public Iterator<? extends Edge<Vertex>> outEdgeIterator(Vertex v);
 
 	/**
-	 * Build and return {@link Iterator} of vertices connected by incoming edges.
+	 * Build and return {@link Iterator} of vertices connected by incoming
+	 * edges.
 	 *
 	 * @param v
 	 *            <code>Vertex</code> to use for the query.
@@ -167,7 +135,8 @@ public interface DirectedGraph<Vertex>
 	public Iterator<Vertex> parentVertexIterator(Vertex v);
 
 	/**
-	 * Build and return {@link Iterator} of vertices connected by outgoing edges.
+	 * Build and return {@link Iterator} of vertices connected by outgoing
+	 * edges.
 	 *
 	 * @param v
 	 *            <code>Vertex</code> to use for the query.
@@ -176,13 +145,13 @@ public interface DirectedGraph<Vertex>
 	public Iterator<Vertex> childVertexIterator(Vertex v);
 
 	/**
-	 * Build and return <code>DirectedGraph</code> by restricting the vertex set to
-	 * <code>vertices</code>.
+	 * Build and return <code>DirectedGraph</code> by restricting the vertex set
+	 * to <code>vertices</code>.
 	 *
 	 * @param vertices
 	 *            {@link Collection} of <code>Vertex</code> objects to limit to.
-	 * @return <code>DirectedGraph</code> induced by restricting the vertex set to
-	 *         <code>vertices</code>.
+	 * @return <code>DirectedGraph</code> induced by restricting the vertex set
+	 *         to <code>vertices</code>.
 	 */
 	public DirectedGraph<Vertex> subGraph(Collection<Vertex> vertices);
 
