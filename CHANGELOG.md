@@ -1,6 +1,8 @@
 # OntologizerLib Changelog
 
-## HEAD (unreleased)
+## v0.1
+
+Initial release on Maven Central.
 
 - Making `TermID` implement `Comparable<TermID>`
 - Adding demos `obo2dot` and `obo2ic`
