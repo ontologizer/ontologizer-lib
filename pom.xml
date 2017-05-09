@@ -4,7 +4,7 @@
 
 	<groupId>de.ontologizer</groupId>
 	<artifactId>OntologizerLib</artifactId>
-	<version>0.1</version>
+	<version>0.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>OntologizerLib</name>
 	<description>Library with data structures for ontologies and I/O for OBO files</description>
