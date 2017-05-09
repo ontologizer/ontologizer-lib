@@ -31,7 +31,6 @@ public class TopologicalSorting<Vertex, Graph extends DirectedGraph<Vertex>>
 		// Perform visiting
 		while (!unmarked.isEmpty()) {
 			final Vertex v = unmarked.iterator().next();
-			unmarked.remove(v);
 			startFrom(g, unmarked, tmpMarked, v, visitor);
 		}
 	}
@@ -48,7 +47,7 @@ public class TopologicalSorting<Vertex, Graph extends DirectedGraph<Vertex>>
 			tmpMarked.add(v);
 			Iterator<Vertex> nextVertices = g.childVertexIterator(v);
 			while (nextVertices.hasNext()) {
-				startFrom(g, unmarked, tmpMarked, nextVertices.next(), visitor);
+			 	startFrom(g, unmarked, tmpMarked, nextVertices.next(), visitor);
 			}
 			unmarked.remove(v);
 			tmpMarked.remove(v);

@@ -61,4 +61,10 @@ final class ImmutableVertexEdgeList<Vertex> {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "ImmutableVertexEdgeList [inEdges=" + inEdges + ", outEdges="
+				+ outEdges + "]";
+	}
+
 }

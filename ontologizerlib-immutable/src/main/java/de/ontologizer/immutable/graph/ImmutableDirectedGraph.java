@@ -156,6 +156,10 @@ public final class ImmutableDirectedGraph<Vertex>
 			builders.put(v, ImmutableVertexEdgeList.<Vertex>builder());
 		}
 		// Fill edge builders
+		for (ImmutableEdge<Vertex> e : edges) {
+			builders.get(e.getSource()).addOutEdge(e);
+			builders.get(e.getDest()).addInEdge(e);
+		}
 		// Fill ImmutableMap builder and construct
 		com.google.common.collect.ImmutableMap.Builder<Vertex, ImmutableVertexEdgeList<Vertex>> builder = ImmutableMap
 				.<Vertex, ImmutableVertexEdgeList<Vertex>>builder();
@@ -163,6 +167,7 @@ public final class ImmutableDirectedGraph<Vertex>
 				.entrySet()) {
 			builder.put(e.getKey(), e.getValue().build());
 		}
+		this.edgeLists = builder.build();
 	}
 
 	/**
