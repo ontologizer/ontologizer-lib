@@ -114,7 +114,6 @@
 				<version>2.10.4</version>
 				<configuration>
 					<defaultVersion>${project.version}</defaultVersion>
-					<additionalparam>-Xdoclint:none</additionalparam>
 					<aggregate>true</aggregate>
 					<show>public</show>
 					<nohelp>true</nohelp>
