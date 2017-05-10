@@ -1,22 +1,22 @@
 /**
  * 
  */
-package de.ontologizer.immutable.graph.algorithm;
+package de.ontologizer.immutable.graph.algorithms;
 
 import com.google.common.collect.ImmutableList;
 import de.ontologizer.immutable.graph.ImmutableDirectedGraph;
 import de.ontologizer.immutable.graph.ImmutableEdge;
-import de.ontologizer.immutable.graph.algorithms.DepthFirstSearch;
+import de.ontologizer.immutable.graph.algorithms.BreadthFirstSearch;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Test the {@link DepthFirstSearch} class.
+ * Test the {@link BreadthFirstSearch} class.
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public class DepthFirstSearchTest {
+public class BreadthFirstSearchTest {
 
 	/** Acyclic directed graph for testing. */
 	ImmutableDirectedGraph<Integer> dag;
@@ -49,16 +49,16 @@ public class DepthFirstSearchTest {
 
 	@Test
 	public void testStartFromDag() {
-		new DepthFirstSearch<Integer, ImmutableDirectedGraph<Integer>>()
+		new BreadthFirstSearch<Integer, ImmutableDirectedGraph<Integer>>()
 				.startFrom(dag, 4, visitor);
 
-		Assert.assertEquals("[4, 3, 0, 2, 1]",
+		Assert.assertEquals("[4, 1, 2, 3, 0]",
 				visitor.getVisitedVertices().toString());
 	}
 
 	@Test
 	public void testStartFromCyclic() {
-		new DepthFirstSearch<Integer, ImmutableDirectedGraph<Integer>>()
+		new BreadthFirstSearch<Integer, ImmutableDirectedGraph<Integer>>()
 				.startFrom(cyclic, 4, visitor);
 
 		Assert.assertEquals("[4, 3, 2, 1, 0]",

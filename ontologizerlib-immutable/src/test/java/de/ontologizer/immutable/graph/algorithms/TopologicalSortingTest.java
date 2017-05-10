@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.ontologizer.immutable.graph.algorithm;
+package de.ontologizer.immutable.graph.algorithms;
 
 import com.google.common.collect.ImmutableList;
 import de.ontologizer.immutable.graph.ImmutableDirectedGraph;

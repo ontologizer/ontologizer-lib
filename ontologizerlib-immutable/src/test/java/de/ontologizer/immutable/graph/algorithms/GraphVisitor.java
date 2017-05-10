@@ -1,4 +1,4 @@
-package de.ontologizer.immutable.graph.algorithm;
+package de.ontologizer.immutable.graph.algorithms;
 
 import de.ontologizer.immutable.graph.DirectedGraph;
 import de.ontologizer.immutable.graph.algorithms.VertexVisitor;
