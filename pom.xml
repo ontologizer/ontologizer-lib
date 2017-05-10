@@ -56,7 +56,7 @@
 	<scm>
 		<connection>scm:git:git@github.com:ontologizer/ontologizerlib.git</connection>
 		<developerConnection>scm:git:git@github.com:ontologizer/ontologizerlib.git</developerConnection>
-		<url>scm:git:git@github.com:ontologizer/ontologizerlib.git</url>
+		<url>https://github.com/ontologizer/ontologizerlib</url>
 	</scm>
 
 	<dependencies>
