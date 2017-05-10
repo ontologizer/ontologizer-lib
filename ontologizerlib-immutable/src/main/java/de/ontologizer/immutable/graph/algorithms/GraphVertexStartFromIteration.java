@@ -20,8 +20,8 @@ public interface GraphVertexStartFromIteration<Vertex, Graph extends DirectedGra
 	 *
 	 * @param g
 	 *            {@link DirectedGraph} to iterate over
-	 * @param <code>Vertex</code>
-	 *            to start iterating at
+	 * @param v
+	 *            <code>Vertex</code> to start iterating at
 	 * @param visitor
 	 *            {@link VertexVisitor} to use for notifying about reaching a
 	 *            vertex

@@ -8,13 +8,12 @@ import java.util.Queue;
 import java.util.Set;
 
 /**
- * Visit vertices of a {@link Graph} in a breadth-first manner (pre-order).
+ * Visit vertices of a {@link DirectedGraph} in a breadth-first manner (pre-order).
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public class BreadthFirstSearch<Vertex, Graph extends DirectedGraph<Vertex>>
-		implements
-			GraphVertexStartFromIteration<Vertex, Graph> {
+		implements GraphVertexStartFromIteration<Vertex, Graph> {
 
 	@Override
 	public void startFrom(Graph g, Vertex v, VertexVisitor<Vertex> visitor) {
