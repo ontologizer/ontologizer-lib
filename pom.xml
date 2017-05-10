@@ -54,7 +54,7 @@
 
 	<!-- SCM Information for Maven Central -->
 	<scm>
-		<connection>scm:git:git@github.com:ontologizer/ontologizerlib.git</connection>
+		<connection>scm:git:https://github.com/ontologizer/ontologizerlib.git</connection>
 		<developerConnection>scm:git:git@github.com:ontologizer/ontologizerlib.git</developerConnection>
 		<url>https://github.com/ontologizer/ontologizerlib</url>
 	</scm>
