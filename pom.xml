@@ -113,7 +113,6 @@
 				<version>2.10.4</version>
 				<configuration>
 					<defaultVersion>${project.version}</defaultVersion>
-					<aggregate>true</aggregate>
 					<show>public</show>
 					<nohelp>true</nohelp>
 					<header>${project.artifactId}, ${project.version}</header>
@@ -123,12 +122,24 @@
 					<reportOutputDirectory>${project.reporting.outputDirectory}/apidocs/api/</reportOutputDirectory>
 				</configuration>
 				<executions>
+					<!--  The aggregation javadoc -->
 					<execution>
 						<id>aggregate</id>
 						<goals>
 							<goal>aggregate</goal>
 						</goals>
 						<phase>site</phase>
+						<configuration>
+						</configuration>
+					</execution>
+
+					<!--  Javadoc of each single project to spot errors in the compile phase -->
+					<execution>
+						<id>javadoc</id>
+						<goals>
+							<goal>javadoc</goal>
+						</goals>
+						<phase>compile</phase>
 						<configuration>
 						</configuration>
 					</execution>
