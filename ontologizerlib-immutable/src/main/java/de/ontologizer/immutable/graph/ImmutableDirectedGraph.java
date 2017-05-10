@@ -245,7 +245,6 @@ public final class ImmutableDirectedGraph<Vertex>
 		int result = 0;
 		for (ImmutableVertexEdgeList<Vertex> lst : edgeLists.values()) {
 			result += lst.getInEdges().size();
-			result += lst.getOutEdges().size();
 		}
 		return result;
 	}
@@ -358,7 +357,10 @@ public final class ImmutableDirectedGraph<Vertex>
 		Set<Vertex> vertexSubset = new HashSet<Vertex>();
 		Iterator<Vertex> vIt = vertexIterator();
 		while (vIt.hasNext()) {
-			vertexSubset.add(vIt.next());
+			final Vertex v = vIt.next();
+			if (argVertexSet.contains(v)) {
+				vertexSubset.add(v);
+			}
 		}
 		Set<ImmutableEdge<Vertex>> edgeSubset = new HashSet<ImmutableEdge<Vertex>>();
 		Iterator<? extends Edge<Vertex>> eIt = edgeIterator();
@@ -373,6 +375,11 @@ public final class ImmutableDirectedGraph<Vertex>
 
 		// Construct sub graph
 		return construct(vertexSubset, edgeSubset);
+	}
+
+	@Override
+	public String toString() {
+		return "ImmutableDirectedGraph [edgeLists=" + edgeLists + "]";
 	}
 
 	/**
@@ -394,6 +401,18 @@ public final class ImmutableDirectedGraph<Vertex>
 		 */
 		public void addVertex(Vertex v) {
 			vertices.add(v);
+		}
+
+		/**
+		 * Add {@link Collection} of <code>Vertex</code> objects to the builder.
+		 *
+		 * @param vs
+		 *            <code>Vertex</code> objects to add to the builder.
+		 */
+		public void addVertices(Collection<Vertex> vs) {
+			for (Vertex v : vs) {
+				vertices.add(v);
+			}
 		}
 
 		/**

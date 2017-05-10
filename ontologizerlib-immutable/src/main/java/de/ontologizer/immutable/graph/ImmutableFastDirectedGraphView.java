@@ -38,7 +38,7 @@ public final class ImmutableFastDirectedGraphView<Vertex>
 	 * Contains all the ancestors of the terms (and the terms itself). Note that
 	 * the array of ancestors is sorted.
 	 */
-	public final ImmutableList<ImmutableList<Integer>> vertexAncestors;
+	private final ImmutableList<ImmutableList<Integer>> vertexAncestors;
 
 	/** Contains the parents of the terms */
 	private final ImmutableList<ImmutableList<Integer>> vertexParents;
@@ -50,7 +50,7 @@ public final class ImmutableFastDirectedGraphView<Vertex>
 	 * Contains the descendants of the (i.e., children, grand-children, etc. and
 	 * the term itself). Note that the array of descendants is sorted.
 	 */
-	public ImmutableList<ImmutableList<Integer>> vertexDescendants;
+	private final ImmutableList<ImmutableList<Integer>> vertexDescendants;
 
 	/**
 	 * Construct new {@link ImmutableFastDirectedGraphView} from
@@ -71,11 +71,12 @@ public final class ImmutableFastDirectedGraphView<Vertex>
 		}
 
 		// Collect ancestors for each vertex
-		final ArrayList<ArrayList<Integer>> vertexAncestors = new ArrayList<ArrayList<Integer>>();
+		final ArrayList<List<Integer>> vertexAncestors = new ArrayList<List<Integer>>();
 		for (int i = 0; i < mapper.getSize(); i++) {
 			Vertex v = mapper.get(i);
 			final List<Vertex> ancestors = new ArrayList<Vertex>();
-			final BreadthFirstSearch<Vertex, DirectedGraph<Vertex>> bfs = new BreadthFirstSearch<Vertex, DirectedGraph<Vertex>>();
+			final BreadthFirstSearch<Vertex, DirectedGraph<Vertex>> bfs = new BreadthFirstSearch<Vertex, DirectedGraph<Vertex>>(
+					false);
 			bfs.startFrom(g, v, new VertexVisitor<Vertex>() {
 				@Override
 				public boolean visit(DirectedGraph<Vertex> g, Vertex v) {
@@ -83,8 +84,13 @@ public final class ImmutableFastDirectedGraphView<Vertex>
 					return true;
 				}
 			});
+			vertexAncestors
+					.add(createIndicesFromIter(mapper, ancestors.iterator()));
 
-			Collections.sort(vertexAncestors.get(vertexAncestors.size() - 1));
+			if (!vertexAncestors.isEmpty()) {
+				Collections
+						.sort(vertexAncestors.get(vertexAncestors.size() - 1));
+			}
 		}
 
 		// Collect children for each vertex
@@ -99,7 +105,8 @@ public final class ImmutableFastDirectedGraphView<Vertex>
 		for (int i = 0; i < mapper.getSize(); i++) {
 			Vertex v = mapper.get(i);
 			final List<Vertex> descendants = new ArrayList<Vertex>();
-			final BreadthFirstSearch<Vertex, DirectedGraph<Vertex>> bfs = new BreadthFirstSearch<Vertex, DirectedGraph<Vertex>>();
+			final BreadthFirstSearch<Vertex, DirectedGraph<Vertex>> bfs = new BreadthFirstSearch<Vertex, DirectedGraph<Vertex>>(
+					true);
 			bfs.startFrom(g, v, new VertexVisitor<Vertex>() {
 				@Override
 				public boolean visit(DirectedGraph<Vertex> g, Vertex v) {
@@ -107,12 +114,18 @@ public final class ImmutableFastDirectedGraphView<Vertex>
 					return true;
 				}
 			});
+			vertexDescendants
+					.add(createIndicesFromIter(mapper, descendants.iterator()));
 
-			Collections.sort(vertexAncestors.get(vertexAncestors.size() - 1));
+			if (!vertexDescendants.isEmpty()) {
+				Collections.sort(
+						vertexDescendants.get(vertexDescendants.size() - 1));
+			}
 		}
 
-		return new ImmutableFastDirectedGraphView<Vertex>(g, mapper, vertexParents,
-				vertexAncestors, vertexChildren, vertexDescendants);
+		return new ImmutableFastDirectedGraphView<Vertex>(g, mapper,
+				vertexParents, vertexAncestors, vertexChildren,
+				vertexDescendants);
 	}
 
 	private static <Vertex> List<Integer> createIndicesFromIter(
@@ -207,8 +220,8 @@ public final class ImmutableFastDirectedGraphView<Vertex>
 		if (!containsVertex(u) || !containsVertex(v)) {
 			return false;
 		}
-		ImmutableList<Integer> descs = vertexAncestors.get(getVertexIndex(u));
-		return descs.contains(getVertexIndex(v));
+		ImmutableList<Integer> descs = vertexAncestors.get(getVertexIndex(v));
+		return descs.contains(getVertexIndex(u));
 	}
 
 	@Override
@@ -216,13 +229,12 @@ public final class ImmutableFastDirectedGraphView<Vertex>
 		if (!containsVertex(u) || !containsVertex(v)) {
 			return false;
 		}
-		ImmutableList<Integer> descs = vertexDescendants.get(getVertexIndex(u));
-		return descs.contains(getVertexIndex(v));
+		ImmutableList<Integer> descs = vertexDescendants.get(getVertexIndex(v));
+		return descs.contains(getVertexIndex(u));
 	}
 
 	@Override
 	public List<Vertex> getDescendants(Vertex v) {
-		getVertexIndex(v);
 		ImmutableList.Builder<Vertex> builder = ImmutableList.builder();
 		for (int childIndex : vertexDescendants.get(getVertexIndex(v))) {
 			builder.add(getVertex(childIndex));
@@ -232,10 +244,9 @@ public final class ImmutableFastDirectedGraphView<Vertex>
 
 	@Override
 	public List<Vertex> getAncestors(Vertex v) {
-		getVertexIndex(v);
 		ImmutableList.Builder<Vertex> builder = ImmutableList.builder();
-		for (int childIndex : vertexAncestors.get(getVertexIndex(v))) {
-			builder.add(getVertex(childIndex));
+		for (int parentIndex : vertexAncestors.get(getVertexIndex(v))) {
+			builder.add(getVertex(parentIndex));
 		}
 		return builder.build();
 	}

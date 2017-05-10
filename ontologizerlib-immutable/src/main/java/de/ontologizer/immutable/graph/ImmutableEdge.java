@@ -13,6 +13,20 @@ public final class ImmutableEdge<Vertex> implements Edge<Vertex> {
 	private final Vertex dest;
 
 	/**
+	 * Static constructor method so <code>Vertex</code> does not have to be
+	 * explicit.
+	 * 
+	 * @param source
+	 *            <code>Vertex</code> to use for the edge foot vertex
+	 * @param dest
+	 *            <code>Vertex</code> to use for the edge tip vertex
+	 */
+	public static <Vertex> ImmutableEdge<Vertex> construct(Vertex source,
+			Vertex dest) {
+		return new ImmutableEdge<Vertex>(source, dest);
+	}
+
+	/**
 	 * Construct <code>ImmutableEdge</code> with the given source and
 	 * destination vertices.
 	 *

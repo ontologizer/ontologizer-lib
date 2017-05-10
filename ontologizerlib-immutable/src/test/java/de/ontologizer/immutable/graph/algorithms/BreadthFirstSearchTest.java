@@ -48,8 +48,26 @@ public class BreadthFirstSearchTest {
 	}
 
 	@Test
-	public void testStartFromDag() {
+	public void testStartFromDagForward() {
 		new BreadthFirstSearch<Integer, ImmutableDirectedGraph<Integer>>()
+				.startFrom(dag, 0, visitor);
+
+		Assert.assertEquals("[0, 1, 2, 3, 4]",
+				visitor.getVisitedVertices().toString());
+	}
+
+	@Test
+	public void testStartFromCyclicForward() {
+		new BreadthFirstSearch<Integer, ImmutableDirectedGraph<Integer>>()
+				.startFrom(cyclic, 4, visitor);
+
+		Assert.assertEquals("[4, 0, 1, 2, 3]",
+				visitor.getVisitedVertices().toString());
+	}
+
+	@Test
+	public void testStartFromDagReverse() {
+		new BreadthFirstSearch<Integer, ImmutableDirectedGraph<Integer>>(true)
 				.startFrom(dag, 4, visitor);
 
 		Assert.assertEquals("[4, 1, 2, 3, 0]",
@@ -57,8 +75,8 @@ public class BreadthFirstSearchTest {
 	}
 
 	@Test
-	public void testStartFromCyclic() {
-		new BreadthFirstSearch<Integer, ImmutableDirectedGraph<Integer>>()
+	public void testStartFromCyclicReverse() {
+		new BreadthFirstSearch<Integer, ImmutableDirectedGraph<Integer>>(true)
 				.startFrom(cyclic, 4, visitor);
 
 		Assert.assertEquals("[4, 3, 2, 1, 0]",
