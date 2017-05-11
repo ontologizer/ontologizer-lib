@@ -19,10 +19,7 @@ import java.util.Iterator;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public interface DirectedGraph<Vertex>
-		extends
-			Serializable,
-			ShallowCopyable<DirectedGraph<Vertex>> {
+public interface DirectedGraph<VertexType, EdgeType extends Edge<? extends VertexType>> extends Serializable {
 
 	/**
 	 * Query whether the given vertex is contained in the graph.
@@ -31,7 +28,7 @@ public interface DirectedGraph<Vertex>
 	 *            <code>Vertex</code> to query for
 	 * @return whether <code>v</code> is contained in the graph.
 	 */
-	public boolean containsVertex(Vertex v);
+	public boolean containsVertex(VertexType v);
 
 	/**
 	 * Return number of vertices in the graph.
@@ -45,14 +42,14 @@ public interface DirectedGraph<Vertex>
 	 *
 	 * @return {@link Collection} of vertices.
 	 */
-	public Collection<Vertex> getVertices();
+	public Collection<VertexType> getVertices();
 
 	/**
 	 * Build and return iterator over all vertices in the graph.
 	 *
 	 * @return {@link Iterator} over all vertices.
 	 */
-	public Iterator<Vertex> vertexIterator();
+	public Iterator<VertexType> vertexIterator();
 
 	/**
 	 * Query for an edge being in in the graph.
@@ -64,7 +61,7 @@ public interface DirectedGraph<Vertex>
 	 * @return <code>true</code> if the edge could be found, <code>false</code>
 	 *         otherwise
 	 */
-	public boolean containsEdge(Vertex source, Vertex dest);
+	public boolean containsEdge(VertexType source, VertexType dest);
 
 	/**
 	 * Query for the edge between <code>source</code> and </code> dest.
@@ -76,7 +73,7 @@ public interface DirectedGraph<Vertex>
 	 * @return {@link Edge} between <code>source</code> and <code>dest</code>,
 	 *         <code>null</code> if no such edge could be found
 	 */
-	public Edge<Vertex> getEdge(Vertex source, Vertex dest);
+	public EdgeType getEdge(VertexType source, VertexType dest);
 
 	/**
 	 * Query for number of edges.
@@ -90,7 +87,7 @@ public interface DirectedGraph<Vertex>
 	 *
 	 * @return {@link Iterator} over all edges in the graph.
 	 */
-	public Iterator<? extends Edge<Vertex>> edgeIterator();
+	public Iterator<EdgeType> edgeIterator();
 
 	/**
 	 * Query for in-degree of <code>Vertex</code>.
@@ -99,14 +96,14 @@ public interface DirectedGraph<Vertex>
 	 *            <code>Vertex</code> to use for the query.
 	 * @return number of incoming edges into <code>v</code.
 	 */
-	public int getInDegree(Vertex v);
+	public int getInDegree(VertexType v);
 
 	/**
 	 * Construct and return in-edge iterator.
 	 *
 	 * @return In-edge iterator for <code>v</code>
 	 */
-	public Iterator<? extends Edge<Vertex>> inEdgeIterator(Vertex v);
+	public Iterator<EdgeType> inEdgeIterator(VertexType v);
 
 	/**
 	 * Query for out-degree of <code>Vertex</code>.
@@ -115,14 +112,14 @@ public interface DirectedGraph<Vertex>
 	 *            <code>Vertex</code> to use for the query.
 	 * @return number of outgoing edges from <code>v</code.
 	 */
-	public int getOutDegree(Vertex v);
+	public int getOutDegree(VertexType v);
 
 	/**
 	 * Construct and return out-edge iterator.
 	 *
 	 * @return Out-edge iterator for <code>v</code>
 	 */
-	public Iterator<? extends Edge<Vertex>> outEdgeIterator(Vertex v);
+	public Iterator<EdgeType> outEdgeIterator(VertexType v);
 
 	/**
 	 * Build and return {@link Iterator} of vertices connected by incoming
@@ -132,7 +129,7 @@ public interface DirectedGraph<Vertex>
 	 *            <code>Vertex</code> to use for the query.
 	 * @return {@link Iterator} over all vertices connected by incoming edges.
 	 */
-	public Iterator<Vertex> parentVertexIterator(Vertex v);
+	public Iterator<VertexType> parentVertexIterator(VertexType v);
 
 	/**
 	 * Build and return {@link Iterator} of vertices connected by outgoing
@@ -142,7 +139,7 @@ public interface DirectedGraph<Vertex>
 	 *            <code>Vertex</code> to use for the query.
 	 * @return {@link Iterator} over all vertices connected by outgoing edges.
 	 */
-	public Iterator<Vertex> childVertexIterator(Vertex v);
+	public Iterator<VertexType> childVertexIterator(VertexType v);
 
 	/**
 	 * Build and return <code>DirectedGraph</code> by restricting the vertex set
@@ -153,6 +150,6 @@ public interface DirectedGraph<Vertex>
 	 * @return <code>DirectedGraph</code> induced by restricting the vertex set
 	 *         to <code>vertices</code>.
 	 */
-	public DirectedGraph<Vertex> subGraph(Collection<Vertex> vertices);
+	public DirectedGraph<VertexType, EdgeType> subGraph(Collection<VertexType> vertices);
 
 }

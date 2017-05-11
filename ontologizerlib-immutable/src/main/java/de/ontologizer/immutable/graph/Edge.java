@@ -7,21 +7,23 @@ import java.io.Serializable;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public interface Edge<Vertex> extends Serializable {
+public interface Edge<VertexType>
+		extends
+			Serializable {
 
 	/**
 	 * Query for the destination vertex.
 	 *
 	 * @return <code>Vertex</code> at the tip of the edge (if directed).
 	 */
-	public Vertex getDest();
+	public VertexType getDest();
 
 	/**
 	 * Query for the source vertex.
 	 *
 	 * @return <code>Vertex</code> at the foot of the edge (if directed).
 	 */
-	public Vertex getSource();
+	public VertexType getSource();
 
 	/**
 	 * Query for the edge weight.

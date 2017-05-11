@@ -12,11 +12,11 @@ import org.junit.Test;
  */
 public class ImmutableDirectedGraphBuilderTest {
 
-	ImmutableDirectedGraph.Builder<Integer> builder;
+	ImmutableDirectedGraph.Builder<Integer, ImmutableEdge<Integer>> builder;
 
 	@Before
 	public void setUp() throws Exception {
-		builder = ImmutableDirectedGraph.builder();
+		builder = ImmutableDirectedGraph.builder(ImmutableEdge.<Integer>factory());
 	}
 
 	@Test
@@ -26,14 +26,13 @@ public class ImmutableDirectedGraphBuilderTest {
 		builder.addVertex(0);
 		builder.addVertices(ImmutableList.of(1, 2));
 
-		ImmutableDirectedGraph<Integer> g = builder.build(true);
+		ImmutableDirectedGraph<Integer, ImmutableEdge<Integer>> g = builder.build(true);
 		Assert.assertEquals(
 				"ImmutableDirectedGraph [edgeLists={0=ImmutableVertexEdgeList "
 						+ "[inEdges=[], outEdges=[ImmutableEdge [source=0, dest=1]]], "
 						+ "1=ImmutableVertexEdgeList [inEdges=[ImmutableEdge [source=0, "
 						+ "dest=1]], outEdges=[ImmutableEdge [source=1, dest=2]]], "
-						+ "2=ImmutableVertexEdgeList [inEdges=[ImmutableEdge [source=1, "
-						+ "dest=2]], outEdges=[]]}]",
+						+ "2=ImmutableVertexEdgeList [inEdges=[ImmutableEdge [source=1, " + "dest=2]], outEdges=[]]}]",
 				g.toString());
 	}
 

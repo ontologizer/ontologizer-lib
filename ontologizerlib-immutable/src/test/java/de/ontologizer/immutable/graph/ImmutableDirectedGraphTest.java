@@ -17,7 +17,7 @@ import org.junit.Test;
 public class ImmutableDirectedGraphTest {
 
 	/** Sample graph to use for testing. */
-	static ImmutableDirectedGraph<Integer> g;
+	static ImmutableDirectedGraph<Integer, ImmutableEdge<Integer>> g;
 
 	/** Sample vertex list to use for testing. */
 	static ImmutableList<Integer> vertices;
@@ -29,43 +29,39 @@ public class ImmutableDirectedGraphTest {
 	public static void setUp() throws Exception {
 		vertices = ImmutableList.of(0, 1, 2, 3, 4, 5, 6, 7);
 
-		edges = ImmutableList.of(ImmutableEdge.construct(0, 1),
-				ImmutableEdge.construct(0, 2), ImmutableEdge.construct(0, 3),
-				ImmutableEdge.construct(1, 4), ImmutableEdge.construct(2, 5),
-				ImmutableEdge.construct(3, 6), ImmutableEdge.construct(4, 7),
-				ImmutableEdge.construct(5, 7), ImmutableEdge.construct(6, 7));
+		edges = ImmutableList.of(ImmutableEdge.construct(0, 1), ImmutableEdge.construct(0, 2),
+				ImmutableEdge.construct(0, 3), ImmutableEdge.construct(1, 4), ImmutableEdge.construct(2, 5),
+				ImmutableEdge.construct(3, 6), ImmutableEdge.construct(4, 7), ImmutableEdge.construct(5, 7),
+				ImmutableEdge.construct(6, 7));
 
 		g = ImmutableDirectedGraph.construct(edges);
 	}
 
 	@Test
 	public void testConstructFromVerticesAndEdges() {
-		ImmutableDirectedGraph<Integer> graph = ImmutableDirectedGraph
-				.construct(vertices, edges);
-		Assert.assertEquals(
-				"ImmutableDirectedGraph [edgeLists={0=ImmutableVertexEdgeList "
-						+ "[inEdges=[], outEdges=[ImmutableEdge [source=0, dest=1], "
-						+ "ImmutableEdge [source=0, dest=2], ImmutableEdge [source=0, "
-						+ "dest=3]]], 1=ImmutableVertexEdgeList [inEdges=[ImmutableEdge "
-						+ "[source=0, dest=1]], outEdges=[ImmutableEdge [source=1, dest=4]]], "
-						+ "2=ImmutableVertexEdgeList [inEdges=[ImmutableEdge [source=0, dest=2]], "
-						+ "outEdges=[ImmutableEdge [source=2, dest=5]]], 3=ImmutableVertexEdgeList "
-						+ "[inEdges=[ImmutableEdge [source=0, dest=3]], outEdges=[ImmutableEdge "
-						+ "[source=3, dest=6]]], 4=ImmutableVertexEdgeList [inEdges=[ImmutableEdge "
-						+ "[source=1, dest=4]], outEdges=[ImmutableEdge [source=4, dest=7]]], "
-						+ "5=ImmutableVertexEdgeList [inEdges=[ImmutableEdge [source=2, dest=5]], "
-						+ "outEdges=[ImmutableEdge [source=5, dest=7]]], 6=ImmutableVertexEdgeList "
-						+ "[inEdges=[ImmutableEdge [source=3, dest=6]], outEdges=[ImmutableEdge "
-						+ "[source=6, dest=7]]], 7=ImmutableVertexEdgeList [inEdges=[ImmutableEdge "
-						+ "[source=4, dest=7], ImmutableEdge [source=5, dest=7], ImmutableEdge "
-						+ "[source=6, dest=7]], outEdges=[]]}]",
-				graph.toString());
+		ImmutableDirectedGraph<Integer, ImmutableEdge<Integer>> graph =
+				ImmutableDirectedGraph.construct(vertices, edges);
+		Assert.assertEquals("ImmutableDirectedGraph [edgeLists={0=ImmutableVertexEdgeList "
+				+ "[inEdges=[], outEdges=[ImmutableEdge [source=0, dest=1], "
+				+ "ImmutableEdge [source=0, dest=2], ImmutableEdge [source=0, "
+				+ "dest=3]]], 1=ImmutableVertexEdgeList [inEdges=[ImmutableEdge "
+				+ "[source=0, dest=1]], outEdges=[ImmutableEdge [source=1, dest=4]]], "
+				+ "2=ImmutableVertexEdgeList [inEdges=[ImmutableEdge [source=0, dest=2]], "
+				+ "outEdges=[ImmutableEdge [source=2, dest=5]]], 3=ImmutableVertexEdgeList "
+				+ "[inEdges=[ImmutableEdge [source=0, dest=3]], outEdges=[ImmutableEdge "
+				+ "[source=3, dest=6]]], 4=ImmutableVertexEdgeList [inEdges=[ImmutableEdge "
+				+ "[source=1, dest=4]], outEdges=[ImmutableEdge [source=4, dest=7]]], "
+				+ "5=ImmutableVertexEdgeList [inEdges=[ImmutableEdge [source=2, dest=5]], "
+				+ "outEdges=[ImmutableEdge [source=5, dest=7]]], 6=ImmutableVertexEdgeList "
+				+ "[inEdges=[ImmutableEdge [source=3, dest=6]], outEdges=[ImmutableEdge "
+				+ "[source=6, dest=7]]], 7=ImmutableVertexEdgeList [inEdges=[ImmutableEdge "
+				+ "[source=4, dest=7], ImmutableEdge [source=5, dest=7], ImmutableEdge "
+				+ "[source=6, dest=7]], outEdges=[]]}]", graph.toString());
 	}
 
 	@Test(expected = VerticesAndEdgesIncompatibleException.class)
 	public void testConstructFromVerticesAndEdgesCheckFails() {
-		ImmutableList.Builder<ImmutableEdge<Integer>> builder = ImmutableList
-				.builder();
+		ImmutableList.Builder<ImmutableEdge<Integer>> builder = ImmutableList.builder();
 		builder.addAll(edges);
 		builder.add(ImmutableEdge.construct(7, 8));
 
@@ -74,31 +70,28 @@ public class ImmutableDirectedGraphTest {
 
 	@Test
 	public void testConstructFromEdges() {
-		ImmutableDirectedGraph<Integer> graph = ImmutableDirectedGraph
-				.construct(edges);
-		Assert.assertEquals(
-				"ImmutableDirectedGraph [edgeLists={0=ImmutableVertexEdgeList "
-						+ "[inEdges=[], outEdges=[ImmutableEdge [source=0, dest=1], "
-						+ "ImmutableEdge [source=0, dest=2], ImmutableEdge [source=0, "
-						+ "dest=3]]], 1=ImmutableVertexEdgeList [inEdges=[ImmutableEdge "
-						+ "[source=0, dest=1]], outEdges=[ImmutableEdge [source=1, dest=4]]], "
-						+ "2=ImmutableVertexEdgeList [inEdges=[ImmutableEdge [source=0, dest=2]], "
-						+ "outEdges=[ImmutableEdge [source=2, dest=5]]], 3=ImmutableVertexEdgeList "
-						+ "[inEdges=[ImmutableEdge [source=0, dest=3]], outEdges=[ImmutableEdge "
-						+ "[source=3, dest=6]]], 4=ImmutableVertexEdgeList [inEdges=[ImmutableEdge "
-						+ "[source=1, dest=4]], outEdges=[ImmutableEdge [source=4, dest=7]]], "
-						+ "5=ImmutableVertexEdgeList [inEdges=[ImmutableEdge [source=2, dest=5]], "
-						+ "outEdges=[ImmutableEdge [source=5, dest=7]]], 6=ImmutableVertexEdgeList "
-						+ "[inEdges=[ImmutableEdge [source=3, dest=6]], outEdges=[ImmutableEdge "
-						+ "[source=6, dest=7]]], 7=ImmutableVertexEdgeList [inEdges=[ImmutableEdge "
-						+ "[source=4, dest=7], ImmutableEdge [source=5, dest=7], ImmutableEdge "
-						+ "[source=6, dest=7]], outEdges=[]]}]",
-				graph.toString());
+		ImmutableDirectedGraph<Integer, ImmutableEdge<Integer>> graph = ImmutableDirectedGraph.construct(edges);
+		Assert.assertEquals("ImmutableDirectedGraph [edgeLists={0=ImmutableVertexEdgeList "
+				+ "[inEdges=[], outEdges=[ImmutableEdge [source=0, dest=1], "
+				+ "ImmutableEdge [source=0, dest=2], ImmutableEdge [source=0, "
+				+ "dest=3]]], 1=ImmutableVertexEdgeList [inEdges=[ImmutableEdge "
+				+ "[source=0, dest=1]], outEdges=[ImmutableEdge [source=1, dest=4]]], "
+				+ "2=ImmutableVertexEdgeList [inEdges=[ImmutableEdge [source=0, dest=2]], "
+				+ "outEdges=[ImmutableEdge [source=2, dest=5]]], 3=ImmutableVertexEdgeList "
+				+ "[inEdges=[ImmutableEdge [source=0, dest=3]], outEdges=[ImmutableEdge "
+				+ "[source=3, dest=6]]], 4=ImmutableVertexEdgeList [inEdges=[ImmutableEdge "
+				+ "[source=1, dest=4]], outEdges=[ImmutableEdge [source=4, dest=7]]], "
+				+ "5=ImmutableVertexEdgeList [inEdges=[ImmutableEdge [source=2, dest=5]], "
+				+ "outEdges=[ImmutableEdge [source=5, dest=7]]], 6=ImmutableVertexEdgeList "
+				+ "[inEdges=[ImmutableEdge [source=3, dest=6]], outEdges=[ImmutableEdge "
+				+ "[source=6, dest=7]]], 7=ImmutableVertexEdgeList [inEdges=[ImmutableEdge "
+				+ "[source=4, dest=7], ImmutableEdge [source=5, dest=7], ImmutableEdge "
+				+ "[source=6, dest=7]], outEdges=[]]}]", graph.toString());
 	}
 
 	@Test
 	public void testShallowCopy() {
-		DirectedGraph<Integer> copy = g.shallowCopy();
+		ImmutableDirectedGraph<Integer, ImmutableEdge<Integer>> copy = g.shallowCopy();
 
 		Assert.assertNotSame(g, copy);
 		// TODO: make internal maps sorted so we can compare string values
@@ -141,8 +134,7 @@ public class ImmutableDirectedGraphTest {
 
 	@Test
 	public void testGetEdge() {
-		Assert.assertEquals("ImmutableEdge [source=0, dest=1]",
-				g.getEdge(0, 1).toString());
+		Assert.assertEquals("ImmutableEdge [source=0, dest=1]", g.getEdge(0, 1).toString());
 		Assert.assertNull(g.getEdge(1, 0));
 	}
 
@@ -160,13 +152,11 @@ public class ImmutableDirectedGraphTest {
 			eList.add(eIt.next());
 		}
 
-		Assert.assertEquals(
-				"[ImmutableEdge [source=0, dest=1], ImmutableEdge [source=0, dest=2], "
-						+ "ImmutableEdge [source=0, dest=3], ImmutableEdge [source=1, dest=4], "
-						+ "ImmutableEdge [source=2, dest=5], ImmutableEdge [source=3, dest=6], "
-						+ "ImmutableEdge [source=4, dest=7], ImmutableEdge [source=5, dest=7], "
-						+ "ImmutableEdge [source=6, dest=7]]",
-				eList.toString());
+		Assert.assertEquals("[ImmutableEdge [source=0, dest=1], ImmutableEdge [source=0, dest=2], "
+				+ "ImmutableEdge [source=0, dest=3], ImmutableEdge [source=1, dest=4], "
+				+ "ImmutableEdge [source=2, dest=5], ImmutableEdge [source=3, dest=6], "
+				+ "ImmutableEdge [source=4, dest=7], ImmutableEdge [source=5, dest=7], "
+				+ "ImmutableEdge [source=6, dest=7]]", eList.toString());
 	}
 
 	@Test
@@ -185,10 +175,8 @@ public class ImmutableDirectedGraphTest {
 			eList.add(eIt.next());
 		}
 
-		Assert.assertEquals(
-				"[ImmutableEdge [source=4, dest=7], ImmutableEdge [source=5, dest=7], "
-						+ "ImmutableEdge [source=6, dest=7]]",
-				eList.toString());
+		Assert.assertEquals("[ImmutableEdge [source=4, dest=7], ImmutableEdge [source=5, dest=7], "
+				+ "ImmutableEdge [source=6, dest=7]]", eList.toString());
 	}
 
 	@Test
@@ -207,10 +195,8 @@ public class ImmutableDirectedGraphTest {
 			eList.add(eIt.next());
 		}
 
-		Assert.assertEquals(
-				"[ImmutableEdge [source=0, dest=1], ImmutableEdge [source=0, dest=2], "
-						+ "ImmutableEdge [source=0, dest=3]]",
-				eList.toString());
+		Assert.assertEquals("[ImmutableEdge [source=0, dest=1], ImmutableEdge [source=0, dest=2], "
+				+ "ImmutableEdge [source=0, dest=3]]", eList.toString());
 	}
 
 	@Test
@@ -239,7 +225,7 @@ public class ImmutableDirectedGraphTest {
 
 	@Test
 	public void testSubGraph() {
-		DirectedGraph<Integer> subG = g.subGraph(ImmutableList.of(0, 1, 2, 3));
+		ImmutableDirectedGraph<Integer, ImmutableEdge<Integer>> subG = g.subGraph(ImmutableList.of(0, 1, 2, 3));
 		Assert.assertEquals(
 				"ImmutableDirectedGraph [edgeLists={0=ImmutableVertexEdgeList [inEdges=[], "
 						+ "outEdges=[ImmutableEdge [source=0, dest=1], ImmutableEdge [source=0, dest=3], "

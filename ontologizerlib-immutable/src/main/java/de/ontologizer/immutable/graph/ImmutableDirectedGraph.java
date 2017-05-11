@@ -30,21 +30,21 @@ import java.util.Set;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public final class ImmutableDirectedGraph<Vertex>
-		implements
-			DirectedGraph<Vertex> {
+public final class ImmutableDirectedGraph<VertexType, EdgeType extends Edge<VertexType> & ShallowCopyable<EdgeType>>
+		implements DirectedGraph<VertexType, EdgeType>, ShallowCopyable<ImmutableDirectedGraph<VertexType, EdgeType>> {
 
 	private static final long serialVersionUID = 1L;
 
-	private ImmutableMap<Vertex, ImmutableVertexEdgeList<Vertex>> edgeLists;
+	private ImmutableMap<VertexType, VertexEdgeList<VertexType, EdgeType>> edgeLists;
 
 	/**
 	 * Construct and return a {@link #Builder} helper object.
 	 *
 	 * @return Freshly constructed {@link #Builder} object.
 	 */
-	public static <Vertex> Builder<Vertex> builder() {
-		return new Builder<Vertex>();
+	public static <VertexType, EdgeType extends Edge<VertexType> & ShallowCopyable<EdgeType>>
+			Builder<VertexType, EdgeType> builder(EdgeFactory<VertexType, EdgeType> edgeFactory) {
+		return new Builder<VertexType, EdgeType>(edgeFactory);
 	}
 
 	/**
@@ -61,21 +61,19 @@ public final class ImmutableDirectedGraph<Vertex>
 	 *            whether or not to check vertex and edge list to be compatible
 	 * @return the built {@link ImmutableDirectedGraph}
 	 */
-	public static <Vertex> ImmutableDirectedGraph<Vertex> construct(
-			Collection<Vertex> vertices,
-			Collection<? extends Edge<Vertex>> edges,
-			boolean checkCompatibility) {
+	public static <VertexType, EdgeType extends Edge<VertexType> & ShallowCopyable<EdgeType>>
+			ImmutableDirectedGraph<VertexType, EdgeType>
+			construct(Collection<VertexType> vertices, Collection<EdgeType> edges, boolean checkCompatibility) {
 		// Check compatibility if asked for
 		if (checkCompatibility) {
 			checkCompatibility(vertices, edges);
 		}
 		// Create copy of immutable edges
-		List<ImmutableEdge<Vertex>> immutableEdges = new ArrayList<>();
-		for (Edge<Vertex> edge : edges) {
-			immutableEdges.add(new ImmutableEdge<Vertex>(edge.getSource(),
-					edge.getDest()));
+		List<EdgeType> immutableEdges = new ArrayList<>();
+		for (EdgeType edge : edges) {
+			immutableEdges.add(edge.shallowCopy());
 		}
-		return new ImmutableDirectedGraph<Vertex>(vertices, immutableEdges);
+		return new ImmutableDirectedGraph<VertexType, EdgeType>(vertices, immutableEdges);
 	}
 
 	/**
@@ -92,13 +90,13 @@ public final class ImmutableDirectedGraph<Vertex>
 	 *            whether or not to check vertex and edge list to be compatible
 	 * @return the built {@link ImmutableDirectedGraph}
 	 */
-	public static <Vertex> ImmutableDirectedGraph<Vertex> construct(
-			Collection<? extends Edge<Vertex>> edges,
-			boolean checkCompatibility) {
+	public static <VertexType, EdgeType extends Edge<VertexType> & ShallowCopyable<EdgeType>>
+			ImmutableDirectedGraph<VertexType, EdgeType>
+			construct(Collection<EdgeType> edges, boolean checkCompatibility) {
 		// Collect the vertices in the same order as in edges
-		List<Vertex> vertices = new ArrayList<Vertex>();
-		Set<Vertex> vertexSet = new HashSet<Vertex>();
-		for (Edge<Vertex> edge : edges) {
+		List<VertexType> vertices = new ArrayList<VertexType>();
+		Set<VertexType> vertexSet = new HashSet<VertexType>();
+		for (Edge<VertexType> edge : edges) {
 			if (!vertexSet.contains(edge.getSource())) {
 				vertexSet.add(edge.getSource());
 				vertices.add(edge.getSource());
@@ -120,9 +118,9 @@ public final class ImmutableDirectedGraph<Vertex>
 	 * This is just a forward to <code>construct(vertices, edges, false);
 	 * </p>
 	 */
-	public static <Vertex> ImmutableDirectedGraph<Vertex> construct(
-			Collection<Vertex> vertices,
-			Collection<? extends Edge<Vertex>> edges) {
+	public static <VertexType, EdgeType extends Edge<VertexType> & ShallowCopyable<EdgeType>>
+			ImmutableDirectedGraph<VertexType, EdgeType>
+			construct(Collection<VertexType> vertices, Collection<EdgeType> edges) {
 		return construct(vertices, edges, false);
 	}
 
@@ -134,8 +132,8 @@ public final class ImmutableDirectedGraph<Vertex>
 	 * This is just a forward to <code>construct(edges, false);
 	 * </p>
 	 */
-	public static <Vertex> ImmutableDirectedGraph<Vertex> construct(
-			Collection<? extends Edge<Vertex>> edges) {
+	public static <VertexType, EdgeType extends Edge<VertexType> & ShallowCopyable<EdgeType>>
+			ImmutableDirectedGraph<VertexType, EdgeType> construct(Collection<EdgeType> edges) {
 		return construct(edges, false);
 	}
 
@@ -148,23 +146,22 @@ public final class ImmutableDirectedGraph<Vertex>
 	 * @param edges
 	 *            to use for constructing the graph with.
 	 */
-	private ImmutableDirectedGraph(Collection<Vertex> vertices,
-			Collection<ImmutableEdge<Vertex>> edges) {
+	private ImmutableDirectedGraph(Collection<VertexType> vertices, Collection<EdgeType> edges) {
 		// Construct mapping from vertex to builder
-		Map<Vertex, ImmutableVertexEdgeList.Builder<Vertex>> builders = new HashMap<Vertex, ImmutableVertexEdgeList.Builder<Vertex>>();
-		for (Vertex v : vertices) {
-			builders.put(v, ImmutableVertexEdgeList.<Vertex>builder());
+		Map<VertexType, VertexEdgeList.Builder<VertexType, EdgeType>> builders =
+				new HashMap<VertexType, VertexEdgeList.Builder<VertexType, EdgeType>>();
+		for (VertexType v : vertices) {
+			builders.put(v, VertexEdgeList.<VertexType, EdgeType>builder());
 		}
 		// Fill edge builders
-		for (ImmutableEdge<Vertex> e : edges) {
+		for (EdgeType e : edges) {
 			builders.get(e.getSource()).addOutEdge(e);
 			builders.get(e.getDest()).addInEdge(e);
 		}
 		// Fill ImmutableMap builder and construct
-		com.google.common.collect.ImmutableMap.Builder<Vertex, ImmutableVertexEdgeList<Vertex>> builder = ImmutableMap
-				.<Vertex, ImmutableVertexEdgeList<Vertex>>builder();
-		for (Entry<Vertex, ImmutableVertexEdgeList.Builder<Vertex>> e : builders
-				.entrySet()) {
+		com.google.common.collect.ImmutableMap.Builder<VertexType, VertexEdgeList<VertexType, EdgeType>> builder =
+				ImmutableMap.<VertexType, VertexEdgeList<VertexType, EdgeType>>builder();
+		for (Entry<VertexType, VertexEdgeList.Builder<VertexType, EdgeType>> e : builders.entrySet()) {
 			builder.put(e.getKey(), e.getValue().build());
 		}
 		this.edgeLists = builder.build();
@@ -183,16 +180,13 @@ public final class ImmutableDirectedGraph<Vertex>
 		Set<Vertex> vertexSet = new HashSet<>(vertices);
 		for (Edge<Vertex> edge : edges) {
 			if (!vertexSet.contains(edge.getSource())) {
-				throw new VerticesAndEdgesIncompatibleException(
-						"Unknown source edge in edge " + edge);
+				throw new VerticesAndEdgesIncompatibleException("Unknown source edge in edge " + edge);
 			}
 			if (!vertexSet.contains(edge.getDest())) {
-				throw new VerticesAndEdgesIncompatibleException(
-						"Unknown dest edge in edge " + edge);
+				throw new VerticesAndEdgesIncompatibleException("Unknown dest edge in edge " + edge);
 			}
 			if (edge.getSource() == edge.getDest()) {
-				throw new VerticesAndEdgesIncompatibleException(
-						"Self-loop edge " + edge);
+				throw new VerticesAndEdgesIncompatibleException("Self-loop edge " + edge);
 			}
 		}
 
@@ -200,12 +194,12 @@ public final class ImmutableDirectedGraph<Vertex>
 	}
 
 	@Override
-	public DirectedGraph<Vertex> shallowCopy() {
+	public ImmutableDirectedGraph<VertexType, EdgeType> shallowCopy() {
 		return subGraph(edgeLists.keySet());
 	}
 
 	@Override
-	public boolean containsVertex(Vertex v) {
+	public boolean containsVertex(VertexType v) {
 		return edgeLists.containsKey(v);
 	}
 
@@ -215,24 +209,24 @@ public final class ImmutableDirectedGraph<Vertex>
 	}
 
 	@Override
-	public Iterator<Vertex> vertexIterator() {
+	public Iterator<VertexType> vertexIterator() {
 		return edgeLists.keySet().iterator();
 	}
 
 	@Override
-	public Collection<Vertex> getVertices() {
+	public Collection<VertexType> getVertices() {
 		return edgeLists.keySet();
 	}
 
 	@Override
-	public boolean containsEdge(Vertex source, Vertex dest) {
+	public boolean containsEdge(VertexType source, VertexType dest) {
 		return getEdge(source, dest) != null;
 	}
 
 	@Override
-	public Edge<Vertex> getEdge(Vertex source, Vertex dest) {
-		final ImmutableVertexEdgeList<Vertex> edgeList = edgeLists.get(source);
-		for (Edge<Vertex> e : edgeList.getOutEdges()) {
+	public EdgeType getEdge(VertexType source, VertexType dest) {
+		final VertexEdgeList<VertexType, EdgeType> edgeList = edgeLists.get(source);
+		for (EdgeType e : edgeList.getOutEdges()) {
 			if (e.getSource().equals(source) && e.getDest().equals(dest)) {
 				return e;
 			}
@@ -243,19 +237,18 @@ public final class ImmutableDirectedGraph<Vertex>
 	@Override
 	public int countEdges() {
 		int result = 0;
-		for (ImmutableVertexEdgeList<Vertex> lst : edgeLists.values()) {
+		for (VertexEdgeList<VertexType, EdgeType> lst : edgeLists.values()) {
 			result += lst.getInEdges().size();
 		}
 		return result;
 	}
 
 	@Override
-	public Iterator<? extends Edge<Vertex>> edgeIterator() {
+	public Iterator<EdgeType> edgeIterator() {
 
-		return new Iterator<Edge<Vertex>>() {
-			UnmodifiableIterator<ImmutableVertexEdgeList<Vertex>> outerIt = edgeLists
-					.values().iterator();
-			private UnmodifiableIterator<ImmutableEdge<Vertex>> innerIt = null;
+		return new Iterator<EdgeType>() {
+			UnmodifiableIterator<VertexEdgeList<VertexType, EdgeType>> outerIt = edgeLists.values().iterator();
+			private UnmodifiableIterator<EdgeType> innerIt = null;
 
 			@Override
 			public boolean hasNext() {
@@ -275,7 +268,7 @@ public final class ImmutableDirectedGraph<Vertex>
 			}
 
 			@Override
-			public Edge<Vertex> next() {
+			public EdgeType next() {
 				return innerIt.next();
 			}
 
@@ -287,37 +280,37 @@ public final class ImmutableDirectedGraph<Vertex>
 	}
 
 	@Override
-	public int getInDegree(Vertex v) {
+	public int getInDegree(VertexType v) {
 		return edgeLists.get(v).getInEdges().size();
 	}
 
 	@Override
-	public Iterator<? extends Edge<Vertex>> inEdgeIterator(Vertex v) {
+	public Iterator<EdgeType> inEdgeIterator(VertexType v) {
 		return edgeLists.get(v).getInEdges().iterator();
 	}
 
 	@Override
-	public int getOutDegree(Vertex v) {
+	public int getOutDegree(VertexType v) {
 		return edgeLists.get(v).getOutEdges().size();
 	}
 
 	@Override
-	public Iterator<? extends Edge<Vertex>> outEdgeIterator(Vertex v) {
+	public Iterator<EdgeType> outEdgeIterator(VertexType v) {
 		return edgeLists.get(v).getOutEdges().iterator();
 	}
 
 	@Override
-	public Iterator<Vertex> parentVertexIterator(Vertex v) {
-		final Iterator<? extends Edge<Vertex>> iter = outEdgeIterator(v);
+	public Iterator<VertexType> parentVertexIterator(VertexType v) {
+		final Iterator<? extends Edge<VertexType>> iter = outEdgeIterator(v);
 
-		return new Iterator<Vertex>() {
+		return new Iterator<VertexType>() {
 			@Override
 			public boolean hasNext() {
 				return iter.hasNext();
 			}
 
 			@Override
-			public Vertex next() {
+			public VertexType next() {
 				return iter.next().getDest();
 			}
 
@@ -329,17 +322,17 @@ public final class ImmutableDirectedGraph<Vertex>
 	}
 
 	@Override
-	public Iterator<Vertex> childVertexIterator(Vertex v) {
-		final Iterator<? extends Edge<Vertex>> iter = inEdgeIterator(v);
+	public Iterator<VertexType> childVertexIterator(VertexType v) {
+		final Iterator<? extends Edge<VertexType>> iter = inEdgeIterator(v);
 
-		return new Iterator<Vertex>() {
+		return new Iterator<VertexType>() {
 			@Override
 			public boolean hasNext() {
 				return iter.hasNext();
 			}
 
 			@Override
-			public Vertex next() {
+			public VertexType next() {
 				return iter.next().getSource();
 			}
 
@@ -350,26 +343,24 @@ public final class ImmutableDirectedGraph<Vertex>
 	}
 
 	@Override
-	public DirectedGraph<Vertex> subGraph(Collection<Vertex> vs) {
-		Set<Vertex> argVertexSet = ImmutableSet.copyOf(vs);
+	public ImmutableDirectedGraph<VertexType, EdgeType> subGraph(Collection<VertexType> vs) {
+		Set<VertexType> argVertexSet = ImmutableSet.copyOf(vs);
 
 		// Create subset of vertices and edges
-		Set<Vertex> vertexSubset = new HashSet<Vertex>();
-		Iterator<Vertex> vIt = vertexIterator();
+		Set<VertexType> vertexSubset = new HashSet<VertexType>();
+		Iterator<VertexType> vIt = vertexIterator();
 		while (vIt.hasNext()) {
-			final Vertex v = vIt.next();
+			final VertexType v = vIt.next();
 			if (argVertexSet.contains(v)) {
 				vertexSubset.add(v);
 			}
 		}
-		Set<ImmutableEdge<Vertex>> edgeSubset = new HashSet<ImmutableEdge<Vertex>>();
-		Iterator<? extends Edge<Vertex>> eIt = edgeIterator();
+		Set<EdgeType> edgeSubset = new HashSet<EdgeType>();
+		Iterator<EdgeType> eIt = edgeIterator();
 		while (eIt.hasNext()) {
-			Edge<Vertex> e = eIt.next();
-			if (argVertexSet.contains(e.getSource())
-					&& argVertexSet.contains(e.getDest())) {
-				edgeSubset.add(
-						new ImmutableEdge<Vertex>(e.getSource(), e.getDest()));
+			EdgeType e = eIt.next();
+			if (argVertexSet.contains(e.getSource()) && argVertexSet.contains(e.getDest())) {
+				edgeSubset.add(e.shallowCopy());
 			}
 		}
 
@@ -388,10 +379,22 @@ public final class ImmutableDirectedGraph<Vertex>
 	 * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel
 	 *         Holtgrewe</a>
 	 */
-	public static class Builder<Vertex> {
+	public static class Builder<VertexType, EdgeType extends Edge<VertexType> & ShallowCopyable<EdgeType>> {
 
-		private List<Vertex> vertices = new ArrayList<Vertex>();
-		private List<ImmutableEdge<Vertex>> edges = new ArrayList<ImmutableEdge<Vertex>>();
+		private final List<VertexType> vertices = new ArrayList<VertexType>();
+		private final List<EdgeType> edges = new ArrayList<EdgeType>();
+		private final EdgeFactory<VertexType, EdgeType> edgeFactory;
+
+		/**
+		 * Construct with {@link EdgeFactory} for constructing
+		 * appropriately-typed {@link Edge}s.
+		 * 
+		 * @param edgeFactory
+		 *            The {@link EdgeFactory} to use
+		 */
+		public Builder(EdgeFactory<VertexType, EdgeType> edgeFactory) {
+			this.edgeFactory = edgeFactory;
+		}
 
 		/**
 		 * Add <code>Vertex</code> to add to the builder.
@@ -399,7 +402,7 @@ public final class ImmutableDirectedGraph<Vertex>
 		 * @param v
 		 *            <code>Vertex</code> to add to the builder.
 		 */
-		public void addVertex(Vertex v) {
+		public void addVertex(VertexType v) {
 			vertices.add(v);
 		}
 
@@ -409,19 +412,19 @@ public final class ImmutableDirectedGraph<Vertex>
 		 * @param vs
 		 *            <code>Vertex</code> objects to add to the builder.
 		 */
-		public void addVertices(Collection<Vertex> vs) {
-			for (Vertex v : vs) {
+		public void addVertices(Collection<VertexType> vs) {
+			for (VertexType v : vs) {
 				vertices.add(v);
 			}
 		}
 
 		/**
-		 * Add {@link ImmutableEdge} to the builder.
+		 * Add {@link Edge} to the builder.
 		 *
 		 * @param e
-		 *            {@link ImmutableEdge} to add to the builder.
+		 *            {@link Edge} to add to the builder.
 		 */
-		public void addEdge(ImmutableEdge<Vertex> e) {
+		public void addEdge(EdgeType e) {
 			edges.add(e);
 		}
 
@@ -434,8 +437,8 @@ public final class ImmutableDirectedGraph<Vertex>
 		 * @param dest
 		 *            Destination vertex for the directed edge
 		 */
-		public void addEdge(Vertex source, Vertex dest) {
-			edges.add(new ImmutableEdge<Vertex>(source, dest));
+		public void addEdge(VertexType source, VertexType dest) {
+			edges.add(edgeFactory.construct(source, dest));
 		}
 
 		/**
@@ -446,9 +449,8 @@ public final class ImmutableDirectedGraph<Vertex>
 		 *            list.
 		 * @return freshly built {@link ImmutableDirectedGraph}
 		 */
-		public ImmutableDirectedGraph<Vertex> build(boolean checkConsistency) {
-			return ImmutableDirectedGraph.construct(vertices, edges,
-					checkConsistency);
+		public ImmutableDirectedGraph<VertexType, EdgeType> build(boolean checkConsistency) {
+			return ImmutableDirectedGraph.construct(vertices, edges, checkConsistency);
 		}
 
 		/**
@@ -458,7 +460,7 @@ public final class ImmutableDirectedGraph<Vertex>
 		 * This is a forward to <code>build(false)</code>.
 		 * </p>
 		 */
-		public ImmutableDirectedGraph<Vertex> build() {
+		public ImmutableDirectedGraph<VertexType, EdgeType> build() {
 			return build(false);
 		}
 

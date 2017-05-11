@@ -1,6 +1,7 @@
 package de.ontologizer.immutable.graph.algorithms;
 
 import de.ontologizer.immutable.graph.DirectedGraph;
+import de.ontologizer.immutable.graph.Edge;
 
 /**
  * Interface for classes implementating vertex visitors for graphs.
@@ -12,7 +13,7 @@ import de.ontologizer.immutable.graph.DirectedGraph;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public interface VertexVisitor<Vertex> {
+public interface VertexVisitor<VertexType, EdgeType extends Edge<? extends VertexType>> {
 
 	/**
 	 * Called when visiting vertex <code>v</code> in graph <code>graph</code>.
@@ -28,6 +29,6 @@ public interface VertexVisitor<Vertex> {
 	 * @return <code>false</code> if the outer algorithm is to be stopped,
 	 *         <code>true</code> if it is to be continued.
 	 */
-	public boolean visit(DirectedGraph<Vertex> g, Vertex v);
+	public boolean visit(DirectedGraph<VertexType, EdgeType> g, VertexType v);
 
 }

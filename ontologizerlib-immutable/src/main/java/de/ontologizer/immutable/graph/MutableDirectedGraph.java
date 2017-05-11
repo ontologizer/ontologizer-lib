@@ -5,7 +5,8 @@ package de.ontologizer.immutable.graph;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public interface MutableDirectedGraph<Vertex> extends DirectedGraph<Vertex> {
+public interface MutableDirectedGraph<VertexType, EdgeType extends Edge<? extends VertexType>>
+		extends DirectedGraph<VertexType, EdgeType> {
 
 	/**
 	 * Insert <code>Vertex</code> into graph.
@@ -13,7 +14,7 @@ public interface MutableDirectedGraph<Vertex> extends DirectedGraph<Vertex> {
 	 * @param v
 	 *            <code>Vertex</code> to insert
 	 */
-	void addVertex(Vertex v);
+	void addVertex(VertexType v);
 
 	/**
 	 * Remove <code>Vertex</code> from graph.
@@ -21,7 +22,7 @@ public interface MutableDirectedGraph<Vertex> extends DirectedGraph<Vertex> {
 	 * @param v
 	 *            <code>Vertex</code> to remove
 	 */
-	void removeVertex(Vertex v);
+	void removeVertex(VertexType v);
 
 	/**
 	 * Add {@link Edge} to the graph.
@@ -29,7 +30,7 @@ public interface MutableDirectedGraph<Vertex> extends DirectedGraph<Vertex> {
 	 * @param edge
 	 *            {@link Edge} to add to the graph.
 	 */
-	void addEdge(Edge<Vertex> edge);
+	void addEdge(EdgeType edge);
 
 	/**
 	 * Remove the edge between <code>source</code> and <code>dest</code>.
@@ -41,6 +42,6 @@ public interface MutableDirectedGraph<Vertex> extends DirectedGraph<Vertex> {
 	 * @return <code>true</code> if the edge could be found and was removed,
 	 *         <code>false</code> otherwise
 	 */
-	boolean removeEdgeBetween(Vertex source, Vertex dest);
+	boolean removeEdgeBetween(VertexType source, VertexType dest);
 
 }

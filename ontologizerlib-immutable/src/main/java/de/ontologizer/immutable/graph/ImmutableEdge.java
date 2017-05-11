@@ -5,12 +5,12 @@ package de.ontologizer.immutable.graph;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public final class ImmutableEdge<Vertex> implements Edge<Vertex> {
+public final class ImmutableEdge<VertexType> implements Edge<VertexType>, ShallowCopyable<ImmutableEdge<VertexType>> {
 
 	private static final long serialVersionUID = 1L;
 
-	private final Vertex source;
-	private final Vertex dest;
+	private final VertexType source;
+	private final VertexType dest;
 
 	/**
 	 * Static constructor method so <code>Vertex</code> does not have to be
@@ -21,8 +21,7 @@ public final class ImmutableEdge<Vertex> implements Edge<Vertex> {
 	 * @param dest
 	 *            <code>Vertex</code> to use for the edge tip vertex
 	 */
-	public static <Vertex> ImmutableEdge<Vertex> construct(Vertex source,
-			Vertex dest) {
+	public static <Vertex> ImmutableEdge<Vertex> construct(Vertex source, Vertex dest) {
 		return new ImmutableEdge<Vertex>(source, dest);
 	}
 
@@ -35,18 +34,18 @@ public final class ImmutableEdge<Vertex> implements Edge<Vertex> {
 	 * @param dest
 	 *            <code>Vertex</code> to use for the edge tip vertex
 	 */
-	public ImmutableEdge(Vertex source, Vertex dest) {
+	public ImmutableEdge(VertexType source, VertexType dest) {
 		this.source = source;
 		this.dest = dest;
 	}
 
 	@Override
-	public Vertex getSource() {
+	public VertexType getSource() {
 		return source;
 	}
 
 	@Override
-	public Vertex getDest() {
+	public VertexType getDest() {
 		return dest;
 	}
 
@@ -81,7 +80,7 @@ public final class ImmutableEdge<Vertex> implements Edge<Vertex> {
 			return false;
 		}
 		@SuppressWarnings("unchecked")
-		ImmutableEdge<Vertex> other = (ImmutableEdge<Vertex>) obj;
+		ImmutableEdge<VertexType> other = (ImmutableEdge<VertexType>) obj;
 		if (dest == null) {
 			if (other.dest != null)
 				return false;
@@ -95,6 +94,35 @@ public final class ImmutableEdge<Vertex> implements Edge<Vertex> {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public ImmutableEdge<VertexType> shallowCopy() {
+		return ImmutableEdge.construct(source, dest);
+	}
+
+	/**
+	 * Static factory method for creating a {@link #Factory}
+	 * 
+	 * @return Built <code>Factory</code> object.
+	 */
+	public static <VertexType> Factory<VertexType> factory() {
+		return new Factory<VertexType>();
+	}
+
+	/**
+	 * Factory for {@link ImmutableEdge}.
+	 * 
+	 * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel
+	 *         Holtgrewe</a>
+	 */
+	public static class Factory<VertexType> implements EdgeFactory<VertexType, ImmutableEdge<VertexType>> {
+
+		@Override
+		public ImmutableEdge<VertexType> construct(VertexType u, VertexType v) {
+			return ImmutableEdge.construct(u, v);
+		}
+
 	}
 
 }

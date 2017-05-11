@@ -16,18 +16,17 @@ public class ImmutableFastDirectedGraphViewTest {
 	static ImmutableList<ImmutableEdge<Integer>> edges;
 
 	/** Graph to use for testing. */
-	static ImmutableDirectedGraph<Integer> graph;
+	static ImmutableDirectedGraph<Integer, ImmutableEdge<Integer>> graph;
 
 	/** Graph view under test */
-	static ImmutableFastDirectedGraphView<Integer> gView;
+	static ImmutableFastDirectedGraphView<Integer, ImmutableEdge<Integer>> gView;
 
 	@BeforeClass
 	public static void setUp() throws Exception {
-		edges = ImmutableList.of(ImmutableEdge.construct(0, 1),
-				ImmutableEdge.construct(0, 2), ImmutableEdge.construct(0, 3),
-				ImmutableEdge.construct(1, 4), ImmutableEdge.construct(2, 5),
-				ImmutableEdge.construct(3, 6), ImmutableEdge.construct(4, 7),
-				ImmutableEdge.construct(5, 7), ImmutableEdge.construct(6, 7));
+		edges = ImmutableList.of(ImmutableEdge.construct(0, 1), ImmutableEdge.construct(0, 2),
+				ImmutableEdge.construct(0, 3), ImmutableEdge.construct(1, 4), ImmutableEdge.construct(2, 5),
+				ImmutableEdge.construct(3, 6), ImmutableEdge.construct(4, 7), ImmutableEdge.construct(5, 7),
+				ImmutableEdge.construct(6, 7));
 
 		graph = ImmutableDirectedGraph.construct(edges);
 
@@ -61,8 +60,7 @@ public class ImmutableFastDirectedGraphViewTest {
 
 	@Test
 	public void testGetVertexIndices() {
-		Assert.assertEquals("[0, 3]",
-				gView.getVertexIndices(ImmutableList.of(0, 3)).toString());
+		Assert.assertEquals("[0, 3]", gView.getVertexIndices(ImmutableList.of(0, 3)).toString());
 	}
 
 	@Test
@@ -85,8 +83,7 @@ public class ImmutableFastDirectedGraphViewTest {
 
 	@Test
 	public void testGetAncestors() {
-		Assert.assertEquals("[0, 1, 2, 3, 4, 5, 6, 7]",
-				gView.getAncestors(0).toString());
+		Assert.assertEquals("[0, 1, 2, 3, 4, 5, 6, 7]", gView.getAncestors(0).toString());
 		Assert.assertEquals("[1, 4, 7]", gView.getAncestors(1).toString());
 	}
 

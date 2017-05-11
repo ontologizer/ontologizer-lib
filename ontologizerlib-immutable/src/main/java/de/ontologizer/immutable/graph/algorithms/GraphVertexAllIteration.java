@@ -1,6 +1,7 @@
 package de.ontologizer.immutable.graph.algorithms;
 
 import de.ontologizer.immutable.graph.DirectedGraph;
+import de.ontologizer.immutable.graph.Edge;
 
 /**
  * Interface for iteration of {@link DirectedGraph} vertices using the Visitor
@@ -8,7 +9,8 @@ import de.ontologizer.immutable.graph.DirectedGraph;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public interface GraphVertexAllIteration<Vertex, Graph extends DirectedGraph<Vertex>> {
+public interface GraphVertexAllIteration<VertexType, EdgeType extends Edge<VertexType>,
+		GraphType extends DirectedGraph<VertexType, EdgeType>> {
 
 	/**
 	 * Iterate all vertices in topological order.
@@ -24,6 +26,6 @@ public interface GraphVertexAllIteration<Vertex, Graph extends DirectedGraph<Ver
 	 *            {@link VertexVisitor} to use for notifying about reaching a
 	 *            vertex
 	 */
-	public void start(Graph g, VertexVisitor<Vertex> visitor);
+	public void start(GraphType g, VertexVisitor<VertexType, EdgeType> visitor);
 
 }

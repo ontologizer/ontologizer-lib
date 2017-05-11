@@ -1,6 +1,7 @@
 package de.ontologizer.immutable.graph.algorithms;
 
 import de.ontologizer.immutable.graph.DirectedGraph;
+import de.ontologizer.immutable.graph.ImmutableEdge;
 import de.ontologizer.immutable.graph.algorithms.VertexVisitor;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,12 +11,12 @@ import java.util.List;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-class GraphVisitor implements VertexVisitor<Integer> {
+class GraphVisitor implements VertexVisitor<Integer, ImmutableEdge<Integer>> {
 
 	private final List<Integer> visitedVertices = new ArrayList<Integer>();
 
 	@Override
-	public boolean visit(DirectedGraph<Integer> g, Integer v) {
+	public boolean visit(DirectedGraph<Integer, ImmutableEdge<Integer>> g, Integer v) {
 		visitedVertices.add(v);
 		return true;
 	}

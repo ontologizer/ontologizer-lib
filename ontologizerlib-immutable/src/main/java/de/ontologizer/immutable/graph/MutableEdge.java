@@ -5,7 +5,7 @@ package de.ontologizer.immutable.graph;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public interface MutableEdge<Vertex> extends Edge<Vertex> {
+public interface MutableEdge<VertexType> extends Edge<VertexType> {
 
 	/**
 	 * Set the destination vertex.
@@ -14,7 +14,7 @@ public interface MutableEdge<Vertex> extends Edge<Vertex> {
 	 *            <code>Vertex</code> to set the vertex at the tip of the edge
 	 *            to.
 	 */
-	void setDest(Vertex dest);
+	void setDest(VertexType dest);
 
 	/**
 	 * Set the source vertex.
@@ -23,7 +23,7 @@ public interface MutableEdge<Vertex> extends Edge<Vertex> {
 	 *            <code>Vertex</code> to set the vertex at the foot of the edge
 	 *            to.
 	 */
-	void setSource(Vertex source);
+	void setSource(VertexType source);
 
 	/**
 	 * Set the edge weight

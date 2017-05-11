@@ -2,6 +2,8 @@ package ontologizer.ontology;
 
 import java.io.Serializable;
 
+// TODO: rename to ParentRelation
+
 /**
  * This class is used to specify a parent accompanied with
  * the kind of relationship. Note that the term "parent" is

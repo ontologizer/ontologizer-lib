@@ -23,14 +23,16 @@ import java.util.List;
  * @author Sebastian Bauer
  * @author Sebastian Koehler
  */
-public interface FastDirectedGraphView<Vertex> extends Serializable {
+public interface FastDirectedGraphView<VertexType, EdgeType extends Edge<VertexType>>
+		extends
+			Serializable {
 
 	/**
 	 * Query for underlying {@link DirectedGraph}.
 	 *
 	 * @return {@link DirectedGraph} used for precomputation
 	 */
-	public DirectedGraph<Vertex> getGraph();
+	public DirectedGraph<VertexType, EdgeType> getGraph();
 
 	/**
 	 * Query for number of vertices in the graph.
@@ -53,7 +55,7 @@ public interface FastDirectedGraphView<Vertex> extends Serializable {
 	 *            of vertex to use for query
 	 * @return resulting <code>Vertex</code>
 	 */
-	public Vertex getVertex(int index);
+	public VertexType getVertex(int index);
 
 	/**
 	 * Query for vertex index by <code>Vertex</code>
@@ -62,7 +64,7 @@ public interface FastDirectedGraphView<Vertex> extends Serializable {
 	 *            <code>Vertex</code> to obtain the index for
 	 * @return numeric index for <code>Vertex</code>
 	 */
-	public int getVertexIndex(Vertex v);
+	public int getVertexIndex(VertexType v);
 
 	/**
 	 * Query for index given the collection of <code>Vertex</code> objects.
@@ -71,7 +73,7 @@ public interface FastDirectedGraphView<Vertex> extends Serializable {
 	 *            {@link Collection} of <code>Vertex</code> objects to query for
 	 * @return resulting list of numeric vertex representation
 	 */
-	public List<Integer> getVertexIndices(Collection<Vertex> vertices);
+	public List<Integer> getVertexIndices(Collection<VertexType> vertices);
 
 	/**
 	 * Query for whether one node is the ancestor of another
@@ -82,7 +84,7 @@ public interface FastDirectedGraphView<Vertex> extends Serializable {
 	 *            second node
 	 * @return whether <code>u</code> is the ancestor of <code>v</code>
 	 */
-	public boolean isAncestor(Vertex u, Vertex v);
+	public boolean isAncestor(VertexType u, VertexType v);
 
 	/**
 	 * Query for whether one node is the descendant of another
@@ -93,7 +95,7 @@ public interface FastDirectedGraphView<Vertex> extends Serializable {
 	 *            second node
 	 * @return whether <code>u</code> is the descendant of <code>v</code>
 	 */
-	public boolean isDescendant(Vertex u, Vertex v);
+	public boolean isDescendant(VertexType u, VertexType v);
 
 	/**
 	 * Query for all descendants of <code>v</code>
@@ -102,7 +104,7 @@ public interface FastDirectedGraphView<Vertex> extends Serializable {
 	 *            <code>Vertex</code> to use for the query
 	 * @return list of descendant vertices for <code>v</code>
 	 */
-	public List<Vertex> getDescendants(Vertex v);
+	public List<VertexType> getDescendants(VertexType v);
 
 	/**
 	 * Query for all ancestor of <code>v</code>
@@ -111,7 +113,7 @@ public interface FastDirectedGraphView<Vertex> extends Serializable {
 	 *            <code>Vertex</code> to use for the query
 	 * @return list of ancestor vertices for <code>v</code>
 	 */
-	public List<Vertex> getAncestors(Vertex v);
+	public List<VertexType> getAncestors(VertexType v);
 
 	/**
 	 * Whether or not the underlying graph contains vertex <code>v</code>
@@ -120,7 +122,7 @@ public interface FastDirectedGraphView<Vertex> extends Serializable {
 	 *            <code>Vertex</code> to query with
 	 * @return whether or not the underlying graph contains <code>v</code>
 	 */
-	public boolean containsVertex(Vertex v);
+	public boolean containsVertex(VertexType v);
 
 	/**
 	 * Parents of <code>v</code> up to the root
@@ -130,7 +132,7 @@ public interface FastDirectedGraphView<Vertex> extends Serializable {
 	 * @return {@link List} of <code>Vertex</code> objects of ancestors of
 	 *         <code>v</code, up to the root, excluding <code>v</code.
 	 */
-	public List<Vertex> getParents(Vertex v);
+	public List<VertexType> getParents(VertexType v);
 
 	/**
 	 * Children of <code>v</code>.
@@ -140,6 +142,6 @@ public interface FastDirectedGraphView<Vertex> extends Serializable {
 	 * @return {@link List} of <code>Vertex</code> objects that are children of
 	 *         <code>v</code>, excluding <code>v</code> itself
 	 */
-	public List<Vertex> getChildren(Vertex v);
+	public List<VertexType> getChildren(VertexType v);
 
 }
