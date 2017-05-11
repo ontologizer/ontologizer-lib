@@ -473,7 +473,7 @@ public class Ontology implements Iterable<Term>, Serializable
 	{
 		Set<ParentTermID> parents = getTermParentsWithRelation(term);
 		for (ParentTermID p : parents)
-			if (p.termid.equals(parent)) return p.relation;
+			if (p.getRelated().equals(parent)) return p.getRelation();
 		return null;
 	}
 
@@ -1325,20 +1325,21 @@ public class Ontology implements Iterable<Term>, Serializable
 
 			for (ParentTermID parent : term.getParents())
 			{
+				TermID related = parent.getRelated();
 				/* Ignore loops */
-				if (term.getID().equals(parent.termid))
+				if (term.getID().equals(related))
 				{
 					logger.log(Level.INFO,"Detected self-loop in the definition of the ontology (term "+ term.getIDAsString()+"). This link has been ignored.");
 					continue;
 				}
-				if (tc.get(parent.termid) == null)
+				if (tc.get(related) == null)
 				{
 					/* FIXME: We may want to add a new vertex to graph here instead */
-					logger.log(Level.INFO,"Could not add a link from term " + term.toString() + " to " + parent.termid.toString() +" as the latter's definition is missing.");
+					logger.log(Level.INFO,"Could not add a link from term " + term.toString() + " to " + parent.getRelated().toString() +" as the latter's definition is missing.");
 					++skippedEdges;
 					continue;
 				}
-				o.graph.addEdge(new OntologyEdge(tc.get(parent.termid), term, parent.relation));
+				o.graph.addEdge(new OntologyEdge(tc.get(parent.getRelated()), term, parent.getRelation()));
 			}
 		}
 

@@ -10,19 +10,35 @@ import java.io.Serializable;
  *
  * @author Sebastian Bauer
  */
-public class ParentTermID implements Serializable
+public final class ParentTermID implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 
 	/** The id of the related term */
-	public TermID termid;
+	private TermID termid;
 
 	/** the type of the relation */
-	public TermRelation relation;
+	private TermRelation relation;
 
 	public ParentTermID(TermID parent, TermRelation relation)
 	{
 		this.termid = parent;
 		this.relation = relation;
+	}
+
+	/**
+	 * @return the id of the related (parent) term
+	 */
+	public TermID getRelated()
+	{
+		return termid;
+	}
+
+	/**
+	 * @return the relation
+	 */
+	public TermRelation getRelation()
+	{
+		return relation;
 	}
 }
