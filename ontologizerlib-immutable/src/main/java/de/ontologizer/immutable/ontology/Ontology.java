@@ -39,7 +39,7 @@ public interface Ontology extends TermMap, Serializable {
 	 * 
 	 * @return {@link DirectedGraph} of this <code>Ontology</code>.
 	 */
-	public DirectedGraph<Term> getGraph();
+	public DirectedGraph<Term, OntologyEdge> getGraph();
 
 	/**
 	 * Query for underlying {@link TermContainer}.

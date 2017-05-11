@@ -3,6 +3,7 @@ package de.ontologizer.immutable.ontology;
 import de.ontologizer.immutable.graph.algorithms.VertexVisitor;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.EnumSet;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermID;
 import ontologizer.ontology.TermRelation;
@@ -42,7 +43,7 @@ public interface TraversableOntology extends TermMap, Serializable {
 	 * @param visitor
 	 *            {@link VertexVisitor} to use for callback
 	 */
-	public void walkToSource(TermID termId, VertexVisitor<Term> visitor);
+	public void walkToSource(TermID termId, VertexVisitor<Term, OntologyEdge> visitor);
 
 	/**
 	 * Starting at the given {@link TermID}s, walk to the source of the DAG and
@@ -57,8 +58,8 @@ public interface TraversableOntology extends TermMap, Serializable {
 	 * @param relations
 	 *            {@link Collection} of {@link TermRelation}s to follow
 	 */
-	public void walkToSource(TermID termId, VertexVisitor<Term> visitor,
-			Collection<TermRelation> relationsToFollow);
+	public void walkToSource(TermID termId, VertexVisitor<Term, OntologyEdge> visitor,
+			EnumSet<TermRelation> relationsToFollow);
 
 	/**
 	 * Starting at all {@link Term}s with the given {@link TermID}s, walk to the
@@ -70,8 +71,7 @@ public interface TraversableOntology extends TermMap, Serializable {
 	 * @param visitor
 	 *            {@link VertexVisitor} to use for callback
 	 */
-	public void walkToSource(Collection<TermID> termIds,
-			VertexVisitor<Term> vistingVertex);
+	public void walkToSource(Collection<TermID> termIds, VertexVisitor<Term, OntologyEdge> vistingVertex);
 
 	/**
 	 * Starting at all {@link Term}s with the given {@link TermID}s, walk to the
@@ -86,9 +86,8 @@ public interface TraversableOntology extends TermMap, Serializable {
 	 * @param relations
 	 *            {@link Collection} of {@link TermRelation}s to follow
 	 */
-	public void walkToSource(Collection<TermID> termIdSet,
-			VertexVisitor<Term> visitor,
-			Collection<TermRelation> relationsToFollow);
+	public void walkToSource(Collection<TermID> termIdSet, VertexVisitor<Term, OntologyEdge> visitor,
+			EnumSet<TermRelation> relationsToFollow);
 
 	/**
 	 * Starting at all {@link Term}s with the given {@link TermID}s, walk to the
@@ -100,7 +99,7 @@ public interface TraversableOntology extends TermMap, Serializable {
 	 * @param visitor
 	 *            {@link VertexVisitor} to use for callback
 	 */
-	public void walkToSinks(TermID termId, VertexVisitor<Term> visitor);
+	public void walkToSinks(TermID termId, VertexVisitor<Term, OntologyEdge> visitor);
 
 	/**
 	 * Starting at the given {@link TermID}s, walk to the sinks of the DAG and
@@ -115,8 +114,8 @@ public interface TraversableOntology extends TermMap, Serializable {
 	 * @param relations
 	 *            {@link Collection} of {@link TermRelation}s to follow
 	 */
-	public void walkToSinks(TermID termId, VertexVisitor<Term> visitor,
-			Collection<TermRelation> relationsToFollow);
+	public void walkToSinks(TermID termId, VertexVisitor<Term, OntologyEdge> visitor,
+			EnumSet<TermRelation> relationsToFollow);
 
 	/**
 	 * Starting at all {@link Term}s with the given {@link TermID}s, walk to the
@@ -128,8 +127,7 @@ public interface TraversableOntology extends TermMap, Serializable {
 	 * @param visitor
 	 *            {@link VertexVisitor} to use for callback
 	 */
-	public void walkToSinks(Collection<TermID> termIds,
-			VertexVisitor<Term> visitor);
+	public void walkToSinks(Collection<TermID> termIds, VertexVisitor<Term, OntologyEdge> visitor);
 
 	/**
 	 * Starting at all {@link Term}s with the given {@link TermID}s, walk to the
@@ -144,8 +142,7 @@ public interface TraversableOntology extends TermMap, Serializable {
 	 * @param relations
 	 *            {@link Collection} of {@link TermRelation}s to follow
 	 */
-	public void walkToSinks(Collection<TermID> termIds,
-			VertexVisitor<Term> visitor,
-			Collection<TermRelation> relationsToFollow);
+	public void walkToSinks(Collection<TermID> termIds, VertexVisitor<Term, OntologyEdge> visitor,
+			EnumSet<TermRelation> relationsToFollow);
 
 }

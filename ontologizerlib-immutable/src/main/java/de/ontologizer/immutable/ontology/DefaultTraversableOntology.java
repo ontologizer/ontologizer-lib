@@ -1,14 +1,13 @@
 package de.ontologizer.immutable.ontology;
 
 import de.ontologizer.immutable.graph.DirectedGraph;
-import de.ontologizer.immutable.graph.Edge;
 import de.ontologizer.immutable.graph.NeighborSelector;
 import de.ontologizer.immutable.graph.algorithms.BreadthFirstSearch;
 import de.ontologizer.immutable.graph.algorithms.VertexVisitor;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.Iterator;
-import ontologizer.ontology.OntologyEdge;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermID;
 import ontologizer.ontology.TermRelation;
@@ -89,10 +88,10 @@ public class DefaultTraversableOntology implements TraversableOntology {
 		final Term source = ontology.get(sourceId);
 		Term dest = ontology.get(destId);
 
-		new BreadthFirstSearch<Term, DirectedGraph<Term>>(true).startFrom(
-				ontology.getGraph(), dest, new VertexVisitor<Term>() {
+		new BreadthFirstSearch<Term, OntologyEdge, DirectedGraph<Term, OntologyEdge>>()
+				.startFromReverse(ontology.getGraph(), dest, new VertexVisitor<Term, OntologyEdge>() {
 					@Override
-					public boolean visit(DirectedGraph<Term> g, Term v) {
+					public boolean visit(DirectedGraph<Term, OntologyEdge> g, Term v) {
 						if (!v.equals(source)) {
 							return true;
 						}
@@ -105,91 +104,102 @@ public class DefaultTraversableOntology implements TraversableOntology {
 	}
 
 	@Override
-	public void walkToSource(TermID termId, VertexVisitor<Term> visitor) {
-		new BreadthFirstSearch<Term, DirectedGraph<Term>>().startFrom(
-				ontology.getGraph(), get(termId), new NeighborSelector<Term>() {
-					@Override
-					public Iterator<Term> selectNeighbors(Term v) {
-						final Iterator<? extends Edge<Term>> inIter = ontology
-								.getGraph().inEdgeIterator(v);
-						final ArrayList<Term> termsToConsider = new ArrayList<Term>();
-						while (inIter.hasNext()) {
-							OntologyEdge edge = (OntologyEdge) inIter
-									.next(); /* Ugly cast */
-							if (relationsToFollow.contains(edge.getRelation()))
-								termsToConsider.add(edge.getSource());
-						}
-						return termsToConsider.iterator();
-					}
-
-				}, visitor);
-
-		graph.bfs(termIDsToTerms(termIDSet), new INeighbourGrabber<Term>() {
-			public Iterator<Term> grabNeighbours(Term t) {
-				Iterator<Edge<Term>> inIter = graph.getInEdges(t);
-				ArrayList<Term> termsToConsider = new ArrayList<Term>();
-				while (inIter.hasNext()) {
-					OntologyEdge edge = (OntologyEdge) inIter
-							.next(); /* Ugly cast */
-					if (relationsToFollow.contains(edge.getRelation()))
-						termsToConsider.add(edge.getSource());
-				}
-				return termsToConsider.iterator();
-			}
-		}, vistingVertex);
+	public void walkToSource(TermID termId, VertexVisitor<Term, OntologyEdge> visitor,
+			EnumSet<TermRelation> relationsToFollow) {
+		new BreadthFirstSearch<Term, OntologyEdge, DirectedGraph<Term, OntologyEdge>>().startFrom(ontology.getGraph(),
+				get(termId), new RelationsToFollowNeighborSelector(false, relationsToFollow), visitor);
 	}
 
 	@Override
-	public void walkToSource(TermID termId, VertexVisitor<Term> visitor,
-			Collection<TermRelation> relationsToFollow) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void walkToSource(Collection<TermID> termIds,
-			VertexVisitor<Term> visitor) {
+	public void walkToSource(Collection<TermID> termIds, VertexVisitor<Term, OntologyEdge> visitor) {
 		for (TermID termId : termIds) {
 			walkToSource(termId, visitor);
 		}
-
 	}
 
 	@Override
-	public void walkToSource(Collection<TermID> termIds,
-			VertexVisitor<Term> visitor,
-			Collection<TermRelation> relationsToFollow) {
+	public void walkToSource(TermID termId, VertexVisitor<Term, OntologyEdge> visitor) {
+		walkToSource(termId, visitor, EnumSet.allOf(TermRelation.class));
+	}
+
+	@Override
+	public void walkToSource(Collection<TermID> termIds, VertexVisitor<Term, OntologyEdge> visitor,
+			EnumSet<TermRelation> relationsToFollow) {
 		for (TermID termId : termIds) {
 			walkToSinks(termId, visitor, relationsToFollow);
 		}
 	}
 
 	@Override
-	public void walkToSinks(TermID termId, VertexVisitor<Term> visitor) {
-		// TODO Auto-generated method stub
-
+	public void walkToSinks(TermID termId, VertexVisitor<Term, OntologyEdge> visitor,
+			EnumSet<TermRelation> relationsToFollow) {
+		new BreadthFirstSearch<Term, OntologyEdge, DirectedGraph<Term, OntologyEdge>>().startFrom(ontology.getGraph(),
+				get(termId), new RelationsToFollowNeighborSelector(true, relationsToFollow), visitor);
 	}
 
 	@Override
-	public void walkToSinks(TermID termId, VertexVisitor<Term> visitor,
-			Collection<TermRelation> relationsToFollow) {
-		// TODO Auto-generated method stub
-
+	public void walkToSinks(TermID termId, VertexVisitor<Term, OntologyEdge> visitor) {
+		walkToSinks(termId, visitor, EnumSet.allOf(TermRelation.class));
 	}
 
 	@Override
-	public void walkToSinks(Collection<TermID> termIds,
-			VertexVisitor<Term> visitor) {
+	public void walkToSinks(Collection<TermID> termIds, VertexVisitor<Term, OntologyEdge> visitor) {
 		for (TermID termId : termIds) {
 			walkToSinks(termId, visitor);
 		}
 	}
 
 	@Override
-	public void walkToSinks(Collection<TermID> termIds,
-			VertexVisitor<Term> visitor,
-			Collection<TermRelation> relationsToFollow) {
+	public void walkToSinks(Collection<TermID> termIds, VertexVisitor<Term, OntologyEdge> visitor,
+			EnumSet<TermRelation> relationsToFollow) {
 		for (TermID termId : termIds) {
 			walkToSinks(termId, visitor, relationsToFollow);
+		}
+	}
+
+	/**
+	 * Helper class for selecting neighbors over a edges marked with specific
+	 * {@link TermRelation}s only.
+	 * 
+	 * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel
+	 *         Holtgrewe</a>
+	 */
+	private final class RelationsToFollowNeighborSelector
+			implements NeighborSelector<Term, OntologyEdge, DirectedGraph<Term, OntologyEdge>> {
+
+		private final boolean reverse;
+		private final EnumSet<TermRelation> rels;
+
+		/**
+		 * Construct with set of relation types to follow
+		 * 
+		 * @param reverse
+		 *            whether or not to iterate edges in reverse order
+		 * @param rels
+		 *            relation types to follow in neighbor selections
+		 */
+		private RelationsToFollowNeighborSelector(boolean reverse, EnumSet<TermRelation> rels) {
+			this.reverse = reverse;
+			this.rels = rels;
+		}
+
+		@Override
+		public Iterator<Term> selectNeighbors(Term v) {
+			final Iterator<OntologyEdge> inIter;
+			if (reverse) {
+				inIter = ontology.getGraph().inEdgeIterator(v);
+			} else {
+				inIter = ontology.getGraph().outEdgeIterator(v);
+			}
+			final ArrayList<Term> termsToConsider = new ArrayList<Term>();
+			while (inIter.hasNext()) {
+				OntologyEdge edge =
+						(OntologyEdge) inIter.next(); /* Ugly cast */
+				if (rels.contains(edge.getTermRelation())) {
+					termsToConsider.add(edge.getSource());
+				}
+			}
+			return termsToConsider.iterator();
 		}
 	}
 

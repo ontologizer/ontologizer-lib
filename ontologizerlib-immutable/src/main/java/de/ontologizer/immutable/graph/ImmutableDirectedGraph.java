@@ -430,7 +430,8 @@ public final class ImmutableDirectedGraph<VertexType, EdgeType extends Edge<Vert
 
 		/**
 		 * Construct and add new {@link ImmutableEdge} between
-		 * <code>source</code> and <code>dest</code>.
+		 * <code>source</code> and <code>dest</code>, any label/weights are set
+		 * to default values.
 		 *
 		 * @param source
 		 *            Source vertex for the directed edge

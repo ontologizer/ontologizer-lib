@@ -22,7 +22,7 @@ public class ImmutableOntology implements Ontology {
 	private final ImmutableTermContainer termContainer;
 
 	/** Wrapped {@link DirectedGraph}. */
-	private final ImmutableDirectedGraph<Term> graph;
+	private final ImmutableDirectedGraph<Term, OntologyEdge> graph;
 
 	/**
 	 * Construct the object with the given <code>termContainer</code> and
@@ -34,8 +34,7 @@ public class ImmutableOntology implements Ontology {
 	 * @param graph
 	 *            {@link ImmutableDirectedGraph} with the ontology's structure.
 	 */
-	public ImmutableOntology(ImmutableTermContainer termContainer,
-			ImmutableDirectedGraph<Term> graph) {
+	public ImmutableOntology(ImmutableTermContainer termContainer, ImmutableDirectedGraph<Term, OntologyEdge> graph) {
 		this.termContainer = termContainer;
 		this.graph = graph;
 	}
@@ -61,7 +60,7 @@ public class ImmutableOntology implements Ontology {
 	}
 
 	@Override
-	public DirectedGraph<Term> getGraph() {
+	public ImmutableDirectedGraph<Term, OntologyEdge> getGraph() {
 		return graph;
 	}
 

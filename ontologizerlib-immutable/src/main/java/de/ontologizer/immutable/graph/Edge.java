@@ -7,9 +7,7 @@ import java.io.Serializable;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public interface Edge<VertexType>
-		extends
-			Serializable {
+public interface Edge<VertexType> extends Serializable {
 
 	/**
 	 * Query for the destination vertex.
