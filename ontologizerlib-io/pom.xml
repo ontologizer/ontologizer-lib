@@ -11,7 +11,7 @@
 	<parent>
 		<groupId>de.ontologizer</groupId>
 		<artifactId>OntologizerLib</artifactId>
-		<version>0.2-SNAPSHOT</version>
+		<version>0.2</version>
 	</parent>
 
 	<properties>
