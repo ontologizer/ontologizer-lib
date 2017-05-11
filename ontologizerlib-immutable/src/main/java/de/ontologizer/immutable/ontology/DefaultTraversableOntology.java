@@ -75,8 +75,8 @@ public class DefaultTraversableOntology implements TraversableOntology {
 	@Override
 	public boolean doesPathExist(TermID sourceId, TermID destId) {
 		// Some special cases because of the artificial root
-		if (ontology.isRoot(destId)) {
-			if (ontology.isRoot(sourceId)) {
+		if (ontology.isRootTerm(destId)) {
+			if (ontology.isRootTerm(sourceId)) {
 				return true;
 			}
 			return false;

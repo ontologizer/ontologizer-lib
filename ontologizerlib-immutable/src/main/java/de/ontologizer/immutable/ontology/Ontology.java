@@ -3,6 +3,7 @@ package de.ontologizer.immutable.ontology;
 import de.ontologizer.immutable.graph.DirectedGraph;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import ontologizer.ontology.ParentTermID;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermID;
@@ -21,7 +22,7 @@ import ontologizer.types.ByteString;
  * </p>
  * 
  * <p>
- * In <code>Ontology</code> graphs, vertices point to their parents.
+ * In <code>Ontology</code> graphs, vertices point to their children.
  * </p>
  * 
  * <p>
@@ -58,9 +59,9 @@ public interface Ontology extends TermMap, Serializable {
 	/**
 	 * Query for all {@link Term}s in topological order.
 	 * 
-	 * @return {@link Collection} of {@link Term}s in topological order.
+	 * @return {@link List} of {@link Term}s in topological order.
 	 */
-	public Collection<Term> getTermsInTopologicalOrder();
+	public List<Term> getTermsInTopologicalOrder();
 
 	/**
 	 * Query for "is root" state of the given {@link TermID}
@@ -69,7 +70,7 @@ public interface Ontology extends TermMap, Serializable {
 	 *            {@link TermID} of the root
 	 * @return whether or not <code>termId</code> is the root.
 	 */
-	public boolean isRoot(TermID termId);
+	public boolean isRootTerm(TermID termId);
 
 	/**
 	 * Query for "is artificial root" state of the given {@link TermID}
@@ -81,13 +82,11 @@ public interface Ontology extends TermMap, Serializable {
 	public boolean isArtificialRoot(TermID termId);
 
 	/**
-	 * Return {@link Term} for the given <code>termId</code> or the ontology
-	 * root.
+	 * Return {@link Collection} of terms on the first level.
 	 * 
-	 * @param termId
-	 * @return {@link Term} with the given <code>termId</code> or the root.
+	 * @return {@link Collection} of children
 	 */
-	public Term getTermOrRoot(TermID termId);
+	public Collection<Term> getLevel1Terms();
 
 	/**
 	 * Return {@link Collection} of children for the given {@link TermID}
@@ -96,7 +95,7 @@ public interface Ontology extends TermMap, Serializable {
 	 *            {@link TermID} to query for
 	 * @return {@link Collection} of children
 	 */
-	public Collection<Term> getChildrTerms(TermID termId);
+	public Collection<Term> getChildTerms(TermID termId);
 
 	/**
 	 * Return {@link Collection} of parents for the given {@link TermID}
