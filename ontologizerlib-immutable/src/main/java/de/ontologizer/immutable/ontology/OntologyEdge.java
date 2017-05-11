@@ -1,7 +1,6 @@
 package de.ontologizer.immutable.ontology;
 
 import de.ontologizer.immutable.graph.Edge;
-import de.ontologizer.immutable.graph.ShallowCopyable;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermRelation;
 
@@ -10,7 +9,7 @@ import ontologizer.ontology.TermRelation;
  * 
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public interface OntologyEdge extends Edge<Term>, ShallowCopyable<OntologyEdge> {
+public interface OntologyEdge extends Edge<Term> {
 
 	/**
 	 * Query for term relation of ontology edge.

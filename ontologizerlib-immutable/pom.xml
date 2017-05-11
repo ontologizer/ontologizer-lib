@@ -20,11 +20,16 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>de.ontologizer</groupId>
-			<artifactId>ontologizerlib-core</artifactId>
-			<version>${project.version}</version>
-	    </dependency>
+        <dependency>
+            <groupId>de.ontologizer</groupId>
+            <artifactId>ontologizerlib-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.ontologizer</groupId>
+            <artifactId>ontologizerlib-io</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!--
 			Using Guava v20.0 here for Java 7/Android compatibility.

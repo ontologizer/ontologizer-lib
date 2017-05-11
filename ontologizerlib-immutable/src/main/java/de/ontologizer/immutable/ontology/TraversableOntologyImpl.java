@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
+import java.util.List;
+import ontologizer.ontology.ParentTermID;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermID;
 import ontologizer.ontology.TermRelation;
@@ -35,12 +37,12 @@ import ontologizer.ontology.TermRelation;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public class DefaultTraversableOntology implements TraversableOntology {
+public class TraversableOntologyImpl<EdgeType extends OntologyEdge> implements TraversableOntology<EdgeType> {
 
 	private static final long serialVersionUID = 1L;
 
 	/** Decorated {@link ImmutableOntology} to wrap. */
-	private final Ontology ontology;
+	private final Ontology<EdgeType> ontology;
 
 	/**
 	 * Construct decorator with underlying {@link ImmutableOntology}.
@@ -48,7 +50,7 @@ public class DefaultTraversableOntology implements TraversableOntology {
 	 * @param ontology
 	 *            {@link ImmutableOntology} to decorate.
 	 */
-	public DefaultTraversableOntology(Ontology ontology) {
+	public TraversableOntologyImpl(Ontology<EdgeType> ontology) {
 		this.ontology = ontology;
 	}
 
@@ -88,10 +90,10 @@ public class DefaultTraversableOntology implements TraversableOntology {
 		final Term source = ontology.get(sourceId);
 		Term dest = ontology.get(destId);
 
-		new BreadthFirstSearch<Term, OntologyEdge, DirectedGraph<Term, OntologyEdge>>()
-				.startFromReverse(ontology.getGraph(), dest, new VertexVisitor<Term, OntologyEdge>() {
+		new BreadthFirstSearch<Term, EdgeType, DirectedGraph<Term, EdgeType>>().startFromReverse(ontology.getGraph(),
+				dest, new VertexVisitor<Term, EdgeType>() {
 					@Override
-					public boolean visit(DirectedGraph<Term, OntologyEdge> g, Term v) {
+					public boolean visit(DirectedGraph<Term, EdgeType> g, Term v) {
 						if (!v.equals(source)) {
 							return true;
 						}
@@ -104,26 +106,26 @@ public class DefaultTraversableOntology implements TraversableOntology {
 	}
 
 	@Override
-	public void walkToSource(TermID termId, VertexVisitor<Term, OntologyEdge> visitor,
+	public void walkToSource(TermID termId, VertexVisitor<Term, EdgeType> visitor,
 			EnumSet<TermRelation> relationsToFollow) {
-		new BreadthFirstSearch<Term, OntologyEdge, DirectedGraph<Term, OntologyEdge>>().startFrom(ontology.getGraph(),
+		new BreadthFirstSearch<Term, EdgeType, DirectedGraph<Term, EdgeType>>().startFrom(ontology.getGraph(),
 				get(termId), new RelationsToFollowNeighborSelector(false, relationsToFollow), visitor);
 	}
 
 	@Override
-	public void walkToSource(Collection<TermID> termIds, VertexVisitor<Term, OntologyEdge> visitor) {
+	public void walkToSource(Collection<TermID> termIds, VertexVisitor<Term, EdgeType> visitor) {
 		for (TermID termId : termIds) {
 			walkToSource(termId, visitor);
 		}
 	}
 
 	@Override
-	public void walkToSource(TermID termId, VertexVisitor<Term, OntologyEdge> visitor) {
+	public void walkToSource(TermID termId, VertexVisitor<Term, EdgeType> visitor) {
 		walkToSource(termId, visitor, EnumSet.allOf(TermRelation.class));
 	}
 
 	@Override
-	public void walkToSource(Collection<TermID> termIds, VertexVisitor<Term, OntologyEdge> visitor,
+	public void walkToSource(Collection<TermID> termIds, VertexVisitor<Term, EdgeType> visitor,
 			EnumSet<TermRelation> relationsToFollow) {
 		for (TermID termId : termIds) {
 			walkToSinks(termId, visitor, relationsToFollow);
@@ -131,26 +133,26 @@ public class DefaultTraversableOntology implements TraversableOntology {
 	}
 
 	@Override
-	public void walkToSinks(TermID termId, VertexVisitor<Term, OntologyEdge> visitor,
+	public void walkToSinks(TermID termId, VertexVisitor<Term, EdgeType> visitor,
 			EnumSet<TermRelation> relationsToFollow) {
-		new BreadthFirstSearch<Term, OntologyEdge, DirectedGraph<Term, OntologyEdge>>().startFrom(ontology.getGraph(),
+		new BreadthFirstSearch<Term, EdgeType, DirectedGraph<Term, EdgeType>>().startFrom(ontology.getGraph(),
 				get(termId), new RelationsToFollowNeighborSelector(true, relationsToFollow), visitor);
 	}
 
 	@Override
-	public void walkToSinks(TermID termId, VertexVisitor<Term, OntologyEdge> visitor) {
+	public void walkToSinks(TermID termId, VertexVisitor<Term, EdgeType> visitor) {
 		walkToSinks(termId, visitor, EnumSet.allOf(TermRelation.class));
 	}
 
 	@Override
-	public void walkToSinks(Collection<TermID> termIds, VertexVisitor<Term, OntologyEdge> visitor) {
+	public void walkToSinks(Collection<TermID> termIds, VertexVisitor<Term, EdgeType> visitor) {
 		for (TermID termId : termIds) {
 			walkToSinks(termId, visitor);
 		}
 	}
 
 	@Override
-	public void walkToSinks(Collection<TermID> termIds, VertexVisitor<Term, OntologyEdge> visitor,
+	public void walkToSinks(Collection<TermID> termIds, VertexVisitor<Term, EdgeType> visitor,
 			EnumSet<TermRelation> relationsToFollow) {
 		for (TermID termId : termIds) {
 			walkToSinks(termId, visitor, relationsToFollow);
@@ -165,7 +167,7 @@ public class DefaultTraversableOntology implements TraversableOntology {
 	 *         Holtgrewe</a>
 	 */
 	private final class RelationsToFollowNeighborSelector
-			implements NeighborSelector<Term, OntologyEdge, DirectedGraph<Term, OntologyEdge>> {
+			implements NeighborSelector<Term, EdgeType, DirectedGraph<Term, EdgeType>> {
 
 		private final boolean reverse;
 		private final EnumSet<TermRelation> rels;
@@ -185,7 +187,7 @@ public class DefaultTraversableOntology implements TraversableOntology {
 
 		@Override
 		public Iterator<Term> selectNeighbors(Term v) {
-			final Iterator<OntologyEdge> inIter;
+			final Iterator<? extends OntologyEdge> inIter;
 			if (reverse) {
 				inIter = ontology.getGraph().inEdgeIterator(v);
 			} else {
@@ -201,6 +203,66 @@ public class DefaultTraversableOntology implements TraversableOntology {
 			}
 			return termsToConsider.iterator();
 		}
+	}
+
+	@Override
+	public DirectedGraph<Term, EdgeType> getGraph() {
+		return ontology.getGraph();
+	}
+
+	@Override
+	public TermContainer getTermContainer() {
+		return ontology.getTermContainer();
+	}
+
+	@Override
+	public Collection<Term> getLeafTerms() {
+		return ontology.getLeafTerms();
+	}
+
+	@Override
+	public List<Term> getTermsInTopologicalOrder() {
+		return ontology.getTermsInTopologicalOrder();
+	}
+
+	@Override
+	public boolean isRootTerm(TermID termId) {
+		return ontology.isRootTerm(termId);
+	}
+
+	@Override
+	public boolean isArtificialRoot(TermID termId) {
+		return ontology.isArtificialRoot(termId);
+	}
+
+	@Override
+	public Collection<Term> getLevel1Terms() {
+		return ontology.getLevel1Terms();
+	}
+
+	@Override
+	public Collection<Term> getChildTerms(TermID termId) {
+		return ontology.getChildTerms(termId);
+	}
+
+	@Override
+	public Collection<Term> getParentTerms(TermID termId) {
+		return ontology.getParentTerms(termId);
+	}
+
+	@Override
+	public Collection<ParentTermID> getParentRelations(TermID termId) {
+		return ontology.getParentRelations(termId);
+	}
+
+	@Override
+	public TermRelation getParentRelation(TermID termId, TermID parent) {
+		return ontology.getParentRelation(termId, parent);
+	}
+
+	@Override
+	public Collection<TermID> getTermSiblings(TermID termId) {
+		return ontology.getTermSiblings(termId);
 	}
 
 }

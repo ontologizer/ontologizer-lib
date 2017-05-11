@@ -1,7 +1,14 @@
 package de.ontologizer.immutable.io;
 
+import de.ontologizer.immutable.ontology.ImmutableOntology;
+import de.ontologizer.immutable.ontology.ImmutableTermContainer;
 import de.ontologizer.immutable.ontology.Ontology;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import ontologizer.io.obo.IParserInput;
+import ontologizer.io.obo.OBOParser;
+import ontologizer.io.obo.OBOParserException;
 
 /**
  * Read {@link Ontology} from an OBO file.
@@ -39,8 +46,48 @@ public class OboOntologyReader implements OntologyReader {
 	}
 
 	@Override
-	public Ontology read() {
-		throw new RuntimeException();
+	public ImmutableOntology readImmutable() {
+		OBOParser parser = new OBOParser(new IParserInput() {
+			@Override
+			public InputStream inputStream() {
+				return readerInput.inputStream();
+			}
+
+			@Override
+			public void close() {
+				readerInput.close();
+			}
+
+			@Override
+			public int getSize() {
+				return readerInput.getSize();
+			}
+
+			@Override
+			public int getPosition() {
+				return readerInput.getPosition();
+			}
+
+			@Override
+			public String getFilename() {
+				return readerInput.getFilename();
+			}
+		}, 0);
+
+		// Peform the parsing
+		try {
+			parser.doParse();
+		} catch (IOException e) {
+			// XXX add to interface, document
+			throw new RuntimeException("Problem reading OBO file", e);
+		} catch (OBOParserException e) {
+			// XXX add to interface, document
+			throw new RuntimeException("Problem parsing OBO file", e);
+		}
+
+		// Build TermContainer from parse results
+		return ImmutableOntology.constructFromTerms(
+				new ImmutableTermContainer(parser.getTermMap(), parser.getFormatVersion(), parser.getDate()));
 	}
 
 }

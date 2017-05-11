@@ -12,7 +12,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import ontologizer.ontology.ParentTermID;
+import ontologizer.ontology.Subset;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermID;
 import ontologizer.ontology.TermRelation;
@@ -22,21 +25,84 @@ import ontologizer.ontology.TermRelation;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public class ImmutableOntology implements Ontology {
+public final class ImmutableOntology implements Ontology<ImmutableOntologyEdge> {
 
 	private static final long serialVersionUID = 1L;
+
+	private static Logger LOGGER = Logger.getLogger(ImmutableOntology.class.getName());
 
 	/** Wrapped {@link TermContainer}. */
 	private final ImmutableTermContainer termContainer;
 
 	/** Wrapped {@link DirectedGraph}. */
-	private final ImmutableDirectedGraph<Term, OntologyEdge> graph;
+	private final ImmutableDirectedGraph<Term, ImmutableOntologyEdge> graph;
 
 	/** The {@link Term}s on the first level. */
 	private final ImmutableList<Term> level1Terms;
 
 	/** The ontology's root {@link Term}. */
 	private final Term rootTerm;
+
+	/**
+	 * Construction of {@link Ontology} from {@link ImmutableTermContainer}.
+	 * 
+	 * @param termContainer
+	 *            {@link ImmutableTermContainer} to construct from.
+	 * @return Constructed {@link ImmutableOntology} built from
+	 *         {@link ImmutableTermContainer}
+	 */
+	public static ImmutableOntology constructFromTerms(ImmutableTermContainer termContainer) {
+		// Construct underlying graph using graph builder
+		final ImmutableDirectedGraph.Builder<Term, ImmutableOntologyEdge> builder =
+				ImmutableDirectedGraph.builder(ImmutableOntologyEdge.factory());
+
+		// Add all terms to the graph builder
+		for (Term term : termContainer) {
+			builder.addVertex(term);
+		}
+
+		// Now add the edges for linking the terms
+		final Set<Subset> availableSubsets = new HashSet<Subset>();
+		int skippedEdges = 0;
+		for (Term term : termContainer) {
+			// Register all subsets
+			if (term.getSubsets() != null) {
+				for (Subset subset : term.getSubsets()) {
+					availableSubsets.add(subset);
+				}
+			}
+
+			for (ParentTermID parent : term.getParents()) {
+				// Ignore loops
+				if (term.getID().equals(parent.getTermID())) {
+					LOGGER.log(Level.INFO, "Detected self-loop in the definition of the ontology (term {}). "
+							+ "This link has been ignored.", new Object[] { term.getID().toString() });
+					skippedEdges += 1;
+					continue;
+				}
+
+				// Skip links to missing vertices
+				// TODO: We may want to add a new vertex to the graph here
+				// instead eventually
+				if (termContainer.get(parent.getTermID()) == null) {
+					LOGGER.log(Level.INFO,
+							"Could not add a link from term {} to {} as the latter's definition is missing.",
+							new Object[] { term.toString(), parent.termid.toString() });
+					skippedEdges += 1;
+					continue;
+				}
+
+				builder.addEdge(new ImmutableOntologyEdge(termContainer.get(parent.getTermID()), term,
+						parent.getTermRelation()));
+			}
+		}
+
+		if (skippedEdges > 0) {
+			LOGGER.log(Level.INFO, "A total of {} edges were skipped.", new Object[] { skippedEdges });
+		}
+
+		return new ImmutableOntology(termContainer, builder.build());
+	}
 
 	/**
 	 * Construct the object with the given <code>termContainer</code> and
@@ -54,10 +120,11 @@ public class ImmutableOntology implements Ontology {
 	 * @param graph
 	 *            {@link ImmutableDirectedGraph} with the ontology's structure.
 	 */
-	public ImmutableOntology(ImmutableTermContainer termContainer, ImmutableDirectedGraph<Term, OntologyEdge> graph) {
-		final OntologySingleRootEnforcer<ImmutableDirectedGraph<Term, OntologyEdge>> enforcer =
+	private ImmutableOntology(ImmutableTermContainer termContainer,
+			ImmutableDirectedGraph<Term, ImmutableOntologyEdge> graph) {
+		final OntologySingleRootEnforcer<ImmutableDirectedGraph<Term, ImmutableOntologyEdge>> enforcer =
 				new ImmutableOntologySingleRootEnforcer();
-		final Result<ImmutableDirectedGraph<Term, OntologyEdge>> enforced =
+		final Result<ImmutableDirectedGraph<Term, ImmutableOntologyEdge>> enforced =
 				enforcer.enforceSingleRoot(termContainer, graph);
 
 		this.termContainer = (ImmutableTermContainer) enforced.getTermContainer();
@@ -91,7 +158,7 @@ public class ImmutableOntology implements Ontology {
 	}
 
 	@Override
-	public ImmutableDirectedGraph<Term, OntologyEdge> getGraph() {
+	public DirectedGraph<Term, ImmutableOntologyEdge> getGraph() {
 		return graph;
 	}
 
@@ -112,10 +179,10 @@ public class ImmutableOntology implements Ontology {
 	@Override
 	public List<Term> getTermsInTopologicalOrder() {
 		final List<Term> result = new ArrayList<Term>();
-		new TopologicalSorting<Term, OntologyEdge, DirectedGraph<Term, OntologyEdge>>().start(graph,
-				new VertexVisitor<Term, OntologyEdge>() {
+		new TopologicalSorting<Term, ImmutableOntologyEdge, DirectedGraph<Term, ImmutableOntologyEdge>>().start(graph,
+				new VertexVisitor<Term, ImmutableOntologyEdge>() {
 					@Override
-					public boolean visit(DirectedGraph<Term, OntologyEdge> g, Term v) {
+					public boolean visit(DirectedGraph<Term, ImmutableOntologyEdge> g, Term v) {
 						result.add(v);
 						return true;
 					}
@@ -147,7 +214,8 @@ public class ImmutableOntology implements Ontology {
 	@Override
 	public Collection<Term> getChildTerms(TermID termId) {
 		List<Term> result = new ArrayList<Term>();
-		for (Iterator<OntologyEdge> inEdgeIt = graph.inEdgeIterator(get(termId)); inEdgeIt.hasNext(); /* nop */) {
+		for (Iterator<ImmutableOntologyEdge> inEdgeIt = graph.inEdgeIterator(get(termId)); inEdgeIt
+				.hasNext(); /* nop */) {
 			result.add(inEdgeIt.next().getSource());
 		}
 		return result;
@@ -156,7 +224,8 @@ public class ImmutableOntology implements Ontology {
 	@Override
 	public Collection<Term> getParentTerms(TermID termId) {
 		List<Term> result = new ArrayList<Term>();
-		for (Iterator<OntologyEdge> inEdgeIt = graph.outEdgeIterator(get(termId)); inEdgeIt.hasNext(); /* nop */) {
+		for (Iterator<ImmutableOntologyEdge> inEdgeIt = graph.outEdgeIterator(get(termId)); inEdgeIt
+				.hasNext(); /* nop */) {
 			result.add(inEdgeIt.next().getDest());
 		}
 		return result;
@@ -170,7 +239,7 @@ public class ImmutableOntology implements Ontology {
 		}
 
 		final Term term = get(termId);
-		for (Iterator<OntologyEdge> inEdgeIt = graph.inEdgeIterator(term); inEdgeIt.hasNext(); /* nop */) {
+		for (Iterator<ImmutableOntologyEdge> inEdgeIt = graph.inEdgeIterator(term); inEdgeIt.hasNext(); /* nop */) {
 			OntologyEdge e = inEdgeIt.next();
 			result.add(new ParentTermID(e.getSource().getID(), e.getTermRelation()));
 		}

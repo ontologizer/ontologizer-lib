@@ -116,7 +116,7 @@ public final class ImmutableEdge<VertexType> implements Edge<VertexType>, Shallo
 	 * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel
 	 *         Holtgrewe</a>
 	 */
-	public static class Factory<VertexType> implements EdgeFactory<VertexType, ImmutableEdge<VertexType>> {
+	public static class Factory<VertexType> implements Edge.Factory<VertexType, ImmutableEdge<VertexType>> {
 
 		@Override
 		public ImmutableEdge<VertexType> construct(VertexType u, VertexType v) {

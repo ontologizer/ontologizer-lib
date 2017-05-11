@@ -1,7 +1,8 @@
 package de.ontologizer.immutable.ontology;
 
-import de.ontologizer.immutable.graph.EdgeFactory;
+import de.ontologizer.immutable.graph.Edge;
 import de.ontologizer.immutable.graph.ImmutableEdge;
+import de.ontologizer.immutable.graph.ShallowCopyable;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermRelation;
 
@@ -10,7 +11,7 @@ import ontologizer.ontology.TermRelation;
  * 
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public final class ImmutableOntologyEdge implements OntologyEdge {
+public final class ImmutableOntologyEdge implements OntologyEdge, ShallowCopyable<ImmutableOntologyEdge> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -89,7 +90,7 @@ public final class ImmutableOntologyEdge implements OntologyEdge {
 	 * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel
 	 *         Holtgrewe</a>
 	 */
-	public static class Factory implements EdgeFactory<Term, ImmutableOntologyEdge> {
+	public static class Factory implements Edge.Factory<Term, ImmutableOntologyEdge> {
 
 		@Override
 		public ImmutableOntologyEdge construct(Term u, Term v) {

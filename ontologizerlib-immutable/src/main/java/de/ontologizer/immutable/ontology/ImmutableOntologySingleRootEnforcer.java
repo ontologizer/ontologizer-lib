@@ -21,7 +21,7 @@ import ontologizer.ontology.TermRelation;
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
 public final class ImmutableOntologySingleRootEnforcer
-		implements OntologySingleRootEnforcer<ImmutableDirectedGraph<Term, OntologyEdge>> {
+		implements OntologySingleRootEnforcer<ImmutableDirectedGraph<Term, ImmutableOntologyEdge>> {
 
 	private static Logger LOGGER = Logger.getLogger(Ontology.class.getName());
 
@@ -43,8 +43,8 @@ public final class ImmutableOntologySingleRootEnforcer
 	}
 
 	@Override
-	public Result<ImmutableDirectedGraph<Term, OntologyEdge>> enforceSingleRoot(TermContainer termContainer,
-			ImmutableDirectedGraph<Term, OntologyEdge> graph) {
+	public Result<ImmutableDirectedGraph<Term, ImmutableOntologyEdge>> enforceSingleRoot(TermContainer termContainer,
+			ImmutableDirectedGraph<Term, ImmutableOntologyEdge> graph) {
 		final List<Term> level1Terms = collectLevel1Terms(graph);
 		if (level1Terms.size() > 1) {
 			return constructFixedRootResult(termContainer, graph, level1Terms);
@@ -57,7 +57,7 @@ public final class ImmutableOntologySingleRootEnforcer
 	 * Construct result object when introducing artificial root.
 	 */
 	private ResultImpl constructFixedRootResult(TermContainer termContainer,
-			ImmutableDirectedGraph<Term, OntologyEdge> graph, List<Term> level1Terms) {
+			ImmutableDirectedGraph<Term, ImmutableOntologyEdge> graph, List<Term> level1Terms) {
 		// Build printable list of level1 term names
 		final List<String> level1TermNames = new ArrayList<String>();
 		for (Term term : level1Terms) {
@@ -86,8 +86,8 @@ public final class ImmutableOntologySingleRootEnforcer
 		// Rebuild graph with new artificial root term and edge list.
 		final List<Term> extendedVertices = new ArrayList<Term>(graph.getVertices());
 		extendedVertices.add(rootTerm);
-		final List<OntologyEdge> extendedEdges = new ArrayList<OntologyEdge>();
-		for (Iterator<OntologyEdge> it = graph.edgeIterator(); it.hasNext(); /* nop */) {
+		final List<ImmutableOntologyEdge> extendedEdges = new ArrayList<ImmutableOntologyEdge>();
+		for (Iterator<ImmutableOntologyEdge> it = graph.edgeIterator(); it.hasNext(); /* nop */) {
 			extendedEdges.add(it.next());
 		}
 		for (Term term : level1Terms) {
@@ -102,7 +102,7 @@ public final class ImmutableOntologySingleRootEnforcer
 	 * Construct result object for one level 1 term.
 	 */
 	private ResultImpl constructSingleRootResult(TermContainer termContainer,
-			ImmutableDirectedGraph<Term, OntologyEdge> graph, List<Term> level1Terms) {
+			ImmutableDirectedGraph<Term, ImmutableOntologyEdge> graph, List<Term> level1Terms) {
 		ResultImpl result = new ResultImpl(level1Terms.get(0), graph, termContainer, level1Terms);
 		LOGGER.log(Level.INFO, "Ontology contains a single level-one term ({})",
 				new Object[] { result.getRoot().toString() });
@@ -115,7 +115,7 @@ public final class ImmutableOntologySingleRootEnforcer
 	 * @param graph
 	 * @return
 	 */
-	private List<Term> collectLevel1Terms(ImmutableDirectedGraph<Term, OntologyEdge> graph) {
+	private List<Term> collectLevel1Terms(ImmutableDirectedGraph<Term, ImmutableOntologyEdge> graph) {
 		ArrayList<Term> result = new ArrayList<Term>();
 		for (Iterator<Term> it = graph.vertexIterator(); it.hasNext(); /* nop */) {
 			final Term term = it.next();
@@ -127,15 +127,15 @@ public final class ImmutableOntologySingleRootEnforcer
 	}
 
 	class ResultImpl implements de.ontologizer.immutable.ontology.OntologySingleRootEnforcer.Result<
-			ImmutableDirectedGraph<Term, OntologyEdge>> {
+			ImmutableDirectedGraph<Term, ImmutableOntologyEdge>> {
 
 		private final Term root;
-		private final ImmutableDirectedGraph<Term, OntologyEdge> graph;
+		private final ImmutableDirectedGraph<Term, ImmutableOntologyEdge> graph;
 		private final TermContainer termContainer;
 		private final List<Term> level1Terms;
 
-		public ResultImpl(Term root, ImmutableDirectedGraph<Term, OntologyEdge> graph, TermContainer termContainer,
-				List<Term> level1Terms) {
+		public ResultImpl(Term root, ImmutableDirectedGraph<Term, ImmutableOntologyEdge> graph,
+				TermContainer termContainer, List<Term> level1Terms) {
 			this.root = root;
 			this.graph = graph;
 			this.termContainer = termContainer;
@@ -148,7 +148,7 @@ public final class ImmutableOntologySingleRootEnforcer
 		}
 
 		@Override
-		public ImmutableDirectedGraph<Term, OntologyEdge> getGraph() {
+		public ImmutableDirectedGraph<Term, ImmutableOntologyEdge> getGraph() {
 			return graph;
 		}
 

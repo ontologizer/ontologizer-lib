@@ -29,7 +29,7 @@ public class TermContainer extends TermMap implements Iterable<Term>, Serializab
 
 	/** Date of the OBO file */
 	private ByteString date;
-
+	
 	public TermContainer(Iterable<Term> terms, ByteString format, ByteString datum)
 	{
 		super(terms);

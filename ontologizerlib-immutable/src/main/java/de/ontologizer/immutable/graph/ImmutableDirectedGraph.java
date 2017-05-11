@@ -43,7 +43,7 @@ public final class ImmutableDirectedGraph<VertexType, EdgeType extends Edge<Vert
 	 * @return Freshly constructed {@link #Builder} object.
 	 */
 	public static <VertexType, EdgeType extends Edge<VertexType> & ShallowCopyable<EdgeType>>
-			Builder<VertexType, EdgeType> builder(EdgeFactory<VertexType, EdgeType> edgeFactory) {
+			Builder<VertexType, EdgeType> builder(Edge.Factory<VertexType, EdgeType> edgeFactory) {
 		return new Builder<VertexType, EdgeType>(edgeFactory);
 	}
 
@@ -383,7 +383,7 @@ public final class ImmutableDirectedGraph<VertexType, EdgeType extends Edge<Vert
 
 		private final List<VertexType> vertices = new ArrayList<VertexType>();
 		private final List<EdgeType> edges = new ArrayList<EdgeType>();
-		private final EdgeFactory<VertexType, EdgeType> edgeFactory;
+		private final Edge.Factory<VertexType, EdgeType> edgeFactory;
 
 		/**
 		 * Construct with {@link EdgeFactory} for constructing
@@ -392,7 +392,7 @@ public final class ImmutableDirectedGraph<VertexType, EdgeType extends Edge<Vert
 		 * @param edgeFactory
 		 *            The {@link EdgeFactory} to use
 		 */
-		public Builder(EdgeFactory<VertexType, EdgeType> edgeFactory) {
+		public Builder(Edge.Factory<VertexType, EdgeType> edgeFactory) {
 			this.edgeFactory = edgeFactory;
 		}
 

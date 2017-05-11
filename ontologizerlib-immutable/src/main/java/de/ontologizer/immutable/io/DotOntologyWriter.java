@@ -7,8 +7,8 @@ import java.io.File;
  * Writing of an ontology to the DOT format.
  * 
  * <pre>
- * Ontology ontology = // ... 
- * DotOntologyWriter.fromPath("ontology.dot.gz").write(ontology);
+ * Ontology ontology = // ...
+ * 		DotOntologyWriter.fromPath("ontology.dot.gz").write(ontology);
  * </pre>
  * 
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>

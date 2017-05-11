@@ -1,7 +1,6 @@
 package de.ontologizer.immutable.ontology;
 
 import de.ontologizer.immutable.graph.algorithms.VertexVisitor;
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.EnumSet;
 import ontologizer.ontology.Term;
@@ -20,7 +19,7 @@ import ontologizer.ontology.TermRelation;
  * @author Sebastian Bauer
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public interface TraversableOntology extends TermMap, Serializable {
+public interface TraversableOntology<EdgeType extends OntologyEdge> extends OntologyDecorator<EdgeType> {
 
 	/**
 	 * Query whether a directed path from <code>sourceID</code> to
@@ -43,7 +42,7 @@ public interface TraversableOntology extends TermMap, Serializable {
 	 * @param visitor
 	 *            {@link VertexVisitor} to use for callback
 	 */
-	public void walkToSource(TermID termId, VertexVisitor<Term, OntologyEdge> visitor);
+	public void walkToSource(TermID termId, VertexVisitor<Term, EdgeType> visitor);
 
 	/**
 	 * Starting at the given {@link TermID}s, walk to the source of the DAG and
@@ -58,7 +57,7 @@ public interface TraversableOntology extends TermMap, Serializable {
 	 * @param relations
 	 *            {@link Collection} of {@link TermRelation}s to follow
 	 */
-	public void walkToSource(TermID termId, VertexVisitor<Term, OntologyEdge> visitor,
+	public void walkToSource(TermID termId, VertexVisitor<Term, EdgeType> visitor,
 			EnumSet<TermRelation> relationsToFollow);
 
 	/**
@@ -71,7 +70,7 @@ public interface TraversableOntology extends TermMap, Serializable {
 	 * @param visitor
 	 *            {@link VertexVisitor} to use for callback
 	 */
-	public void walkToSource(Collection<TermID> termIds, VertexVisitor<Term, OntologyEdge> vistingVertex);
+	public void walkToSource(Collection<TermID> termIds, VertexVisitor<Term, EdgeType> vistingVertex);
 
 	/**
 	 * Starting at all {@link Term}s with the given {@link TermID}s, walk to the
@@ -86,7 +85,7 @@ public interface TraversableOntology extends TermMap, Serializable {
 	 * @param relations
 	 *            {@link Collection} of {@link TermRelation}s to follow
 	 */
-	public void walkToSource(Collection<TermID> termIdSet, VertexVisitor<Term, OntologyEdge> visitor,
+	public void walkToSource(Collection<TermID> termIdSet, VertexVisitor<Term, EdgeType> visitor,
 			EnumSet<TermRelation> relationsToFollow);
 
 	/**
@@ -99,7 +98,7 @@ public interface TraversableOntology extends TermMap, Serializable {
 	 * @param visitor
 	 *            {@link VertexVisitor} to use for callback
 	 */
-	public void walkToSinks(TermID termId, VertexVisitor<Term, OntologyEdge> visitor);
+	public void walkToSinks(TermID termId, VertexVisitor<Term, EdgeType> visitor);
 
 	/**
 	 * Starting at the given {@link TermID}s, walk to the sinks of the DAG and
@@ -114,7 +113,7 @@ public interface TraversableOntology extends TermMap, Serializable {
 	 * @param relations
 	 *            {@link Collection} of {@link TermRelation}s to follow
 	 */
-	public void walkToSinks(TermID termId, VertexVisitor<Term, OntologyEdge> visitor,
+	public void walkToSinks(TermID termId, VertexVisitor<Term, EdgeType> visitor,
 			EnumSet<TermRelation> relationsToFollow);
 
 	/**
@@ -127,7 +126,7 @@ public interface TraversableOntology extends TermMap, Serializable {
 	 * @param visitor
 	 *            {@link VertexVisitor} to use for callback
 	 */
-	public void walkToSinks(Collection<TermID> termIds, VertexVisitor<Term, OntologyEdge> visitor);
+	public void walkToSinks(Collection<TermID> termIds, VertexVisitor<Term, EdgeType> visitor);
 
 	/**
 	 * Starting at all {@link Term}s with the given {@link TermID}s, walk to the
@@ -142,7 +141,7 @@ public interface TraversableOntology extends TermMap, Serializable {
 	 * @param relations
 	 *            {@link Collection} of {@link TermRelation}s to follow
 	 */
-	public void walkToSinks(Collection<TermID> termIds, VertexVisitor<Term, OntologyEdge> visitor,
+	public void walkToSinks(Collection<TermID> termIds, VertexVisitor<Term, EdgeType> visitor,
 			EnumSet<TermRelation> relationsToFollow);
 
 }

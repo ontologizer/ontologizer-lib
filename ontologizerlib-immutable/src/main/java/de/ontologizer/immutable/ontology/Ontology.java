@@ -33,14 +33,14 @@ import ontologizer.types.ByteString;
  * @author Sebastian Bauer
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public interface Ontology extends TermMap, Serializable {
+public interface Ontology<EdgeType extends OntologyEdge> extends TermMap, Serializable {
 
 	/**
 	 * Query for underlying {@link DirectedGraph}.
 	 * 
 	 * @return {@link DirectedGraph} of this <code>Ontology</code>.
 	 */
-	public DirectedGraph<Term, OntologyEdge> getGraph();
+	public DirectedGraph<Term, EdgeType> getGraph();
 
 	/**
 	 * Query for underlying {@link TermContainer}.
