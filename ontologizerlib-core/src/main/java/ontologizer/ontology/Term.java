@@ -10,12 +10,6 @@ import ontologizer.types.ByteString;
 /**
  * This class provides a representation of individual terms
  *
- * Both isa and part-of refer to child-parent relationships in the directed
- * acyclic graph. The Ontologizer does not distinguish between these types of
- * child-parent relationships, but rather places both type of parent in an
- * ArrayList termed parents. This will allow us to traverse the DAG while we are
- * tabulating the counts of functions found in a cluster
- *
  * @author Peter Robinson, Sebastian Bauer, Sebastian Koehler
  */
 
