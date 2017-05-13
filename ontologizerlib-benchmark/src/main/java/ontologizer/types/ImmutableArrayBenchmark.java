@@ -35,6 +35,18 @@ public class ImmutableArrayBenchmark
 	}
 
 	@Benchmark
+	public int benchmarkImmutableIntArrayForeachLoop()
+	{
+		int sum = 0;
+
+		for (int s : immutableIntegerArray)
+		{
+			sum += s;
+		}
+		return sum;
+	}
+
+	@Benchmark
 	public int benchmarkMutableIntArraySimpleLoop()
 	{
 		int sum = 0;
@@ -42,6 +54,18 @@ public class ImmutableArrayBenchmark
 		for (int i = 0; i < integerArray.length; i++)
 		{
 			sum += integerArray[i];
+		}
+		return sum;
+	}
+
+	@Benchmark
+	public int benchmarkMutableIntArrayForeachLoop()
+	{
+		int sum = 0;
+
+		for (int s : integerArray)
+		{
+			sum += s;
 		}
 		return sum;
 	}
@@ -57,4 +81,17 @@ public class ImmutableArrayBenchmark
 		}
 		return sum;
 	}
+
+	@Benchmark
+	public int benchmarkMutableNativeIntArrayForeachLoop()
+	{
+		int sum = 0;
+
+		for (int s : nativeIntegerArray)
+		{
+			sum += s;
+		}
+		return sum;
+	}
+
 }
