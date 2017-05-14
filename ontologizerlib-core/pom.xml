@@ -6,7 +6,7 @@
 
 	<name>${project.groupId}:${project.artifactId}</name>
 	<description>ontologizerlib-core contains the core functionality for representing ontologies</description>
-	<url>https://github.com/ontologizer/OntologizerLib</url>
+	<url>https://github.com/ontologizer/ontologizerlib</url>
 
 	<parent>
 		<groupId>de.ontologizer</groupId>
