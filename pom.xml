@@ -15,6 +15,7 @@
 	</properties>
 
 	<modules>
+		<module>ontologizerlib-build-helper</module>
 		<module>ontologizerlib-core</module>
 		<module>ontologizerlib-io</module>
 		<module>ontologizerlib-benchmark</module>
