@@ -14,11 +14,10 @@ import ontologizer.types.ByteString;
  * Interface for representation of a full ontology.
  * 
  * <p>
- * In the ontologizerlib, an ontology is a set of terms with an imposed DAG
- * graph structure. The convention is that the interface takes {@link TermID}s
- * for parameters but returns {@link Term} objects. Any callbacks take
- * {@link Term}s. Any other interfaces using the {@link ByteString} code Java
- * {@link String} representation of term IDs is implemented as decorators.
+ * In the ontologizerlib, an ontology is a set of terms with an imposed DAG graph structure. The
+ * convention is that the interface takes {@link TermID}s for parameters but returns {@link Term}
+ * objects. Any callbacks take {@link Term}s. Any other interfaces using the {@link ByteString} code
+ * Java {@link String} representation of term IDs is implemented as decorators.
  * </p>
  * 
  * <p>
@@ -26,8 +25,8 @@ import ontologizer.types.ByteString;
  * </p>
  * 
  * <p>
- * Only supports simple queries on terms and their relations. For anything going
- * over more than one edge, use an {@link TraversableOntology}.
+ * Only supports simple queries on terms and their relations. For anything going over more than one
+ * edge, use an {@link TraversableOntology}.
  * </p>
  * 
  * @author Sebastian Bauer
@@ -48,6 +47,13 @@ public interface Ontology<EdgeType extends OntologyEdge> extends TermMap, Serial
 	 * @return {@link TermContainer} of this <code>Ontology</code>.
 	 */
 	public TermContainer getTermContainer();
+
+	/**
+	 * Query for root {@link Term}.
+	 * 
+	 * @public The {@link Term} that is the root of the ontology.
+	 */
+	public Term getRootTerm();
 
 	/**
 	 * Query for all leaf terms.
@@ -111,8 +117,7 @@ public interface Ontology<EdgeType extends OntologyEdge> extends TermMap, Serial
 	 * 
 	 * @param termId
 	 *            {@link TermID} to query for.
-	 * @return {@link Collection} of {@link ParentTermID}s describing the
-	 *         term-to-parent relations.
+	 * @return {@link Collection} of {@link ParentTermID}s describing the term-to-parent relations.
 	 */
 	public Collection<ParentTermID> getParentRelations(TermID termId);
 
@@ -123,8 +128,8 @@ public interface Ontology<EdgeType extends OntologyEdge> extends TermMap, Serial
 	 *            selects the parent
 	 * @param termId
 	 *            selects the term
-	 * @return the relation type of term and the parent term or null if no
-	 *         parent is not the parent of term.
+	 * @return the relation type of term and the parent term or null if no parent is not the parent
+	 *         of term.
 	 */
 	public TermRelation getParentRelation(TermID termId, TermID parent);
 

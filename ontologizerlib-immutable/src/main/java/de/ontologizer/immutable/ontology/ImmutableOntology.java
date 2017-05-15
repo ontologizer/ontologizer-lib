@@ -48,13 +48,12 @@ public final class ImmutableOntology implements Ontology<ImmutableOntologyEdge> 
 	 * 
 	 * @param termContainer
 	 *            {@link ImmutableTermContainer} to construct from.
-	 * @return Constructed {@link ImmutableOntology} built from
-	 *         {@link ImmutableTermContainer}
+	 * @return Constructed {@link ImmutableOntology} built from {@link ImmutableTermContainer}
 	 */
 	public static ImmutableOntology constructFromTerms(ImmutableTermContainer termContainer) {
 		// Construct underlying graph using graph builder
-		final ImmutableDirectedGraph.Builder<Term, ImmutableOntologyEdge> builder =
-				ImmutableDirectedGraph.builder(ImmutableOntologyEdge.factory());
+		final ImmutableDirectedGraph.Builder<Term, ImmutableOntologyEdge> builder = ImmutableDirectedGraph
+				.builder(ImmutableOntologyEdge.factory());
 
 		// Add all terms to the graph builder
 		for (Term term : termContainer) {
@@ -75,8 +74,10 @@ public final class ImmutableOntology implements Ontology<ImmutableOntologyEdge> 
 			for (ParentTermID parent : term.getParents()) {
 				// Ignore loops
 				if (term.getID().equals(parent.getTermID())) {
-					LOGGER.log(Level.INFO, "Detected self-loop in the definition of the ontology (term {}). "
-							+ "This link has been ignored.", new Object[] { term.getID().toString() });
+					LOGGER.log(Level.INFO,
+							"Detected self-loop in the definition of the ontology (term {}). "
+									+ "This link has been ignored.",
+							new Object[] { term.getID().toString() });
 					skippedEdges += 1;
 					continue;
 				}
@@ -92,45 +93,47 @@ public final class ImmutableOntology implements Ontology<ImmutableOntologyEdge> 
 					continue;
 				}
 
-				builder.addEdge(new ImmutableOntologyEdge(termContainer.get(parent.getTermID()), term,
-						parent.getTermRelation()));
+				builder.addEdge(new ImmutableOntologyEdge(termContainer.get(parent.getTermID()),
+						term, parent.getTermRelation()));
 			}
 		}
 
 		if (skippedEdges > 0) {
-			LOGGER.log(Level.INFO, "A total of {} edges were skipped.", new Object[] { skippedEdges });
+			LOGGER.log(Level.INFO, "A total of {} edges were skipped.",
+					new Object[] { skippedEdges });
 		}
 
 		return new ImmutableOntology(termContainer, builder.build());
 	}
 
 	/**
-	 * Construct the object with the given <code>termContainer</code> and
-	 * </code>graph</code>.
+	 * Construct the object with the given <code>termContainer</code> and </code>graph</code>.
 	 * 
 	 * <p>
-	 * Note that the <code>termContainer</code> and <code>graph</code> might end
-	 * up as extended copies in the constructed <code>Ontology</code> if an
-	 * artificial root term is introduced.
+	 * Note that the <code>termContainer</code> and <code>graph</code> might end up as extended
+	 * copies in the constructed <code>Ontology</code> if an artificial root term is introduced.
 	 * </p>
 	 * 
 	 * @param termContainer
-	 *            {@link ImmutableTermContainer} with the ontology's
-	 *            {@link Term}s
+	 *            {@link ImmutableTermContainer} with the ontology's {@link Term}s
 	 * @param graph
 	 *            {@link ImmutableDirectedGraph} with the ontology's structure.
 	 */
 	private ImmutableOntology(ImmutableTermContainer termContainer,
 			ImmutableDirectedGraph<Term, ImmutableOntologyEdge> graph) {
-		final OntologySingleRootEnforcer<ImmutableDirectedGraph<Term, ImmutableOntologyEdge>> enforcer =
-				new ImmutableOntologySingleRootEnforcer();
-		final Result<ImmutableDirectedGraph<Term, ImmutableOntologyEdge>> enforced =
-				enforcer.enforceSingleRoot(termContainer, graph);
+		final OntologySingleRootEnforcer<ImmutableDirectedGraph<Term, ImmutableOntologyEdge>> enforcer = new ImmutableOntologySingleRootEnforcer();
+		final Result<ImmutableDirectedGraph<Term, ImmutableOntologyEdge>> enforced = enforcer
+				.enforceSingleRoot(termContainer, graph);
 
 		this.termContainer = (ImmutableTermContainer) enforced.getTermContainer();
 		this.graph = enforced.getGraph();
 		this.level1Terms = ImmutableList.copyOf(enforced.getLevel1Terms());
 		this.rootTerm = enforced.getRoot();
+	}
+
+	@Override
+	public Term getRootTerm() {
+		return rootTerm;
 	}
 
 	@Override
@@ -179,8 +182,8 @@ public final class ImmutableOntology implements Ontology<ImmutableOntologyEdge> 
 	@Override
 	public List<Term> getTermsInTopologicalOrder() {
 		final List<Term> result = new ArrayList<Term>();
-		new TopologicalSorting<Term, ImmutableOntologyEdge, DirectedGraph<Term, ImmutableOntologyEdge>>().start(graph,
-				new VertexVisitor<Term, ImmutableOntologyEdge>() {
+		new TopologicalSorting<Term, ImmutableOntologyEdge, DirectedGraph<Term, ImmutableOntologyEdge>>()
+				.start(graph, new VertexVisitor<Term, ImmutableOntologyEdge>() {
 					@Override
 					public boolean visit(DirectedGraph<Term, ImmutableOntologyEdge> g, Term v) {
 						result.add(v);
@@ -239,7 +242,8 @@ public final class ImmutableOntology implements Ontology<ImmutableOntologyEdge> 
 		}
 
 		final Term term = get(termId);
-		for (Iterator<ImmutableOntologyEdge> inEdgeIt = graph.inEdgeIterator(term); inEdgeIt.hasNext(); /* nop */) {
+		for (Iterator<ImmutableOntologyEdge> inEdgeIt = graph.inEdgeIterator(term); inEdgeIt
+				.hasNext(); /* nop */) {
 			OntologyEdge e = inEdgeIt.next();
 			result.add(new ParentTermID(e.getSource().getID(), e.getTermRelation()));
 		}

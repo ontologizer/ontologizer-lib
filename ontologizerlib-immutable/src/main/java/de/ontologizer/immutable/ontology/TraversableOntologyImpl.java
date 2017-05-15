@@ -265,4 +265,9 @@ public class TraversableOntologyImpl<EdgeType extends OntologyEdge> implements T
 		return ontology.getTermSiblings(termId);
 	}
 
+	@Override
+	public Term getRootTerm() {
+		return ontology.getRootTerm();
+	}
+
 }

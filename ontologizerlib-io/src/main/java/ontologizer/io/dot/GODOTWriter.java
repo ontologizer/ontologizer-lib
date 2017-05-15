@@ -3,6 +3,7 @@ package ontologizer.io.dot;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -62,7 +63,7 @@ public class GODOTWriter
 	 * @param provider
 	 *          should provide for every property an appropiate id.
 	 */
-	public static void writeDOT(Ontology graph, File file, TermID rootTerm, Set<TermID> terms, IDotAttributesProvider provider)
+	public static void writeDOT(Ontology graph, File file, TermID rootTerm, Collection<TermID> terms, IDotAttributesProvider provider)
 	{
 		writeDOT(graph, file, rootTerm, terms, provider, "nodesep=0.4;", false, false, null);
 	}
@@ -90,7 +91,7 @@ public class GODOTWriter
 	 * @param edgeLabels
 	 * @param ignoreTerms
 	 */
-	public static void writeDOT(final Ontology graph, File file, TermID rootTerm, Set<TermID> terms, final IDotAttributesProvider provider, final String graphAttrs, final boolean reverseDirection, final boolean edgeLabels, Set<TermID> ignoreTerms)
+	public static void writeDOT(final Ontology graph, File file, TermID rootTerm, Collection<TermID> terms, final IDotAttributesProvider provider, final String graphAttrs, final boolean reverseDirection, final boolean edgeLabels, Set<TermID> ignoreTerms)
 	{
 		/* Collect terms starting from the terms upto the root term and place them into nodeSet */
 		HashSet<Term> nodeSet = new HashSet<Term>();

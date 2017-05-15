@@ -80,7 +80,7 @@ public class FileWriterOutput implements WriterOutput {
 
 	@Override
 	public String getFilename() {
-		return outputFile.getName();
+		return outputFile.getAbsolutePath();
 	}
 
 }
