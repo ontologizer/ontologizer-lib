@@ -60,7 +60,11 @@ public class FileReaderInput implements ReaderInput {
 			} catch (IOException e) {
 				throw new RuntimeException("Problem with opening input file", e);
 			}
-			inputStream = fileInputStream;
+			try {
+				this.inputStream = new FileInputStream(this.inputFile);
+			} catch (FileNotFoundException e) {
+				throw new RuntimeException("Problem with opening input stream", e);
+			}
 		}
 
 		this.fileChannel = fileInputStream.getChannel();
