@@ -8,7 +8,7 @@ import de.ontologizer.immutable.ontology.ImmutableOntologyEdge;
  * 
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public class ImmutableOntologyDotWriter extends DotOntologyWriter<ImmutableOntologyEdge> {
+public class ImmutableOntologyDotWriter extends OntologyDotWriter<ImmutableOntologyEdge> {
 
 	public ImmutableOntologyDotWriter(WriterOutput writerOutput) {
 		super(writerOutput);

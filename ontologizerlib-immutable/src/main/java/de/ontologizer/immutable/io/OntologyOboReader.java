@@ -19,7 +19,7 @@ import ontologizer.io.obo.OBOParserException;
  * 
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public class OboOntologyReader implements OntologyReader {
+public class OntologyOboReader implements OntologyReader {
 
 	/** The {@link ReaderInput} to read from. */
 	private final ReaderInput readerInput;
@@ -27,21 +27,21 @@ public class OboOntologyReader implements OntologyReader {
 	/**
 	 * Construct with {@link String} path to output file.
 	 */
-	public static OboOntologyReader fromPath(String outputPath) {
+	public static OntologyOboReader fromPath(String outputPath) {
 		return fromFile(new File(outputPath));
 	}
 
 	/**
 	 * Construct with output {@link File}.
 	 */
-	public static OboOntologyReader fromFile(File outputFile) {
-		return new OboOntologyReader(new FileReaderInput(outputFile));
+	public static OntologyOboReader fromFile(File outputFile) {
+		return new OntologyOboReader(new FileReaderInput(outputFile));
 	}
 
 	/**
 	 * Construct with {@link ReaderInput}.
 	 */
-	public OboOntologyReader(ReaderInput readerInput) {
+	public OntologyOboReader(ReaderInput readerInput) {
 		this.readerInput = readerInput;
 	}
 

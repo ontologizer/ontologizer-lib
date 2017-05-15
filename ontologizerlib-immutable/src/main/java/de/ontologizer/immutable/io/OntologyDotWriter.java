@@ -20,7 +20,7 @@ import ontologizer.ontology.TermID;
  * 
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public class DotOntologyWriter<EdgeType extends OntologyEdge> implements OntologyWriter<EdgeType> {
+public class OntologyDotWriter<EdgeType extends OntologyEdge> implements OntologyWriter<EdgeType> {
 
 	/** Where the data is written to. */
 	private final WriterOutput writerOutput;
@@ -28,7 +28,7 @@ public class DotOntologyWriter<EdgeType extends OntologyEdge> implements Ontolog
 	/**
 	 * Construct with {@link String} path to output file.
 	 */
-	public static <EdgeType extends OntologyEdge> DotOntologyWriter<EdgeType> fromPath(
+	public static <EdgeType extends OntologyEdge> OntologyDotWriter<EdgeType> fromPath(
 			String outputPath) {
 		return fromFile(new File(outputPath));
 	}
@@ -36,15 +36,15 @@ public class DotOntologyWriter<EdgeType extends OntologyEdge> implements Ontolog
 	/**
 	 * Construct with output {@link File}.
 	 */
-	public static <EdgeType extends OntologyEdge> DotOntologyWriter<EdgeType> fromFile(
+	public static <EdgeType extends OntologyEdge> OntologyDotWriter<EdgeType> fromFile(
 			File outputFile) {
-		return new DotOntologyWriter<EdgeType>(new FileWriterOutput(outputFile));
+		return new OntologyDotWriter<EdgeType>(new FileWriterOutput(outputFile));
 	}
 
 	/**
 	 * Construct with {@link WriterOutput}.
 	 */
-	public DotOntologyWriter(WriterOutput writerOutput) {
+	public OntologyDotWriter(WriterOutput writerOutput) {
 		this.writerOutput = writerOutput;
 	}
 

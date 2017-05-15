@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 /**
- * Tests for the {@link OboOntologyReader} class.
+ * Tests for the {@link OntologyOboReader} class.
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
@@ -55,7 +55,7 @@ public class DotOntologyWriterTest {
 	@Test
 	public void test() throws IOException {
 		final File tmpFile = tmpFolder.newFile();
-		final DotOntologyWriter<ImmutableOntologyEdge> dotWriter = new DotOntologyWriter<ImmutableOntologyEdge>(
+		final OntologyDotWriter<ImmutableOntologyEdge> dotWriter = new OntologyDotWriter<ImmutableOntologyEdge>(
 				new FileWriterOutput(tmpFile));
 		dotWriter.write(ontology);
 
