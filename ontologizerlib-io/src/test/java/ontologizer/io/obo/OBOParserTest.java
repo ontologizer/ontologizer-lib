@@ -100,8 +100,8 @@ public class OBOParserTest
 		HashMap<String,Term> name2Term = new HashMap<String,Term>();
 		for (Term t : terms)
 			name2Term.put(t.getIDAsString(), t);
-		assertEquals(TermRelation.PART_OF_A, name2Term.get("GO:0000002").getParents()[0].getRelation());
-		assertEquals("GO:0000001", name2Term.get("GO:0000002").getParents()[0].getRelated().toString());
+		assertEquals(TermRelation.PART_OF_A, name2Term.get("GO:0000002").getParents()[0].getTermRelation());
+		assertEquals("GO:0000001", name2Term.get("GO:0000002").getParents()[0].getTermID().toString());
 	}
 
 	@Test
@@ -124,8 +124,8 @@ public class OBOParserTest
 		HashMap<String,Term> name2Term = new HashMap<String,Term>();
 		for (Term t : terms)
 			name2Term.put(t.getIDAsString(), t);
-		assertEquals(TermRelation.REGULATES, name2Term.get("GO:0000002").getParents()[0].getRelation());
-		assertEquals("GO:0000001", name2Term.get("GO:0000002").getParents()[0].getRelated().toString());
+		assertEquals(TermRelation.REGULATES, name2Term.get("GO:0000002").getParents()[0].getTermRelation());
+		assertEquals("GO:0000001", name2Term.get("GO:0000002").getParents()[0].getTermID().toString());
 	}
 
 	@Test
@@ -148,8 +148,8 @@ public class OBOParserTest
 		HashMap<String,Term> name2Term = new HashMap<String,Term>();
 		for (Term t : terms)
 			name2Term.put(t.getIDAsString(), t);
-		assertEquals(TermRelation.UNKOWN, name2Term.get("GO:0000002").getParents()[0].getRelation());
-		assertEquals("GO:0000001", name2Term.get("GO:0000002").getParents()[0].getRelated().toString());
+		assertEquals(TermRelation.UNKOWN, name2Term.get("GO:0000002").getParents()[0].getTermRelation());
+		assertEquals("GO:0000001", name2Term.get("GO:0000002").getParents()[0].getTermID().toString());
 	}
 
 	@Test
@@ -399,7 +399,7 @@ public class OBOParserTest
 				  "id: prefix:test\n");
 		pw.close();
 
-		OBOParser oboParser = new OBOParser(new OBOParserFileInput(tmp.getCanonicalPath()),0);
+		OBOParser oboParser = new OBOParser(new OBOParserFileInput(tmp.getCanonicalPath()), 0);
 		oboParser.doParse();
 		ArrayList<Term> terms = new ArrayList<Term>(oboParser.getTermMap());
 		assertEquals(1, terms.size());

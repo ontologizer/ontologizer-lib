@@ -3,8 +3,8 @@ package de.ontologizer.immutable.io;
 import de.ontologizer.immutable.ontology.Ontology;
 import de.ontologizer.immutable.ontology.OntologyEdge;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import ontologizer.io.dot.AbstractDotAttributesProvider;
 import ontologizer.io.dot.GODOTWriter;
 import ontologizer.ontology.Term;
@@ -52,7 +52,7 @@ public class OntologyDotWriter<EdgeType extends OntologyEdge> implements Ontolog
 	public void write(Ontology<EdgeType> ontology) {
 		writerOutput.close(); // using old API...
 
-		List<TermID> termIDs = new ArrayList<TermID>();
+		Set<TermID> termIDs = new HashSet<TermID>();
 		for (Term term : ontology) {
 			termIDs.add(term.getID());
 		}

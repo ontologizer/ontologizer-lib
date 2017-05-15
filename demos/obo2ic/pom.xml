@@ -12,7 +12,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<ontologizerlib.version>0.1-SNAPSHOT</ontologizerlib.version>
+		<ontologizerlib.version>0.2-SNAPSHOT</ontologizerlib.version>
 	</properties>
 
 	<dependencies>

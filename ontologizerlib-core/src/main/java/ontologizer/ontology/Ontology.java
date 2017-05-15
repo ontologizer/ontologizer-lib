@@ -473,7 +473,7 @@ public class Ontology implements Iterable<Term>, Serializable
 	{
 		Set<ParentTermID> parents = getTermParentsWithRelation(term);
 		for (ParentTermID p : parents)
-			if (p.getRelated().equals(parent)) return p.getRelation();
+			if (p.getTermRelation().equals(parent)) return p.getTermRelation();
 		return null;
 	}
 
@@ -1325,7 +1325,7 @@ public class Ontology implements Iterable<Term>, Serializable
 
 			for (ParentTermID parent : term.getParents())
 			{
-				TermID related = parent.getRelated();
+				TermID related = parent.getTermID();
 				/* Ignore loops */
 				if (term.getID().equals(related))
 				{
@@ -1335,11 +1335,11 @@ public class Ontology implements Iterable<Term>, Serializable
 				if (tc.get(related) == null)
 				{
 					/* FIXME: We may want to add a new vertex to graph here instead */
-					logger.log(Level.INFO,"Could not add a link from term " + term.toString() + " to " + parent.getRelated().toString() +" as the latter's definition is missing.");
+					logger.log(Level.INFO,"Could not add a link from term " + term.toString() + " to " + parent.getTermID().toString() +" as the latter's definition is missing.");
 					++skippedEdges;
 					continue;
 				}
-				o.graph.addEdge(new OntologyEdge(tc.get(parent.getRelated()), term, parent.getRelation()));
+				o.graph.addEdge(new OntologyEdge(tc.get(parent.getTermID()), term, parent.getTermRelation()));
 			}
 		}
 
