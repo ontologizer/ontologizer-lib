@@ -5,10 +5,9 @@ import java.io.Serializable;
 // TODO: rename to ParentRelation
 
 /**
- * This class is used to specify a parent accompanied with the kind of
- * relationship. Note that the term "parent" is indeed a misnomer. The usage of
- * this term has historical reasons when there were only a limited set of
- * relations.
+ * This class is used to specify a parent accompanied with the kind of relationship. Note that the
+ * term "parent" is indeed a misnomer. The usage of this term has historical reasons when there were
+ * only a limited set of relations.
  *
  * @author Sebastian Bauer
  */
@@ -32,6 +31,11 @@ public class ParentTermID implements Serializable {
 
 	public TermRelation getTermRelation() {
 		return relation;
+	}
+
+	@Override
+	public String toString() {
+		return "ParentTermID [termid=" + termid + ", relation=" + relation + "]";
 	}
 
 }

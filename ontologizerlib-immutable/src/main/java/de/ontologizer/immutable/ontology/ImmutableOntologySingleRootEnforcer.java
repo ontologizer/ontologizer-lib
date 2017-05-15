@@ -35,15 +35,15 @@ public final class ImmutableOntologySingleRootEnforcer
 	}
 
 	/**
-	 * Simply a forward to
-	 * <code>ImmutableOntologySingleRootEnforcer("root")</code>
+	 * Simply a forward to <code>ImmutableOntologySingleRootEnforcer("root")</code>
 	 */
 	public ImmutableOntologySingleRootEnforcer() {
 		this("root");
 	}
 
 	@Override
-	public Result<ImmutableDirectedGraph<Term, ImmutableOntologyEdge>> enforceSingleRoot(TermContainer termContainer,
+	public Result<ImmutableDirectedGraph<Term, ImmutableOntologyEdge>> enforceSingleRoot(
+			TermContainer termContainer,
 			ImmutableDirectedGraph<Term, ImmutableOntologyEdge> graph) {
 		final List<Term> level1Terms = collectLevel1Terms(graph);
 		if (level1Terms.size() > 1) {
@@ -66,10 +66,12 @@ public final class ImmutableOntologySingleRootEnforcer
 		final String jointNames = "\"" + Joiner.on("\", \"").join(level1TermNames) + "\"";
 
 		// Construct artificial root term
-		final Term rootTerm =
-				new Term(level1Terms.get(0).getID().getPrefix().toString() + ":0000000", this.artificialRootName);
+		final Term rootTerm = new Term(
+				level1Terms.get(0).getID().getPrefix().toString() + ":0000000",
+				this.artificialRootName);
 
-		LOGGER.log(Level.INFO, "Ontology contains multiple level-one terms: {}. Adding artificial root term \"{}\".",
+		LOGGER.log(Level.INFO,
+				"Ontology contains multiple level-one terms: {}. Adding artificial root term \"{}\".",
 				new Object[] { jointNames, rootTerm.getID().toString() });
 
 		// Collect available subset and add artificial root terms to all
@@ -94,7 +96,8 @@ public final class ImmutableOntologySingleRootEnforcer
 			extendedEdges.add(new ImmutableOntologyEdge(rootTerm, term, TermRelation.UNKOWN));
 		}
 
-		return new ResultImpl(rootTerm, ImmutableDirectedGraph.construct(extendedVertices, extendedEdges, true),
+		return new ResultImpl(rootTerm,
+				ImmutableDirectedGraph.construct(extendedVertices, extendedEdges, true),
 				termContainer, level1Terms);
 	}
 
@@ -115,7 +118,8 @@ public final class ImmutableOntologySingleRootEnforcer
 	 * @param graph
 	 * @return
 	 */
-	private List<Term> collectLevel1Terms(ImmutableDirectedGraph<Term, ImmutableOntologyEdge> graph) {
+	private List<Term> collectLevel1Terms(
+			ImmutableDirectedGraph<Term, ImmutableOntologyEdge> graph) {
 		ArrayList<Term> result = new ArrayList<Term>();
 		for (Iterator<Term> it = graph.vertexIterator(); it.hasNext(); /* nop */) {
 			final Term term = it.next();
@@ -126,8 +130,8 @@ public final class ImmutableOntologySingleRootEnforcer
 		return result;
 	}
 
-	class ResultImpl implements de.ontologizer.immutable.ontology.OntologySingleRootEnforcer.Result<
-			ImmutableDirectedGraph<Term, ImmutableOntologyEdge>> {
+	class ResultImpl implements
+			de.ontologizer.immutable.ontology.OntologySingleRootEnforcer.Result<ImmutableDirectedGraph<Term, ImmutableOntologyEdge>> {
 
 		private final Term root;
 		private final ImmutableDirectedGraph<Term, ImmutableOntologyEdge> graph;

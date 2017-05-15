@@ -63,6 +63,7 @@ public final class ImmutableOntology implements Ontology<ImmutableOntologyEdge> 
 		// Now add the edges for linking the terms
 		final Set<Subset> availableSubsets = new HashSet<Subset>();
 		int skippedEdges = 0;
+		int addedEdges = 0;
 		for (Term term : termContainer) {
 			// Register all subsets
 			if (term.getSubsets() != null) {
@@ -95,15 +96,18 @@ public final class ImmutableOntology implements Ontology<ImmutableOntologyEdge> 
 
 				builder.addEdge(new ImmutableOntologyEdge(termContainer.get(parent.getTermID()),
 						term, parent.getTermRelation()));
+				addedEdges += 1;
 			}
 		}
 
+		LOGGER.log(Level.INFO, "Added a total of {} edges", new Object[] { addedEdges });
 		if (skippedEdges > 0) {
 			LOGGER.log(Level.INFO, "A total of {} edges were skipped.",
 					new Object[] { skippedEdges });
 		}
 
-		return new ImmutableOntology(termContainer, builder.build());
+		ImmutableOntology result = new ImmutableOntology(termContainer, builder.build());
+		return result;
 	}
 
 	/**

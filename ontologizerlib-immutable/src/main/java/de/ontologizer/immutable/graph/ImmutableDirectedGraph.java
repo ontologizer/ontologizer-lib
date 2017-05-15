@@ -260,7 +260,9 @@ public final class ImmutableDirectedGraph<VertexType, EdgeType extends Edge<Vert
 							return false;
 						} else {
 							innerIt = outerIt.next().getOutEdges().iterator();
-							return innerIt.hasNext();
+							if (innerIt.hasNext()) {
+								return true;
+							}
 						}
 					}
 					return innerIt.hasNext();

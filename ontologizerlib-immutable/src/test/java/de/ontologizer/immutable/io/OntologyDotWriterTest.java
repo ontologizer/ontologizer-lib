@@ -27,7 +27,7 @@ import org.junit.rules.TemporaryFolder;
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public class DotOntologyWriterTest {
+public class OntologyDotWriterTest {
 
 	ImmutableOntology ontology;
 

@@ -11,7 +11,8 @@ import ontologizer.ontology.TermRelation;
  * 
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
  */
-public final class ImmutableOntologyEdge implements OntologyEdge, ShallowCopyable<ImmutableOntologyEdge> {
+public final class ImmutableOntologyEdge
+		implements OntologyEdge, ShallowCopyable<ImmutableOntologyEdge> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -29,13 +30,13 @@ public final class ImmutableOntologyEdge implements OntologyEdge, ShallowCopyabl
 	 * @param termRelation
 	 *            {@link TermRelation} to use for the label
 	 */
-	public static ImmutableOntologyEdge construct(Term source, Term dest, TermRelation termRelation) {
+	public static ImmutableOntologyEdge construct(Term source, Term dest,
+			TermRelation termRelation) {
 		return new ImmutableOntologyEdge(source, dest, termRelation);
 	}
 
 	/**
-	 * Construct <code>ImmutableEdge</code> with the given source and
-	 * destination vertices.
+	 * Construct <code>ImmutableEdge</code> with the given source and destination vertices.
 	 *
 	 * @param source
 	 *            {@link Term} to use for the edge foot vertex
@@ -75,6 +76,46 @@ public final class ImmutableOntologyEdge implements OntologyEdge, ShallowCopyabl
 		return ImmutableOntologyEdge.construct(source, dest, termRelation);
 	}
 
+	@Override
+	public String toString() {
+		return "ImmutableOntologyEdge [source=" + source + ", dest=" + dest + ", termRelation="
+				+ termRelation + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((dest == null) ? 0 : dest.hashCode());
+		result = prime * result + ((source == null) ? 0 : source.hashCode());
+		result = prime * result + ((termRelation == null) ? 0 : termRelation.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ImmutableOntologyEdge other = (ImmutableOntologyEdge) obj;
+		if (dest == null) {
+			if (other.dest != null)
+				return false;
+		} else if (!dest.equals(other.dest))
+			return false;
+		if (source == null) {
+			if (other.source != null)
+				return false;
+		} else if (!source.equals(other.source))
+			return false;
+		if (termRelation != other.termRelation)
+			return false;
+		return true;
+	}
+
 	/**
 	 * Static factory method for creating a {@link #Factory}
 	 * 
@@ -87,8 +128,7 @@ public final class ImmutableOntologyEdge implements OntologyEdge, ShallowCopyabl
 	/**
 	 * Factory for {@link ImmutableEdge}.
 	 * 
-	 * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel
-	 *         Holtgrewe</a>
+	 * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
 	 */
 	public static class Factory implements Edge.Factory<Term, ImmutableOntologyEdge> {
 
@@ -98,5 +138,4 @@ public final class ImmutableOntologyEdge implements OntologyEdge, ShallowCopyabl
 		}
 
 	}
-
 }
