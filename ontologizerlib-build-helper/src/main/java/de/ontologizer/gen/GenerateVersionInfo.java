@@ -59,6 +59,11 @@ public class GenerateVersionInfo
 		ps.println();
 		ps.println("package " + cliConfig.javaPackage + ";");
 		ps.println();
+		ps.println("/**");
+		ps.println(" * Helper class for retrieving version information.");
+		ps.println(" *");
+		ps.println(" * @author <a href=\"mailto:manuel.holtgrewe@bihealth.de\">Manuel Holtgrewe</a>");
+		ps.println(" */");
 		ps.println("public final class VersionInfo");
 		ps.println("{");
 		ps.println("\t/**");
