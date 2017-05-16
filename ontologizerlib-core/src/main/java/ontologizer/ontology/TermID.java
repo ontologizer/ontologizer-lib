@@ -211,7 +211,7 @@ public class TermID implements Comparable<TermID>, Serializable
 	public String toString()
 	{
 		String idString = Integer.toString(id);
-		StringBuffer buf = new StringBuffer(16);
+		StringBuilder buf = new StringBuilder(16);
 		buf.append(prefix.toString());
 		buf.append(":");
 		for (int i=0;i<7-idString.length();i++)
