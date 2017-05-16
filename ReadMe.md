@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/holtgrewe/ontologizer.svg?branch=master)](https://travis-ci.org/holtgrewe/ontologizer)
+[![Build Status](https://travis-ci.org/ontologizer/ontologizerlib.svg?branch=master)](https://travis-ci.org/ontologizer/ontologizerlib)
 
 # OntologizerLib
 
