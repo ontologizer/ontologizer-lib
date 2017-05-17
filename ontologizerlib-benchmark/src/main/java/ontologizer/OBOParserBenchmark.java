@@ -14,9 +14,9 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 
+import ontologizer.io.OBOParserFileInput;
 import ontologizer.io.obo.OBOParser;
 import ontologizer.io.obo.OBOParserException;
-import ontologizer.io.obo.OBOParserFileInput;
 
 @State(Scope.Benchmark)
 public class OBOParserBenchmark

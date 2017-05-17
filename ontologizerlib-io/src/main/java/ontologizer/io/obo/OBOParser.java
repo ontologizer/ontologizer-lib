@@ -33,6 +33,8 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import ontologizer.io.IParserInput;
 import ontologizer.io.linescanner.AbstractByteLineScanner;
 import ontologizer.ontology.Namespace;
 import ontologizer.ontology.ParentTermID;

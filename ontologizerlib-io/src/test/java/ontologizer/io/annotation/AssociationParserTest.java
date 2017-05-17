@@ -23,9 +23,9 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import ontologizer.association.Association;
 import ontologizer.association.AssociationContainer;
+import ontologizer.io.OBOParserFileInput;
 import ontologizer.io.obo.OBOParser;
 import ontologizer.io.obo.OBOParserException;
-import ontologizer.io.obo.OBOParserFileInput;
 import ontologizer.ontology.TermContainer;
 import ontologizer.types.ByteString;
 

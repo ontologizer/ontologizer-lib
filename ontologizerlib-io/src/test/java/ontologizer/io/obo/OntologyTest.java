@@ -12,6 +12,8 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import ontologizer.io.OBOParserFileInput;
 import ontologizer.ontology.Namespace;
 import ontologizer.ontology.Ontology;
 import ontologizer.ontology.Subset;

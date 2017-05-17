@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 import ontologizer.association.Association;
 import ontologizer.association.SwissProtAffyAnnotation;
 import ontologizer.association.SwissProtAffyAnnotationSet;
-import ontologizer.io.obo.IParserInput;
+import ontologizer.io.IParserInput;
 import ontologizer.ontology.TermID;
 import ontologizer.ontology.TermMap;
 import ontologizer.types.ByteString;

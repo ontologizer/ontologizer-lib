@@ -12,6 +12,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
+import ontologizer.io.IParserInput;
+import ontologizer.io.OBOParserFileInput;
+
 public class OBOParserFileInputTest
 {
 	@Rule

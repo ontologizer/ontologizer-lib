@@ -3,6 +3,8 @@ package ontologizer.io.obo;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import ontologizer.io.OBOParserFileInput;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermContainer;
 

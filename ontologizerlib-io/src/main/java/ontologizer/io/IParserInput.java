@@ -1,4 +1,4 @@
-package ontologizer.io.obo;
+package ontologizer.io;
 
 import java.io.InputStream;
 

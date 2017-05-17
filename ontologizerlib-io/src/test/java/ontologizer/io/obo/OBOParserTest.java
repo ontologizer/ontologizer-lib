@@ -15,6 +15,8 @@ import java.util.HashSet;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+
+import ontologizer.io.OBOParserFileInput;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermID;
 import ontologizer.ontology.TermRelation;
