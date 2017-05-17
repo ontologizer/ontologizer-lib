@@ -13,7 +13,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import ontologizer.io.OBOParserFileInput;
+import ontologizer.io.ParserFileInput;
 import ontologizer.ontology.Namespace;
 import ontologizer.ontology.Ontology;
 import ontologizer.ontology.Subset;
@@ -38,7 +38,7 @@ public class OntologyTest
 
 		/* Parse file and create term container */
 		System.out.println("Parse OBO file");
-		OBOParser oboParser = new OBOParser(new OBOParserFileInput(GOtermsOBOFile));
+		OBOParser oboParser = new OBOParser(new ParserFileInput(GOtermsOBOFile));
 		System.out.println(oboParser.doParse());
 		goTerms = new TermContainer(oboParser.getTermMap(), oboParser.getFormatVersion(), oboParser.getDate());
 

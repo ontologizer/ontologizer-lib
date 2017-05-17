@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import ontologizer.io.OBOParserFileInput;
+import ontologizer.io.ParserFileInput;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermContainer;
 
@@ -23,7 +23,7 @@ public class ParsedContainerTest
 	@Before
 	public void setUp() throws Exception
 	{
-		oboParser = new OBOParser(new OBOParserFileInput(OBOParserTest.GOtermsOBOFile));
+		oboParser = new OBOParser(new ParserFileInput(OBOParserTest.GOtermsOBOFile));
 		oboParser.doParse();
 		container = new TermContainer(oboParser.getTermMap(), oboParser.getFormatVersion(), oboParser.getDate());
 	}

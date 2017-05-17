@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import ontologizer.io.IParserInput;
-import ontologizer.io.OBOParserFileInput;
+import ontologizer.io.ParserFileInput;
 
 public class OBOParserFileInputTest
 {
@@ -31,7 +31,7 @@ public class OBOParserFileInputTest
 		out.println("line4");
 		out.close();
 
-		IParserInput input = new OBOParserFileInput(outFile.getAbsolutePath());
+		IParserInput input = new ParserFileInput(outFile.getAbsolutePath());
 		BufferedReader in = new BufferedReader(new InputStreamReader(input.inputStream()));
 		assertEquals("line1", in.readLine());
 		assertEquals("line2", in.readLine());

@@ -14,7 +14,7 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 
-import ontologizer.io.OBOParserFileInput;
+import ontologizer.io.ParserFileInput;
 import ontologizer.io.obo.OBOParser;
 import ontologizer.io.obo.OBOParserException;
 
@@ -54,7 +54,7 @@ public class OBOParserBenchmark
 	@Measurement(time=2,timeUnit=TimeUnit.SECONDS)
 	public OBOParser benchmarkOBOParser() throws IOException, OBOParserException
 	{
-		OBOParser oboParser = new OBOParser(new OBOParserFileInput(oboFilename));
+		OBOParser oboParser = new OBOParser(new ParserFileInput(oboFilename));
 		oboParser.doParse();
 		return oboParser;
 	}
