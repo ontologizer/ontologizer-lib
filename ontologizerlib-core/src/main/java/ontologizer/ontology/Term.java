@@ -33,7 +33,7 @@ public class Term implements ITerm, Serializable
 	private ParentTermID[] parents;
 
 	/** The term's alternatives */
-	private ArrayList<TermID> alternatives;
+	private List<TermID> alternatives;
 
 	/** The term's alternatives */
 	private TermID[] equivalents;
