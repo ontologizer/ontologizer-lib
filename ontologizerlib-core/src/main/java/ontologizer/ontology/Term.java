@@ -59,9 +59,6 @@ public class Term implements ITerm, Serializable
 	/** Whether term is declared as obsolete */
 	private boolean obsolete;
 
-	/** The information content associated to the term. TODO: Extract this */
-	private double informationContent = -1;
-
 	/**
 	 * Default constructor. For builder only.
 	 */
@@ -391,14 +388,6 @@ public class Term implements ITerm, Serializable
 		if (this.alternatives == null)
 			this.alternatives = new ArrayList<TermID>();
 		this.alternatives.add(id2);
-	}
-
-	public void setInformationContent(double informationContent) {
-		this.informationContent = informationContent;
-	}
-
-	public double getInformationContent() {
-		return informationContent;
 	}
 
 	/* Simple builder interface */
