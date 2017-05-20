@@ -3,7 +3,7 @@ package ontologizer.types;
 import java.util.Iterator;
 
 /**
- * This class wraps an native array to be immutable.
+ * This class wraps a native array to be immutable.
  *
  * Note that the elements that it contains are not protected in any way.
  *

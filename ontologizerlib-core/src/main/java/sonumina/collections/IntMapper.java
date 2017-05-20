@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 /**
- * Simple class that holds a int mapping for objects of the same type.
+ * Simple class that holds an int mapping for objects of the same type.
  * This is useful if you want to store ints rather than references to
  * the objects.
  *
