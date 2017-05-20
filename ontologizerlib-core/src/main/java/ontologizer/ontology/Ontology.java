@@ -31,11 +31,6 @@ class OntologyEdge extends Edge<Term> implements Serializable
 	/** Relation always to the parent (source) */
 	private TermRelation relation;
 
-	public void setRelation(TermRelation relation)
-	{
-		this.relation = relation;
-	}
-
 	public TermRelation getRelation()
 	{
 		return relation;
