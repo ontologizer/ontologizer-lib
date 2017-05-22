@@ -14,6 +14,10 @@
 		<version>0.2-SNAPSHOT</version>
 	</parent>
 
+	<properties>
+		<jdt.core.version>3.12.3</jdt.core.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.beust</groupId>
@@ -24,7 +28,7 @@
 		<dependency>
 			<groupId>org.eclipse.jdt</groupId>
 			<artifactId>org.eclipse.jdt.core</artifactId>
-			<version>3.12.3</version>
+			<version>${jdt.core.version}</version>
 		</dependency>
 
 		<dependency>
@@ -81,4 +85,16 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>one-seven</id>
+			<activation>
+				<jdk>1.7</jdk>
+			</activation>
+			<properties>
+				<jdt.core.version>3.10.0</jdt.core.version>
+			</properties>
+		</profile>
+	</profiles>
 </project>
