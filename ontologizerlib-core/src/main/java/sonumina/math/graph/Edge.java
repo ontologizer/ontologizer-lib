@@ -8,14 +8,14 @@ package sonumina.math.graph;
 
 import java.io.Serializable;
 
-public class Edge<Type> implements Serializable
+public class Edge<V> implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 
-	private Type source;
-	private Type dest;
+	private V source;
+	private V dest;
 
-	public Edge(Type source, Type dest)
+	public Edge(V source, V dest)
 	{
 		this.source = source;
 		this.dest = dest;
@@ -24,7 +24,7 @@ public class Edge<Type> implements Serializable
 	/**
 	 * @return the edge's destination.
 	 */
-	public final Type getDest()
+	public final V getDest()
 	{
 		return dest;
 	}
@@ -32,16 +32,16 @@ public class Edge<Type> implements Serializable
 	/**
 	 * @return the edge's source.
 	 */
-	public final Type getSource()
+	public final V getSource()
 	{
 		return source;
 	}
 
-	void setSource(Type source) {
+	void setSource(V source) {
 		this.source = source;
 	}
 
-	void setDest(Type dest) {
+	void setDest(V dest) {
 		this.dest = dest;
 	}
 }
