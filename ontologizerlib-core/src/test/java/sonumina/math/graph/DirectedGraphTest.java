@@ -6,6 +6,8 @@
  */
 package sonumina.math.graph;
 
+import static sonumina.math.graph.Edge.newEdge;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -23,7 +25,7 @@ public class DirectedGraphTest
 	@Test
 	public void testVertexRemove()
 	{
-		DirectedGraph<TestData> graph = new DirectedGraph<TestData>();
+		DirectedGraph<TestData,Void> graph = new DirectedGraph<TestData,Void>();
 		TestData a = new TestData("a");
 		TestData b = new TestData("b");
 		TestData c = new TestData("c");
@@ -35,10 +37,10 @@ public class DirectedGraphTest
 		graph.addVertex(c);
 		graph.addVertex(d);
 
-		graph.addEdge(new Edge<TestData>(a,b));
-		graph.addEdge(new Edge<TestData>(b,c));
-		graph.addEdge(new Edge<TestData>(c,d));
-		graph.addEdge(new Edge<TestData>(d,a));
+		graph.addEdge(new Edge<TestData,Void>(a,b,null));
+		graph.addEdge(new Edge<TestData,Void>(b,c,null));
+		graph.addEdge(new Edge<TestData,Void>(c,d,null));
+		graph.addEdge(new Edge<TestData,Void>(d,a,null));
 
 		graph.removeVertex(a);
 	}
@@ -46,7 +48,7 @@ public class DirectedGraphTest
 	@Test
 	public void testGraph()
 	{
-		final DirectedGraph<TestData> graph = new DirectedGraph<TestData>();
+		final DirectedGraph<TestData,Object> graph = new DirectedGraph<TestData,Object>();
 		final TestData root = new TestData("root");
 		final TestData a = new TestData("a");
 		final TestData b = new TestData("b");
@@ -79,22 +81,22 @@ public class DirectedGraphTest
 		            g
 		*/
 
-		graph.addEdge(new Edge<TestData>(root,a));
-		graph.addEdge(new Edge<TestData>(root,b));
-		graph.addEdge(new Edge<TestData>(root,c));
-		graph.addEdge(new Edge<TestData>(a,b));
-		graph.addEdge(new Edge<TestData>(c,d));
-		graph.addEdge(new Edge<TestData>(c,e));
-		graph.addEdge(new Edge<TestData>(d,g));
-		graph.addEdge(new Edge<TestData>(e,f));
-		graph.addEdge(new Edge<TestData>(f,g));
+		graph.addEdge(newEdge(root,a));
+		graph.addEdge(newEdge(root,b));
+		graph.addEdge(newEdge(root,c));
+		graph.addEdge(newEdge(a,b));
+		graph.addEdge(newEdge(c,d));
+		graph.addEdge(newEdge(c,e));
+		graph.addEdge(newEdge(d,g));
+		graph.addEdge(newEdge(e,f));
+		graph.addEdge(newEdge(f,g));
 
 		/* Validate results */
-		Iterator<Edge<TestData>> iter = graph.getOutEdges(root);
+		Iterator<Edge<TestData,Object>> iter = graph.getOutEdges(root);
 		HashSet<TestData> vertices = new HashSet<TestData>();
 		while (iter.hasNext())
 		{
-			Edge<TestData> edge = iter.next();
+			Edge<TestData,Object> edge = iter.next();
 			Assert.assertTrue(edge.getSource() == root);
 			vertices.add(edge.getDest());
 		}
@@ -115,7 +117,7 @@ public class DirectedGraphTest
 		iter = graph.getInEdges(g);
 		while (iter.hasNext())
 		{
-			Edge<TestData> edge = iter.next();
+			Edge<TestData,Object> edge = iter.next();
 			Assert.assertTrue(edge.getDest() == g);
 			vertices.add(edge.getSource());
 		}
@@ -128,7 +130,7 @@ public class DirectedGraphTest
 		iter = graph.getOutEdges(c);
 		while (iter.hasNext())
 		{
-			Edge<TestData> edge = iter.next();
+			Edge<TestData,Object> edge = iter.next();
 			Assert.assertTrue(edge.getSource() == c);
 			vertices.add(edge.getDest());
 		}
@@ -146,7 +148,7 @@ public class DirectedGraphTest
 		iter = graph.getInEdges(b);
 		while (iter.hasNext())
 		{
-			Edge<TestData> edge = iter.next();
+			Edge<TestData,Object> edge = iter.next();
 			Assert.assertTrue(edge.getDest() == b);
 			vertices.add(edge.getSource());
 		}
@@ -224,7 +226,7 @@ public class DirectedGraphTest
 	 * @return
 	 */
 	private INeighbourGrabber<TestData> getChildNodeNeighbourGrabber(
-			final DirectedGraph<TestData> graph) {
+			final DirectedGraph<TestData,Object> graph) {
 		final INeighbourGrabber<TestData> childGrabber = new INeighbourGrabber<TestData>() {
 			@Override
 			public Iterator<TestData> grabNeighbours(TestData t)
@@ -249,7 +251,7 @@ public class DirectedGraphTest
 		 *
 		 */
 
-		final DirectedGraph<TestData> graph = new DirectedGraph<TestData>();
+		final DirectedGraph<TestData,Object> graph = new DirectedGraph<TestData,Object>();
 		final TestData n0 = new TestData("n0");
 		final TestData n1 = new TestData("n1");
 		final TestData n2 = new TestData("n2");
@@ -266,12 +268,12 @@ public class DirectedGraphTest
 		graph.addVertex(n5);
 		graph.addVertex(n6);
 
-		graph.addEdge(new Edge<TestData>(n0,n1));
-		graph.addEdge(new Edge<TestData>(n1,n2));
-		graph.addEdge(new Edge<TestData>(n1,n3));
-		graph.addEdge(new Edge<TestData>(n0,n4));
-		graph.addEdge(new Edge<TestData>(n4,n5));
-		graph.addEdge(new Edge<TestData>(n4,n6));
+		graph.addEdge(newEdge(n0,n1));
+		graph.addEdge(newEdge(n1,n2));
+		graph.addEdge(newEdge(n1,n3));
+		graph.addEdge(newEdge(n0,n4));
+		graph.addEdge(newEdge(n4,n5));
+		graph.addEdge(newEdge(n4,n6));
 
 		final INeighbourGrabber<TestData> childGrabber = getChildNodeNeighbourGrabber(graph);
 		final HashSet<TestData> visited = new HashSet<TestData>();

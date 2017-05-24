@@ -20,31 +20,6 @@ import sonumina.math.graph.AbstractGraph.IVisitor;
 import sonumina.math.graph.DirectedGraph.IDistanceVisitor;
 
 /**
- * Represents an edge in the ontology graph
- *
- * @author Sebastian Bauer
- */
-class OntologyEdge extends Edge<Term> implements Serializable
-{
-	private static final long serialVersionUID = 1L;
-
-	/** Relation always to the parent (source) */
-	private TermRelation relation;
-
-	public TermRelation getRelation()
-	{
-		return relation;
-	}
-
-	public OntologyEdge(Term source, Term dest, TermRelation relation)
-	{
-		super(source, dest);
-
-		this.relation = relation;
-	}
-}
-
-/**
  * Represents the whole ontology. Note that the terms "parents" and "children" are
  * used somewhat mixed here.
  *
@@ -60,7 +35,7 @@ public class Ontology implements Iterable<Term>, Serializable
 	private static HashSet<String> level1TermNames = new HashSet<String>(Arrays.asList("molecular_function","biological_process", "cellular_component"));
 
 	/** The graph */
-	private DirectedGraph<Term> graph;
+	private DirectedGraph<Term, TermRelation> graph; /* FIXME: Edge type should a list of relations */
 
 	/** We also pack a TermContainer */
 	private TermContainer termContainer;
@@ -233,7 +208,7 @@ public class Ontology implements Iterable<Term>, Serializable
 
 			for (Term lvl1 : level1terms)
 			{
-				graph.addEdge(new OntologyEdge(rootTerm, lvl1,TermRelation.UNKOWN));
+				graph.addEdge(new Edge<Term,TermRelation>(rootTerm, lvl1,TermRelation.UNKOWN));
 			}
 		} else
 		{
@@ -313,7 +288,7 @@ public class Ontology implements Iterable<Term>, Serializable
 		Term term = getTermOrRoot(termID);
 
 		HashSet<String> terms = new HashSet<String>();
-		Iterator<Edge<Term>> edgeIter = graph.getOutEdges(term);
+		Iterator<Edge<Term,TermRelation>> edgeIter = graph.getOutEdges(term);
 		while (edgeIter.hasNext())
 			terms.add(edgeIter.next().getDest().getIDAsString());
 		return terms;
@@ -331,7 +306,7 @@ public class Ontology implements Iterable<Term>, Serializable
 
 		HashSet<String> terms = new HashSet<String>();
 
-		Iterator<Edge<Term>> edgeIter = graph.getInEdges(term);
+		Iterator<Edge<Term,TermRelation>> edgeIter = graph.getInEdges(term);
 		while (edgeIter.hasNext())
 			terms.add(edgeIter.next().getSource().getIDAsString());
 		return terms;
@@ -352,7 +327,7 @@ public class Ontology implements Iterable<Term>, Serializable
 			goTerm = termContainer.get(termID);
 
 		HashSet<TermID> terms = new HashSet<TermID>();
-		Iterator<Edge<Term>> edgeIter = graph.getOutEdges(goTerm);
+		Iterator<Edge<Term,TermRelation>> edgeIter = graph.getOutEdges(goTerm);
 		while (edgeIter.hasNext())
 			terms.add(edgeIter.next().getDest().getID());
 		return terms;
@@ -373,7 +348,7 @@ public class Ontology implements Iterable<Term>, Serializable
 			goTerm = termContainer.get(term.getID());
 
 		HashSet<Term> terms = new HashSet<Term>();
-		Iterator<Edge<Term>> edgeIter = graph.getOutEdges(goTerm);
+		Iterator<Edge<Term,TermRelation>> edgeIter = graph.getOutEdges(goTerm);
 		while (edgeIter.hasNext())
 			terms.add(edgeIter.next().getDest());
 		return terms;
@@ -397,7 +372,7 @@ public class Ontology implements Iterable<Term>, Serializable
 		else
 			goTerm = termContainer.get(goTermID);
 
-		Iterator<Edge<Term>> edgeIter = graph.getInEdges(goTerm);
+		Iterator<Edge<Term,TermRelation>> edgeIter = graph.getInEdges(goTerm);
 		while (edgeIter.hasNext())
 			terms.add(edgeIter.next().getSource().getID());
 		return terms;
@@ -421,7 +396,7 @@ public class Ontology implements Iterable<Term>, Serializable
 		else
 			goTerm = termContainer.get(term.getID());
 
-		Iterator<Edge<Term>> edgeIter = graph.getInEdges(goTerm);
+		Iterator<Edge<Term,TermRelation>> edgeIter = graph.getInEdges(goTerm);
 		while (edgeIter.hasNext())
 			terms.add(edgeIter.next().getSource());
 		return terms;
@@ -446,11 +421,11 @@ public class Ontology implements Iterable<Term>, Serializable
 		else
 			goTerm = termContainer.get(goTermID);
 
-		Iterator<Edge<Term>> edgeIter = graph.getInEdges(goTerm);
+		Iterator<Edge<Term,TermRelation>> edgeIter = graph.getInEdges(goTerm);
 		while (edgeIter.hasNext())
 		{
-			OntologyEdge t = (OntologyEdge)edgeIter.next();
-			terms.add(new ParentTermID(t.getSource().getID(),t.getRelation()));
+			Edge<Term,TermRelation> t = edgeIter.next();
+			terms.add(new ParentTermID(t.getSource().getID(),t.getData()));
 		}
 
 		return terms;
@@ -611,12 +586,12 @@ public class Ontology implements Iterable<Term>, Serializable
 		graph.bfs(termIDsToTerms(termIDSet), new INeighbourGrabber<Term>() {
 			public Iterator<Term> grabNeighbours(Term t)
 			{
-				Iterator<Edge<Term>> inIter = graph.getInEdges(t);
+				Iterator<Edge<Term,TermRelation>> inIter = graph.getInEdges(t);
 				ArrayList<Term> termsToConsider = new ArrayList<Term>();
 				while (inIter.hasNext())
 				{
-					OntologyEdge edge = (OntologyEdge)inIter.next(); /* Ugly cast */
-					if (relationsToFollow.contains(edge.getRelation()))
+					Edge<Term,TermRelation> edge = inIter.next();
+					if (relationsToFollow.contains(edge.getDest()))
 						termsToConsider.add(edge.getSource());
 				}
 				return termsToConsider.iterator();
@@ -1024,7 +999,7 @@ public class Ontology implements Iterable<Term>, Serializable
 	 */
 	public GOLevels getGOLevels(final Set<TermID> termids)
 	{
-		DirectedGraph<Term> transGraph;
+		DirectedGraph<Term,TermRelation> transGraph;
 		Term transRoot;
 
 		if ((getRelevantSubontology() != null && !isRootTerm(getRelevantSubontology())) || getRelevantSubset() != null)
@@ -1255,19 +1230,24 @@ public class Ontology implements Iterable<Term>, Serializable
 		for (Term t : this)
 			if (isRelevantTerm(t)) terms.add(t);
 
-		DirectedGraph<Term> trans = graph.pathMaintainingSubGraph(terms);
+		DirectedGraph<Term,TermRelation> trans = graph.pathMaintainingSubGraph(terms);
 
 		Ontology g 		= new Ontology();
 		g.graph 			= trans;
 		g.termContainer	= termContainer;
 		g.assignLevel1TermsAndFixRoot();
 
-		/* TODO: Add real GOEdges */
+		/* TODO: Fix edges */
 
 		return g;
 	}
 
-	public DirectedGraph<Term> getGraph() {
+	/**
+	 * @return the underlying graph.
+	 */
+	public DirectedGraph<Term,TermRelation> getGraph()
+	{
+		/* We should think about removing this though */
 		return graph;
 	}
 
@@ -1303,7 +1283,7 @@ public class Ontology implements Iterable<Term>, Serializable
 	private static void init(Ontology o, TermContainer tc)
 	{
 		o.termContainer = tc;
-		o.graph = new DirectedGraph<Term>();
+		o.graph = new DirectedGraph<Term,TermRelation>();
 
 		/* At first add all goterms to the graph */
 		for (Term term : tc)
@@ -1334,7 +1314,7 @@ public class Ontology implements Iterable<Term>, Serializable
 					++skippedEdges;
 					continue;
 				}
-				o.graph.addEdge(new OntologyEdge(tc.get(parent.getRelated()), term, parent.getRelation()));
+				o.graph.addEdge(new Edge<Term,TermRelation>(tc.get(parent.getRelated()), term, parent.getRelation()));
 			}
 		}
 

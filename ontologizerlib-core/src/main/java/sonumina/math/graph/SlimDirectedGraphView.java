@@ -44,18 +44,6 @@ public final class SlimDirectedGraphView<VertexType> implements Serializable
 	}
 
 	/**
-	 * Constructs a slim view from a given directed graph.
-	 *
-	 * @param graph
-	 * @deprecated use the create() method.
-	 */
-	@Deprecated
-	public SlimDirectedGraphView(DirectedGraph<VertexType> graph)
-	{
-		init(this, graph);
-	}
-
-	/**
 	 * @return the number of vertices.
 	 */
 	public int getNumberOfVertices()
@@ -283,7 +271,7 @@ public final class SlimDirectedGraphView<VertexType> implements Serializable
 	 * @param slim
 	 * @param graph
 	 */
-	private static <V> void init(SlimDirectedGraphView<V> slim, DirectedGraph<V> graph)
+	private static <V,ED> void init(SlimDirectedGraphView<V> slim, DirectedGraph<V,ED> graph)
 	{
 		int i;
 		IntMapper<V> mapper;
@@ -377,7 +365,7 @@ public final class SlimDirectedGraphView<VertexType> implements Serializable
 	 * @param graph
 	 * @return the slim graph corresponding to graph
 	 */
-	public static <V> SlimDirectedGraphView<V> create(DirectedGraph<V> graph)
+	public static <V,ED> SlimDirectedGraphView<V> create(DirectedGraph<V,ED> graph)
 	{
 		SlimDirectedGraphView<V> g = new SlimDirectedGraphView<V>();
 		init(g, graph);
@@ -400,7 +388,7 @@ public final class SlimDirectedGraphView<VertexType> implements Serializable
 	 * @param map mapping
 	 * @return the slim graph view.
 	 */
-	public static <K,V> SlimDirectedGraphView<V> create(DirectedGraph<K> graph, final Map<K,V> map)
+	public static <K,ED, V> SlimDirectedGraphView<V> create(DirectedGraph<K,ED> graph, final Map<K,V> map)
 	{
 		final SlimDirectedGraphView<K> kg = create(graph);
 		SlimDirectedGraphView<V> vg = new SlimDirectedGraphView<V>();

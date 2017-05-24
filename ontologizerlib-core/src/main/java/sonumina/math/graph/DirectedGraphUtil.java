@@ -15,7 +15,7 @@ public class DirectedGraphUtil
 	 *
 	 * @param graph
 	 */
-	public static <T> void printGraphCode(DirectedGraph<T> graph)
+	public static <T,ED> void printGraphCode(DirectedGraph<T,ED> graph)
 	{
 		Class<? extends Object> clazz = graph.getArbitaryNode().getClass();
 		System.out.println("DirectedGraph<" + clazz.getName() + "> g = new DirectedGraph<" + clazz.getName() + ">();");
