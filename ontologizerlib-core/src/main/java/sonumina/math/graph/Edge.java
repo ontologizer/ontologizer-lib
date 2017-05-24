@@ -37,18 +37,6 @@ public class Edge<Type> implements Serializable
 		return source;
 	}
 
-	/**
-	 * Returns the weight of an edge. The default implementation
-	 * returns always 1 and hence must be overwritten by subclasses
-	 * in order to return different weights.
-	 *
-	 * @return the weight
-	 */
-	public int getWeight()
-	{
-		return 1;
-	}
-
 	void setSource(Type source) {
 		this.source = source;
 	}

@@ -50,6 +50,19 @@ public class DirectedGraph<V> extends AbstractGraph<V> implements Iterable<V>, S
 	}
 
 	/**
+	 * An interface to be used to weight edges.
+	 *
+	 * @author Sebastian Bauer
+	 *
+	 * @param <V> the edge type
+	 */
+	public static interface IEdgeWeighter<V>
+	{
+		/** Return the weight of the given edge */
+		public int getWeight(Edge<V> edge);
+	}
+
+	/**
 	 * Constructs the directed graph.
 	 */
 	public DirectedGraph()
@@ -516,10 +529,10 @@ public class DirectedGraph<V> extends AbstractGraph<V> implements Iterable<V>, S
 	 * @param againstFlow if specified the path is walked against the direction of the graph
 	 * @param visitor object implementing IDistanceVisitor which can be used to process the
 	 *        results
+	 * @param weighter the edge weighter. If null, all weights are considered as 1.
 	 */
-	public void singleSourceShortestPath(V vertex, boolean againstFlow, IDistanceVisitor<V> visitor)
-	{
-		/**
+	public void singleSourceShortestPath(V vertex, boolean againstFlow, IDistanceVisitor<V> visitor, IEdgeWeighter<V> weighter)
+	{		/**
 		 * This class implements some meta information needed by Dijkstra's
 		 * algorithm.
 		 *
@@ -585,6 +598,7 @@ public class DirectedGraph<V> extends AbstractGraph<V> implements Iterable<V>, S
 			{
 				Edge<V> edge = edgeIter.next();
 				V neighbour;
+				int weight = weightOf(edge, weighter);
 
 				if (againstFlow) neighbour = edge.getSource();
 				else neighbour = edge.getDest();
@@ -593,17 +607,17 @@ public class DirectedGraph<V> extends AbstractGraph<V> implements Iterable<V>, S
 				VertexExtension neighbourExt = map.get(neighbour);
 				if (neighbourExt == null)
 				{
-					neighbourExt = new VertexExtension(neighbour, next.distance + edge.getWeight(), next.vertex);
+					neighbourExt = new VertexExtension(neighbour, next.distance + weight, next.vertex);
 					map.put(neighbour,neighbourExt);
 					queue.offer(neighbourExt);
 				} else
 				{
 					/* Would the edge from the current vertex to the neighbour
 					 * make the path to the neighbour shorter? */
-					if (neighbourExt.distance > next.distance + edge.getWeight())
+					if (neighbourExt.distance > next.distance + weight)
 					{
 						queue.remove(neighbourExt);
-						neighbourExt.distance = next.distance + edge.getWeight();
+						neighbourExt.distance = next.distance + weight;
 						neighbourExt.parent = next.vertex;
 						queue.offer(neighbourExt);
 					}
@@ -631,13 +645,29 @@ public class DirectedGraph<V> extends AbstractGraph<V> implements Iterable<V>, S
 	}
 
 	/**
+	 * Return the weight of the edge via weighter.
+	 *
+	 * @param edge
+	 * @param weighter
+	 * @return the edge.
+	 */
+	private int weightOf(Edge<V> edge, IEdgeWeighter<V> weighter)
+	{
+		int weight;
+		if (weighter != null) weight = weighter.getWeight(edge);
+		else weight = 1;
+		return weight;
+	}
+
+	/**
 	 * The bellman-ford algorithm (computes single-source shortest paths in a weighted digraph)
 	 *
 	 * @param source
 	 * @param weightMultiplier multiplies the weights by the given factor.
 	 * @param visitor
+	 * @param weighter the edge weighter. If null, all weights are considered as 1.
 	 */
-	public void bf(V source, int weightMultiplier, IDistanceVisitor<V> visitor)
+	public void bf(V source, int weightMultiplier, IDistanceVisitor<V> visitor, IEdgeWeighter<V> weighter)
 	{
 		/**
 		 * This class implements some meta information needed by the BF algorithm.
@@ -687,19 +717,20 @@ public class DirectedGraph<V> extends AbstractGraph<V> implements Iterable<V>, S
 				for (Edge<V> edge : ent.getValue().outEdges)
 				{
 					V v = edge.getDest();
+					int weight = weightOf(edge, weighter);
 
 
 					VertexExtension vExt = map.get(v);
 					if (vExt == null)
 					{
-						vExt = new VertexExtension(v, uExt.distance + edge.getWeight()*weightMultiplier, u);
+						vExt = new VertexExtension(v, uExt.distance + weight*weightMultiplier, u);
 						map.put(v,vExt);
 						changed = true;
 					} else
 					{
-						if (vExt.distance > uExt.distance + edge.getWeight() * weightMultiplier)
+						if (vExt.distance > uExt.distance + weight * weightMultiplier)
 						{
-							vExt.distance = uExt.distance + edge.getWeight() * weightMultiplier;
+							vExt.distance = uExt.distance + weight * weightMultiplier;
 							vExt.parent = u;
 							changed = true;
 						}
@@ -740,7 +771,7 @@ public class DirectedGraph<V> extends AbstractGraph<V> implements Iterable<V>, S
 	 */
 	public void singleSourceShortestPathBF(V source, IDistanceVisitor<V> visitor)
 	{
-		bf(source,1,visitor);
+		bf(source,1,visitor, null);
 	}
 
 	/**
@@ -758,7 +789,7 @@ public class DirectedGraph<V> extends AbstractGraph<V> implements Iterable<V>, S
 					{
 						return visitor.visit(vertex, path, distance * -1);
 					};
-				});
+				}, null);
 	}
 
 	/**

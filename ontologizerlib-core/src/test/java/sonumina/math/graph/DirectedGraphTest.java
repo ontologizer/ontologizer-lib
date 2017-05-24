@@ -172,7 +172,7 @@ public class DirectedGraphTest
 				Assert.assertTrue(distanceMap.get(vertex) == distance);
 				return true;
 			}
-		});
+		}, null);
 
 
 		HashSet<TestData> sub = new HashSet<TestData>();
