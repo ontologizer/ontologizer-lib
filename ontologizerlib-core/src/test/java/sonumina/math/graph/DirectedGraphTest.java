@@ -6,8 +6,11 @@
  */
 package sonumina.math.graph;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static sonumina.math.graph.Edge.newEdge;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -301,5 +304,59 @@ public class DirectedGraphTest
 			/* Can happen but did not occur yet */
 			Assert.assertFalse(true);
 		}
+	}
+
+	@Test
+	public void testPathMaintainingSubGraph()
+	{
+		/*
+		 * Build a graph like this
+		 *
+		 *       0
+		 *      / \
+		 *     /   \
+		 *    1     4
+		 *   / \   / \
+		 *  2   3 5   6
+		 *
+		 */
+
+		final DirectedGraph<TestData,Object> graph = new DirectedGraph<TestData,Object>();
+		final TestData n0 = new TestData("n0");
+		final TestData n1 = new TestData("n1");
+		final TestData n2 = new TestData("n2");
+		final TestData n3 = new TestData("n3");
+		final TestData n4 = new TestData("n4");
+		final TestData n5 = new TestData("n5");
+		final TestData n6 = new TestData("n6");
+
+		graph.addVertex(n0);
+		graph.addVertex(n1);
+		graph.addVertex(n2);
+		graph.addVertex(n3);
+		graph.addVertex(n4);
+		graph.addVertex(n5);
+		graph.addVertex(n6);
+
+		graph.addEdge(newEdge(n0,n1));
+		graph.addEdge(newEdge(n1,n2));
+		graph.addEdge(newEdge(n1,n3));
+		graph.addEdge(newEdge(n0,n4));
+		graph.addEdge(newEdge(n4,n5));
+		graph.addEdge(newEdge(n4,n6));
+
+		DirectedGraph<TestData,Object> subgraph = graph.pathMaintainingSubGraph(new HashSet<>(Arrays.asList(n0, n3, n4)));
+		assertTrue(subgraph.containsVertex(n0));
+		assertTrue(subgraph.containsVertex(n3));
+		assertTrue(subgraph.containsVertex(n4));
+		assertFalse(subgraph.containsVertex(n1));
+		assertFalse(subgraph.containsVertex(n2));
+		assertFalse(subgraph.containsVertex(n5));
+		assertFalse(subgraph.containsVertex(n6));
+
+		assertTrue(subgraph.areNeighbors(n0, n3));
+		assertTrue(subgraph.areNeighbors(n0, n4));
+
+		assertFalse(subgraph.areNeighbors(n3, n4));
 	}
 }
