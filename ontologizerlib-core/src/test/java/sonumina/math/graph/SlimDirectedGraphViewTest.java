@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 import static sonumina.math.graph.Edge.newEdge;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.junit.Test;
@@ -19,11 +18,10 @@ public class SlimDirectedGraphViewTest
 	 * @param actual
 	 * @param map
 	 */
-	private void checkNodes(Iterator<TestData> expected, int[] actual,  Map<TestData, Integer> map)
+	private void checkNodes(Iterable<TestData> expected, int[] actual,  Map<TestData, Integer> map)
 	{
-		while (expected.hasNext())
+		for (TestData ch : expected)
 		{
-			TestData ch = expected.next();
 			boolean found = false;
 			for (int j=0; j < actual.length; j++)
 			{

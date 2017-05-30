@@ -1,7 +1,5 @@
 package sonumina.math.graph;
 
-import java.util.Iterator;
-
 /**
  * Class providing some utils mainly for debugging.
  *
@@ -25,13 +23,9 @@ public class DirectedGraphUtil
 
 		for (T v : graph)
 		{
-			Iterator<T> parentIter = graph.getParentNodes(v);
-			while (parentIter.hasNext())
+			for (T p : graph.getParentNodes(v))
 			{
-				T p = parentIter.next();
-
 				System.out.println("g.addEdge(new Edge(" + p + ", " + v + "));");
-
 			}
 		}
 

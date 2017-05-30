@@ -3,8 +3,8 @@ package ontologizer.io.dot;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Locale;
+
 import sonumina.math.graph.AbstractGraph;
 import sonumina.math.graph.AbstractGraph.DotAttributesProvider;
 
@@ -103,11 +103,8 @@ public class DOTWriter
 		/* Now write out the edges. Write out only the edges which are linking nodes within the node set. */
 		for (V s : nodeSet)
 		{
-			Iterator<V> ancest = g.getChildNodes(s);
-			while (ancest.hasNext())
+			for (V d : g.getChildNodes(s))
 			{
-				V d = ancest.next();
-
 				if (v2idx.containsKey(d))
 				{
 					String sName = provider.getDotNodeName(s);

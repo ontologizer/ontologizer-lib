@@ -234,7 +234,7 @@ public class DirectedGraphTest
 			@Override
 			public Iterator<TestData> grabNeighbours(TestData t)
 			{
-				return graph.getChildNodes(t);
+				return graph.getChildNodes(t).iterator();
 			}};
 		return childGrabber;
 	}

@@ -373,27 +373,34 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 	}
 
 	@Override
-	public Iterator<V> getParentNodes(V vt)
+	public Iterable<V> getParentNodes(V vt)
 	{
 		final Iterator<Edge<V,ED>> iter = getInEdges(vt);
 
-		return new Iterator<V>()
+		return new Iterable<V>()
 		{
 			@Override
-			public boolean hasNext()
+			public Iterator<V> iterator()
 			{
-				return iter.hasNext();
-			}
+				return new Iterator<V>()
+				{
+					@Override
+					public boolean hasNext()
+					{
+						return iter.hasNext();
+					}
 
-			@Override
-			public V next()
-			{
-				return iter.next().getSource();
-			}
+					@Override
+					public V next()
+					{
+						return iter.next().getSource();
+					}
 
-			@Override
-			public void remove()
-			{
+					@Override
+					public void remove()
+					{
+					}
+				};
 			}
 		};
 	}
@@ -428,7 +435,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 		 */
 		HashSet<V> neighborhood  = new HashSet<V>();
 
-		Iterator<V> neighborsIt = getChildNodes(v);
+		Iterator<V> neighborsIt = getChildNodes(v).iterator();
 		while (neighborsIt.hasNext())
 			neighborhood.add( neighborsIt.next() );
 
@@ -453,7 +460,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 			/*
 			 * Get all nodes reachable from this node
 			 */
-			Iterator<V> neighborsNeighborsIt = getChildNodes(neighbor);
+			Iterator<V> neighborsNeighborsIt = getChildNodes(neighbor).iterator();
 			while (neighborsNeighborsIt.hasNext()){
 				V neighborsNeighbor = neighborsNeighborsIt.next();
 
@@ -493,27 +500,34 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 	}
 
 	@Override
-	public Iterator<V> getChildNodes(V vt)
+	public Iterable<V> getChildNodes(V vt)
 	{
 		final Iterator<Edge<V,ED>> iter = getOutEdges(vt);
 
-		return new Iterator<V>()
+		return new Iterable<V>()
 		{
 			@Override
-			public boolean hasNext()
+			public Iterator<V> iterator()
 			{
-				return iter.hasNext();
-			}
+				return new Iterator<V>()
+				{
+					@Override
+					public boolean hasNext()
+					{
+						return iter.hasNext();
+					}
 
-			@Override
-			public V next()
-			{
-				return iter.next().getDest();
-			}
+					@Override
+					public V next()
+					{
+						return iter.next().getDest();
+					}
 
-			@Override
-			public void remove()
-			{
+					@Override
+					public void remove()
+					{
+					}
+				};
 			}
 		};
 	}
@@ -1069,7 +1083,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 			{
 				Set<V> vUpperVertices = transitiveClosure.getVerticesOfUpperInducedGraph(null,v);
 				LinkedList<V> parents = new LinkedList<V>();
-				Iterator<V> parentIterator = transitiveClosure.getParentNodes(v);
+				Iterator<V> parentIterator = transitiveClosure.getParentNodes(v).iterator();
 				while (parentIterator.hasNext())
 					parents.add(parentIterator.next());
 

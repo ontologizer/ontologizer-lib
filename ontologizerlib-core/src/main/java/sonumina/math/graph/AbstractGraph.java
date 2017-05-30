@@ -120,8 +120,8 @@ public abstract class AbstractGraph<V> implements Serializable, IDirectedGraph<V
 					{
 						/* If bfs is done against flow neighbours can be found via the
 						 * in-going edges otherwise via the outgoing edges */
-						if (againstFlow) return getParentNodes(t);
-						else return getChildNodes(t);
+						if (againstFlow) return getParentNodes(t).iterator();
+						else return getChildNodes(t).iterator();
 					}
 				}, visitor);
 	}
@@ -302,14 +302,14 @@ public abstract class AbstractGraph<V> implements Serializable, IDirectedGraph<V
 		{
 			/* Build list of children */
 			LinkedList<V> vChild 			= new LinkedList<V>();
-			Iterator<V> childrenIterator 	= getChildNodes(v);
+			Iterator<V> childrenIterator 	= getChildNodes(v).iterator();
 			while (childrenIterator.hasNext())
 				vChild.add(childrenIterator.next());
 			vertex2Children.put(v, vChild);
 
 			/* Determine the number of parents for each node */
 			int numParents 						= 0;
-			Iterator<V> parentIterator = getParentNodes(v);
+			Iterator<V> parentIterator = getParentNodes(v).iterator();
 			while (parentIterator.hasNext())
 			{
 				parentIterator.next();

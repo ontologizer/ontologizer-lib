@@ -284,7 +284,7 @@ public final class SlimDirectedGraphView<VertexType> implements Serializable
 		for (i=0;i<mapper.getSize();i++)
 		{
 			V v 				  = mapper.get(i);
-			slim.vertexParents[i] = createIndicesFromIter(mapper,graph.getParentNodes(v));
+			slim.vertexParents[i] = createIndexArray(mapper,graph.getParentNodes(v));
 		}
 
 		/* Term ancestor stuff */
@@ -300,7 +300,7 @@ public final class SlimDirectedGraphView<VertexType> implements Serializable
 					return true;
 				};
 			});
-			slim.vertexAncestors[i] = createIndicesFromIter(mapper,ancestors.iterator());
+			slim.vertexAncestors[i] = createIndexArray(mapper,ancestors);
 
 			/* Sort them, as we require this for binary search in isAncestor() */
 			Arrays.sort(slim.vertexAncestors[i]);
@@ -311,7 +311,7 @@ public final class SlimDirectedGraphView<VertexType> implements Serializable
 		for (i=0;i<mapper.getSize();i++)
 		{
 			V v = mapper.get(i);
-			slim.vertexChildren[i] = createIndicesFromIter(mapper,graph.getChildNodes(v));
+			slim.vertexChildren[i] = createIndexArray(mapper,graph.getChildNodes(v));
 		}
 
 		/* Term descendants stuff */
@@ -327,7 +327,7 @@ public final class SlimDirectedGraphView<VertexType> implements Serializable
 					return true;
 				};
 			});
-			slim.vertexDescendants[i] = createIndicesFromIter(mapper, descendants.iterator());
+			slim.vertexDescendants[i] = createIndexArray(mapper, descendants);
 
 			/* Sort them, as we require this for binary search in isDescendant() */
 			Arrays.sort(slim.vertexDescendants[i]);
@@ -337,16 +337,15 @@ public final class SlimDirectedGraphView<VertexType> implements Serializable
 	/**
 	 * Creates an index array from the given vertex iterator.
 	 *
-	 * @param iterator
+	 * @param iterable
 	 * @return
 	 */
-	private static <V> int[] createIndicesFromIter(IntMapper<V> vertex2Index, Iterator<V> iterator)
+	private static <V> int[] createIndexArray(IntMapper<V> vertex2Index, Iterable<V> iterable)
 	{
 		ArrayList<Integer> indicesList = new ArrayList<Integer>(10);
 
-		while (iterator.hasNext())
+		for (V p : iterable)
 		{
-			V p = iterator.next();
 			int idx = vertex2Index.getIndex(p);
 			if (idx != -1)
 				indicesList.add(idx);
