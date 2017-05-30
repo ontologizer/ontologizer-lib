@@ -14,8 +14,11 @@ import sonumina.collections.TinyQueue;
  * An abstract class for graphs.
  *
  * @author Sebastian Bauer
+ *
+ * @param <V> the type of the vertices.
+ *
  */
-abstract public class AbstractGraph<VertexType> implements Serializable
+public abstract class AbstractGraph<V> implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 
@@ -25,7 +28,7 @@ abstract public class AbstractGraph<VertexType> implements Serializable
 	 *
 	 * @author Sebastian Bauer
 	 */
-	public static interface IVisitor<VertexType>
+	public static interface IVisitor<V>
 	{
 		/**
 		 * Called for every vertex visited by the algorithm.
@@ -35,7 +38,7 @@ abstract public class AbstractGraph<VertexType> implements Serializable
 		 * @return false if algorithm should be stopped (i.e. no further
 		 *         calls to this method will be issued) otherwise true
 		 */
-		boolean visited(VertexType vertex);
+		boolean visited(V vertex);
 	};
 
 	/**
@@ -43,9 +46,9 @@ abstract public class AbstractGraph<VertexType> implements Serializable
 	 *
 	 * @author Sebastian Bauer
 	 */
-	public static interface INeighbourGrabber<VertexType>
+	public static interface INeighbourGrabber<V>
 	{
-		Iterator<VertexType> grabNeighbours(VertexType t);
+		Iterator<V> grabNeighbours(V t);
 	}
 
 	/**
@@ -54,7 +57,7 @@ abstract public class AbstractGraph<VertexType> implements Serializable
 	 * @param v the vertex for which the in-going edges should be returned.
 	 * @return iterator over all in-going edges.
 	 */
-	public abstract Iterator<VertexType>getParentNodes(VertexType v);
+	public abstract Iterator<V>getParentNodes(V v);
 
 	/**
 	 * Returns the vertices to which the outgoing edges point to.
@@ -62,7 +65,7 @@ abstract public class AbstractGraph<VertexType> implements Serializable
 	 * @param v the vertex for which the outgoing edges should be returned.
 	 * @return Iterator over all outgoing edges.
 	 */
-	public abstract Iterator<VertexType>getChildNodes(VertexType v);
+	public abstract Iterator<V>getChildNodes(V v);
 
 	/**
 	 * Performs a breadth-first search onto the graph starting at a given
@@ -79,9 +82,9 @@ abstract public class AbstractGraph<VertexType> implements Serializable
 	 *
 	 * @see IVisitor
 	 */
-	public void bfs(VertexType vertex, boolean againstFlow, IVisitor<VertexType> visitor)
+	public void bfs(V vertex, boolean againstFlow, IVisitor<V> visitor)
 	{
-		ArrayList<VertexType> initial = new ArrayList<VertexType>(1);
+		ArrayList<V> initial = new ArrayList<V>(1);
 		initial.add(vertex);
 		bfs(initial,againstFlow,visitor);
 	}
@@ -102,9 +105,9 @@ abstract public class AbstractGraph<VertexType> implements Serializable
 	 *
 	 * @see IVisitor
 	 */
-	public void bfs(VertexType vertex,  INeighbourGrabber<VertexType> grabber, IVisitor<VertexType> visitor)
+	public void bfs(V vertex,  INeighbourGrabber<V> grabber, IVisitor<V> visitor)
 	{
-		ArrayList<VertexType> initial = new ArrayList<VertexType>(1);
+		ArrayList<V> initial = new ArrayList<V>(1);
 		initial.add(vertex);
 		bfs(initial,grabber,visitor);
 	}
@@ -124,12 +127,12 @@ abstract public class AbstractGraph<VertexType> implements Serializable
 	 *
 	 * @see IVisitor
 	 */
-	public void bfs(Collection<VertexType> initial, final boolean againstFlow, IVisitor<VertexType> visitor)
+	public void bfs(Collection<V> initial, final boolean againstFlow, IVisitor<V> visitor)
 	{
 		bfs(initial,
-				new INeighbourGrabber<VertexType>()
+				new INeighbourGrabber<V>()
 				{
-					public Iterator<VertexType> grabNeighbours(VertexType t)
+					public Iterator<V> grabNeighbours(V t)
 					{
 						/* If bfs is done against flow neighbours can be found via the
 						 * in-going edges otherwise via the outgoing edges */
@@ -153,13 +156,13 @@ abstract public class AbstractGraph<VertexType> implements Serializable
 	 *        called. Note that the method is also called for the vertices
 	 *        specified by initialSet (in arbitrary order)
 	 */
-	public void bfs(Collection<VertexType> initial, INeighbourGrabber<VertexType> grabber, IVisitor<VertexType> visitor)
+	public void bfs(Collection<V> initial, INeighbourGrabber<V> grabber, IVisitor<V> visitor)
 	{
-		HashSet<VertexType> visited = new HashSet<VertexType>();
+		HashSet<V> visited = new HashSet<V>();
 
 		/* Add all nodes into the queue */
-		TinyQueue<VertexType> queue = new TinyQueue<VertexType>();
-		for (VertexType vertex  : initial)
+		TinyQueue<V> queue = new TinyQueue<V>();
+		for (V vertex  : initial)
 		{
 			queue.offer(vertex);
 			visited.add(vertex);
@@ -170,15 +173,15 @@ abstract public class AbstractGraph<VertexType> implements Serializable
 		while (!queue.isEmpty())
 		{
 			/* Remove head of the queue */
-			VertexType head = queue.poll();
+			V head = queue.poll();
 
 			/* Add not yet visited neighbors of old head to the queue
 			 * and mark them as visited. */
-			Iterator<VertexType> neighbours = grabber.grabNeighbours(head);
+			Iterator<V> neighbours = grabber.grabNeighbours(head);
 
 			while (neighbours.hasNext())
 			{
-				VertexType neighbour = neighbours.next();
+				V neighbour = neighbours.next();
 
 				if (!visited.contains(neighbour))
 				{
@@ -197,23 +200,23 @@ abstract public class AbstractGraph<VertexType> implements Serializable
 	 * @param vertex
 	 * @param visitor
 	 */
-	public void dfs(VertexType vertex, INeighbourGrabber<VertexType> grabber, IVisitor<VertexType> visitor)
+	public void dfs(V vertex, INeighbourGrabber<V> grabber, IVisitor<V> visitor)
 	{
-		HashSet<VertexType> visited = new HashSet<VertexType>();
-		Stack<VertexType> stack = new Stack<VertexType>();
+		HashSet<V> visited = new HashSet<V>();
+		Stack<V> stack = new Stack<V>();
 
 		visited.add(vertex);
 		stack.push(vertex);
 
 		while (!stack.isEmpty())
 		{
-			VertexType v = stack.pop();
+			V v = stack.pop();
 			visitor.visited(v);
 
-			Iterator<VertexType> iter = grabber.grabNeighbours(v);
+			Iterator<V> iter = grabber.grabNeighbours(v);
 			while (iter.hasNext())
 			{
-				VertexType n = iter.next();
+				V n = iter.next();
 				if (visited.contains(n)) continue;
 				stack.push(n);
 				visited.add(n);
@@ -222,19 +225,19 @@ abstract public class AbstractGraph<VertexType> implements Serializable
 		}
 	}
 
-	private void getDFSShotcutLinks(VertexType v, HashMap<VertexType,VertexType> map, HashSet<VertexType> visited, ArrayList<VertexType> upwardQueue, INeighbourGrabber<VertexType> grabber, IVisitor<VertexType> visitor)
+	private void getDFSShotcutLinks(V v, HashMap<V,V> map, HashSet<V> visited, ArrayList<V> upwardQueue, INeighbourGrabber<V> grabber, IVisitor<V> visitor)
 	{
 		visitor.visited(v);
 
-		Iterator<VertexType> iter = grabber.grabNeighbours(v);
+		Iterator<V> iter = grabber.grabNeighbours(v);
 		while (iter.hasNext())
 		{
-			VertexType n = iter.next();
+			V n = iter.next();
 			if (visited.contains(n)) continue;
 
 			if (upwardQueue.size() > 0)
 			{
-				for (VertexType t : upwardQueue)
+				for (V t : upwardQueue)
 					map.put(t, n);
 				upwardQueue.clear();
 			}
@@ -255,14 +258,14 @@ abstract public class AbstractGraph<VertexType> implements Serializable
 	 * @param visitor defines which nodes were visisted
 	 * @return the short cut link map.
 	 */
-	public HashMap<VertexType,VertexType> getDFSShotcutLinks(VertexType vt, INeighbourGrabber<VertexType> grabber, IVisitor<VertexType> visitor)
+	public HashMap<V,V> getDFSShotcutLinks(V vt, INeighbourGrabber<V> grabber, IVisitor<V> visitor)
 	{
-		HashMap<VertexType,VertexType> map = new HashMap<VertexType,VertexType>();
-		ArrayList<VertexType> upwardQueue = new ArrayList<VertexType>();
+		HashMap<V,V> map = new HashMap<V,V>();
+		ArrayList<V> upwardQueue = new ArrayList<V>();
 
-		getDFSShotcutLinks(vt, map, new HashSet<VertexType>(), upwardQueue, grabber, visitor);
+		getDFSShotcutLinks(vt, map, new HashSet<V>(), upwardQueue, grabber, visitor);
 
-		for (VertexType t : upwardQueue)
+		for (V t : upwardQueue)
 			map.put(t, null);
 
 		return map;
@@ -276,13 +279,13 @@ abstract public class AbstractGraph<VertexType> implements Serializable
 	 * @param dest
 	 * @return whether there is a path from source to dest or not
 	 */
-	public boolean existsPath(final VertexType source, final VertexType dest)
+	public boolean existsPath(final V source, final V dest)
 	{
-		class ExistsPathVisitor implements IVisitor<VertexType>
+		class ExistsPathVisitor implements IVisitor<V>
 		{
 			boolean found;
 
-			public boolean visited(VertexType vertex)
+			public boolean visited(V vertex)
 			{
 				if (vertex.equals(dest))
 				{
@@ -304,25 +307,25 @@ abstract public class AbstractGraph<VertexType> implements Serializable
 	 *
 	 * @return a list of vertices in a topological order.
 	 */
-	public ArrayList<VertexType> topologicalOrder()
+	public ArrayList<V> topologicalOrder()
 	{
 		/* Gather structure */
-		HashMap<VertexType,LinkedList<VertexType>> vertex2Children 	= new HashMap<VertexType,LinkedList<VertexType>>();
-		HashMap<VertexType,Integer> vertex2NumParents 				= new HashMap<VertexType,Integer>();
-		LinkedList<VertexType> verticesWithNoParents 				= new LinkedList<VertexType>();
+		HashMap<V,LinkedList<V>> vertex2Children 	= new HashMap<V,LinkedList<V>>();
+		HashMap<V,Integer> vertex2NumParents 				= new HashMap<V,Integer>();
+		LinkedList<V> verticesWithNoParents 				= new LinkedList<V>();
 
-		for (VertexType v : getVertices())
+		for (V v : getVertices())
 		{
 			/* Build list of children */
-			LinkedList<VertexType> vChild 			= new LinkedList<VertexType>();
-			Iterator<VertexType> childrenIterator 	= getChildNodes(v);
+			LinkedList<V> vChild 			= new LinkedList<V>();
+			Iterator<V> childrenIterator 	= getChildNodes(v);
 			while (childrenIterator.hasNext())
 				vChild.add(childrenIterator.next());
 			vertex2Children.put(v, vChild);
 
 			/* Determine the number of parents for each node */
 			int numParents 						= 0;
-			Iterator<VertexType> parentIterator = getParentNodes(v);
+			Iterator<V> parentIterator = getParentNodes(v);
 			while (parentIterator.hasNext())
 			{
 				parentIterator.next();
@@ -338,7 +341,7 @@ abstract public class AbstractGraph<VertexType> implements Serializable
 		}
 
 		int numOfVertices 			= vertex2Children.size();
-		ArrayList<VertexType> order = new ArrayList<VertexType>(numOfVertices);
+		ArrayList<V> order = new ArrayList<V>(numOfVertices);
 
 		/* Take the first vertex in the queue verticesWithNoParents and to every
 		 * vertex to which vertex is a parent decrease its current number of parents
@@ -346,10 +349,10 @@ abstract public class AbstractGraph<VertexType> implements Serializable
 		 */
 		while (!verticesWithNoParents.isEmpty())
 		{
-			VertexType top = verticesWithNoParents.poll();
+			V top = verticesWithNoParents.poll();
 			order.add(top);
 
-			for (VertexType p : vertex2Children.get(top))
+			for (V p : vertex2Children.get(top))
 			{
 				int newNumParents = vertex2NumParents.get(p)-1;
 				vertex2NumParents.put(p,newNumParents);
@@ -368,21 +371,21 @@ abstract public class AbstractGraph<VertexType> implements Serializable
 	 *
 	 * @author Sebastian Bauer
 	 *
-	 * @param <VertexType>
+	 * @param <V>
 	 */
-	public static class DotAttributesProvider<VertexType>
+	public static class DotAttributesProvider<V>
 	{
-		public String getDotNodeName(VertexType vt)
+		public String getDotNodeName(V vt)
 		{
 			return null;
 		}
 
-		public String getDotNodeAttributes(VertexType vt)
+		public String getDotNodeAttributes(V vt)
 		{
 			return null;
 		}
 
-		public String getDotEdgeAttributes(VertexType src, VertexType dest)
+		public String getDotEdgeAttributes(V src, V dest)
 		{
 			return null;
 		}
@@ -401,6 +404,5 @@ abstract public class AbstractGraph<VertexType> implements Serializable
 	/**
 	 * @return the vertices is an iterable object.
 	 */
-	abstract public Iterable<VertexType> getVertices();
-
+	public abstract Iterable<V> getVertices();
 }
