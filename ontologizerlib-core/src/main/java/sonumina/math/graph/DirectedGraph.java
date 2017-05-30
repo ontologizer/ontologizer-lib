@@ -372,9 +372,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 		return va.inEdges.iterator();
 	}
 
-	/**
-	 * @return iterator for iterating over the parent nodes (nodes that point to this node).
-	 */
+	@Override
 	public Iterator<V> getParentNodes(V vt)
 	{
 		final Iterator<Edge<V,ED>> iter = getInEdges(vt);
@@ -494,9 +492,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 		return va.outEdges.iterator();
 	}
 
-	/* (non-Javadoc)
-	 * @see sonumina.math.graph.AbstractGraph#getChildNodes(java.lang.Object)
-	 */
+	@Override
 	public Iterator<V> getChildNodes(V vt)
 	{
 		final Iterator<Edge<V,ED>> iter = getOutEdges(vt);
