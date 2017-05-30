@@ -18,7 +18,7 @@ import sonumina.collections.TinyQueue;
  * @param <V> the type of the vertices.
  *
  */
-public abstract class AbstractGraph<V> implements Serializable
+public abstract class AbstractGraph<V> implements Serializable, IDirectedGraph<V>
 {
 	private static final long serialVersionUID = 1L;
 
@@ -50,22 +50,6 @@ public abstract class AbstractGraph<V> implements Serializable
 	{
 		Iterator<V> grabNeighbours(V t);
 	}
-
-	/**
-	 * Returns the vertices to which the in-going edges point to.
-	 *
-	 * @param v the vertex for which the in-going edges should be returned.
-	 * @return iterator over all in-going edges.
-	 */
-	public abstract Iterator<V>getParentNodes(V v);
-
-	/**
-	 * Returns the vertices to which the outgoing edges point to.
-	 *
-	 * @param v the vertex for which the outgoing edges should be returned.
-	 * @return Iterator over all outgoing edges.
-	 */
-	public abstract Iterator<V>getChildNodes(V v);
 
 	/**
 	 * Performs a breadth-first search onto the graph starting at a given
