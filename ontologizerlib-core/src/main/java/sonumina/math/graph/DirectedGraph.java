@@ -373,9 +373,9 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 	}
 
 	@Override
-	public Iterable<V> getParentNodes(V vt)
+	public Iterable<V> getParentNodes(V v)
 	{
-		final Iterator<Edge<V,ED>> iter = getInEdges(vt);
+		final Iterator<Edge<V,ED>> iter = getInEdges(v);
 
 		return new Iterable<V>()
 		{
@@ -500,9 +500,9 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 	}
 
 	@Override
-	public Iterable<V> getChildNodes(V vt)
+	public Iterable<V> getChildNodes(V v)
 	{
-		final Iterator<Edge<V,ED>> iter = getOutEdges(vt);
+		final Iterator<Edge<V,ED>> iter = getOutEdges(v);
 
 		return new Iterable<V>()
 		{
