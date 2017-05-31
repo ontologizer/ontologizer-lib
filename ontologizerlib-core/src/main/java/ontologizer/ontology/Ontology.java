@@ -14,12 +14,12 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import sonumina.math.graph.DirectedGraph;
-import sonumina.math.graph.Edge;
-import sonumina.math.graph.SlimDirectedGraphView;
 import sonumina.math.graph.AbstractGraph.INeighbourGrabber;
 import sonumina.math.graph.AbstractGraph.IVisitor;
+import sonumina.math.graph.DirectedGraph;
 import sonumina.math.graph.DirectedGraph.IDistanceVisitor;
+import sonumina.math.graph.Edge;
+import sonumina.math.graph.SlimDirectedGraphView;
 
 /**
  * Represents the whole ontology. Note that the terms "parents" and "children" are
