@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 public final class ParentTermID implements Serializable
 {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
 	/** The id of the related term */
 	private TermID termid;
