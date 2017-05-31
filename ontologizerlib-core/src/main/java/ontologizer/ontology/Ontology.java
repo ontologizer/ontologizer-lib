@@ -1,5 +1,7 @@
 package ontologizer.ontology;
 
+import static sonumina.math.graph.Edge.newEdge;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -208,7 +210,7 @@ public class Ontology implements Iterable<Term>, Serializable
 
 			for (Term lvl1 : level1terms)
 			{
-				graph.addEdge(new Edge<Term,RelationType>(rootTerm, lvl1, RelationType.UNKNOWN));
+				graph.addEdge(newEdge(rootTerm, lvl1, RelationType.UNKNOWN));
 			}
 		} else
 		{
@@ -1314,7 +1316,7 @@ public class Ontology implements Iterable<Term>, Serializable
 					++skippedEdges;
 					continue;
 				}
-				o.graph.addEdge(new Edge<Term,RelationType>(tc.get(parent.getRelated()), term, parent.getRelation()));
+				o.graph.addEdge(newEdge(tc.get(parent.getRelated()), term, parent.getRelation()));
 			}
 		}
 
