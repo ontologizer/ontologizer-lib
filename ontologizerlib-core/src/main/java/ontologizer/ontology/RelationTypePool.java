@@ -56,9 +56,9 @@ public class RelationTypePool implements Serializable
 	/**
 	 * Find the relation type by name contained in the given byte array.
 	 *
-	 * @param buf
-	 * @param start
-	 * @param len
+	 * @param buf the buffer that contains the name
+	 * @param start the offset the first byte of the name
+	 * @param end the end of the name (exclusive).
 	 * @return the relation type or null if none exists.
 	 */
 	public RelationType map(byte [] buf, int start, int end)
