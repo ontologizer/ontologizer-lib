@@ -338,7 +338,7 @@ public final class SlimDirectedGraphView<VertexType> implements Serializable
 	 * Creates an index array from the given vertex iterator.
 	 *
 	 * @param iterable
-	 * @return
+	 * @return the int array
 	 */
 	private static <V> int[] createIndexArray(IntMapper<V> vertex2Index, Iterable<V> iterable)
 	{
