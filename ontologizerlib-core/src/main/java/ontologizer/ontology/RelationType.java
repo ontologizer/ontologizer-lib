@@ -15,6 +15,7 @@ public final class RelationType implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 
+	/** A default relation type that is the most unspecific one */
 	public static final RelationType UNKNOWN = new RelationType(b("unknown"), TermRelation.UNKOWN);
 
 	private final ByteString name;
