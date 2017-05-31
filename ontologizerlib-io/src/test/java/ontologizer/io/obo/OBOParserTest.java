@@ -102,7 +102,7 @@ public class OBOParserTest
 		HashMap<String,Term> name2Term = new HashMap<String,Term>();
 		for (Term t : terms)
 			name2Term.put(t.getIDAsString(), t);
-		assertEquals(TermRelation.PART_OF_A, name2Term.get("GO:0000002").getParents()[0].getRelation());
+		assertEquals(TermRelation.PART_OF_A, name2Term.get("GO:0000002").getParents()[0].getRelation().type());
 		assertEquals("GO:0000001", name2Term.get("GO:0000002").getParents()[0].getRelated().toString());
 	}
 
@@ -126,7 +126,7 @@ public class OBOParserTest
 		HashMap<String,Term> name2Term = new HashMap<String,Term>();
 		for (Term t : terms)
 			name2Term.put(t.getIDAsString(), t);
-		assertEquals(TermRelation.REGULATES, name2Term.get("GO:0000002").getParents()[0].getRelation());
+		assertEquals(TermRelation.REGULATES, name2Term.get("GO:0000002").getParents()[0].getRelation().type());
 		assertEquals("GO:0000001", name2Term.get("GO:0000002").getParents()[0].getRelated().toString());
 	}
 
@@ -150,7 +150,8 @@ public class OBOParserTest
 		HashMap<String,Term> name2Term = new HashMap<String,Term>();
 		for (Term t : terms)
 			name2Term.put(t.getIDAsString(), t);
-		assertEquals(TermRelation.UNKOWN, name2Term.get("GO:0000002").getParents()[0].getRelation());
+		assertEquals(TermRelation.UNKOWN, name2Term.get("GO:0000002").getParents()[0].getRelation().type());
+		assertEquals("zzz", name2Term.get("GO:0000002").getParents()[0].getRelation().name().toString());
 		assertEquals("GO:0000001", name2Term.get("GO:0000002").getParents()[0].getRelated().toString());
 	}
 

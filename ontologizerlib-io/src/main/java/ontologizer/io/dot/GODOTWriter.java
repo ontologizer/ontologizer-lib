@@ -139,8 +139,9 @@ public class GODOTWriter
 							String relationName;
 							String label;
 
-							TermRelation rel = graph.getDirectRelation(src.getID(), dest.getID());
+							TermRelation rel = graph.getDirectRelation(src.getID(), dest.getID()).type();
 
+							/* TODO: Use fancy name from RelationType */
 							switch (rel)
 							{
 								case	IS_A: relationName = "is a"; break;

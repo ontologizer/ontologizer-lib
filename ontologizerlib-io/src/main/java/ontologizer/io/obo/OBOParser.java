@@ -39,6 +39,8 @@ import ontologizer.io.linescanner.AbstractByteLineScanner;
 import ontologizer.ontology.Namespace;
 import ontologizer.ontology.ParentTermID;
 import ontologizer.ontology.PrefixPool;
+import ontologizer.ontology.RelationType;
+import ontologizer.ontology.RelationTypePool;
 import ontologizer.ontology.Subset;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermID;
@@ -150,6 +152,22 @@ public class OBOParser
 	/** Pool for prefixes. */
 	private PrefixPool prefixPool = new PrefixPool();
 
+	/** Pool for relation types */
+	private RelationTypePool relationTypePool = new RelationTypePool();
+
+	/** The known relation types */
+	private final RelationType [] knownRelations = new RelationType[TermRelation.UNKOWN.ordinal()];
+
+	/* TODO: Find a better way (perhaps drop enums and use ints in the first place) */
+	private final static int IS_A = TermRelation.IS_A.ordinal();
+	private final static int PART_OF_A = TermRelation.PART_OF_A.ordinal();
+	private final static int REGULATES = TermRelation.REGULATES.ordinal();
+	private final static int NEGATIVELY_REGULATES = TermRelation.NEGATIVELY_REGULATES.ordinal();
+	private final static int POSITIVELY_REGULATES = TermRelation.POSITIVELY_REGULATES.ordinal();
+
+	/** Whether the relation has been in use */
+	private boolean [] referencedRelations = new boolean[knownRelations.length];
+
 	/** Pool for term ids */
 	private ReferencePool<TermID> termIDPool = new ReferencePool<TermID>();
 
@@ -217,6 +235,12 @@ public class OBOParser
 	{
 		this.input = input;
 		this.options = options;
+
+		for (int i = 0; i < knownRelations.length; i++)
+		{
+			TermRelation tr = TermRelation.values()[i];
+			knownRelations[i] = new RelationType(tr.relationName(), tr);
+		}
 	}
 
 	public Set<Term> getTermMap()
@@ -648,12 +672,34 @@ public class OBOParser
 
 			private void parse_is_a(byte[] buf, int valueStart, int valueLen)
 			{
-				currentParents.add(new ParentTermID(readTermID(buf, valueStart, valueLen),TermRelation.IS_A));
+				currentParents.add(new ParentTermID(readTermID(buf, valueStart, valueLen),knownRelations[IS_A]));
+				referencedRelations[IS_A] = true;
+			}
+
+			private RelationType parse_relation_type(byte[] buf, int typeStart, int typeEnd)
+			{
+				int meaning;
+
+				if (equalsIgnoreCase(buf, typeStart, typeEnd - typeStart, PART_OF_KEYWORD)) meaning = PART_OF_A;
+				else if (equalsIgnoreCase(buf, typeStart, typeEnd - typeStart, REGULATES_KEYWORD)) meaning = REGULATES;
+				else if (equalsIgnoreCase(buf, typeStart, typeEnd - typeStart, NEGATIVELY_REGULATES_KEYWORD)) meaning = NEGATIVELY_REGULATES;
+				else if (equalsIgnoreCase(buf, typeStart, typeEnd - typeStart, POSITIVELY_REGULATES_KEYWORD)) meaning = POSITIVELY_REGULATES;
+				else
+				{
+					RelationType type = relationTypePool.map(buf, typeStart, typeEnd);
+					if (type != null)
+					{
+						return type;
+					}
+					return relationTypePool.map(new RelationType(new ByteString(buf, typeStart, typeEnd), TermRelation.UNKOWN));
+				}
+				referencedRelations[meaning] = true;
+				return knownRelations[meaning];
 			}
 
 			private void parse_relationship(byte[] buf, int valueStart, int valueLen)
 			{
-				TermRelation type;
+				RelationType type;
 
 				int typeStart = valueStart;
 				int typeEnd = findUnescaped(buf, valueStart, valueLen, ' ');
@@ -664,11 +710,7 @@ public class OBOParser
 				int idEnd = findUnescaped(buf, idStart, valueStart + valueLen - idStart, '[', ' ', '!');
 				if (idEnd == -1) idEnd = valueStart + valueLen;
 
-				if (equalsIgnoreCase(buf,typeStart, typeEnd - typeStart,PART_OF_KEYWORD)) type = TermRelation.PART_OF_A;
-				else if (equalsIgnoreCase(buf,typeStart, typeEnd - typeStart,REGULATES_KEYWORD)) type = TermRelation.REGULATES;
-				else if (equalsIgnoreCase(buf,typeStart, typeEnd - typeStart,NEGATIVELY_REGULATES_KEYWORD)) type = TermRelation.POSITIVELY_REGULATES;
-				else if (equalsIgnoreCase(buf,typeStart, typeEnd - typeStart,POSITIVELY_REGULATES_KEYWORD)) type = TermRelation.NEGATIVELY_REGULATES;
-				else type = TermRelation.UNKOWN;
+				type = parse_relation_type(buf, typeStart, typeEnd);
 
 				currentParents.add(new ParentTermID(readTermID(buf,idStart,idEnd - idStart + 1),type));
 			}

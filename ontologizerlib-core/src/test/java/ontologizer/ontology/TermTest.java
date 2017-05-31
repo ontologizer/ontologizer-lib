@@ -5,15 +5,6 @@ import java.util.ArrayList;
 import org.junit.Assert;
 import org.junit.Test;
 
-import ontologizer.ontology.ITerm;
-import ontologizer.ontology.Namespace;
-import ontologizer.ontology.ParentTermID;
-import ontologizer.ontology.Prefix;
-import ontologizer.ontology.PrefixPool;
-import ontologizer.ontology.Term;
-import ontologizer.ontology.TermID;
-import ontologizer.ontology.TermRelation;
-
 public class TermTest
 {
 	@Test
@@ -25,7 +16,7 @@ public class TermTest
 
 		Term root = new Term("GO:0000000", "root");
 		ArrayList<ParentTermID> rootlist = new ArrayList<ParentTermID>();
-		rootlist.add(new ParentTermID(root.getID(),TermRelation.PART_OF_A));
+		rootlist.add(new ParentTermID(root.getID(), RelationType.UNKNOWN));
 		Term bioproc = new Term("GO:0008150", "biological process", bNamespace, rootlist);
 		Term cellcomp = new Term("GO:0005575", "cellular component", cNamespace, rootlist);
 		Term molfunc = new Term("GO:0003674", "molecular function", fNamespace, rootlist);

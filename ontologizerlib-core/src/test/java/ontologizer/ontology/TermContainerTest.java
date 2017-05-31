@@ -1,18 +1,13 @@
 package ontologizer.ontology;
+
+import static ontologizer.types.ByteString.b;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import ontologizer.ontology.Namespace;
-import ontologizer.ontology.ParentTermID;
-import ontologizer.ontology.Term;
-import ontologizer.ontology.TermContainer;
-import ontologizer.ontology.TermRelation;
-
-import static ontologizer.types.ByteString.b;
 
 public class TermContainerTest
 {
@@ -28,7 +23,7 @@ public class TermContainerTest
 	{
 		root = new Term("GO:0000000", "root", (ParentTermID)null);
 		ArrayList<ParentTermID> rootlist = new ArrayList<ParentTermID>();
-		rootlist.add(new ParentTermID(root.getID(),TermRelation.PART_OF_A));
+		rootlist.add(new ParentTermID(root.getID(), RelationType.UNKNOWN));
 		bioproc = new Term("GO:0008150", "biological process", new Namespace("B"), rootlist);
 		cellcomp = new Term("GO:0005575", "cellular component", new Namespace("C"), rootlist);
 		molfunc = new Term("GO:0003674", "molecular function", new Namespace("F"), rootlist);

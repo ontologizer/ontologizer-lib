@@ -18,9 +18,9 @@ public final class ParentTermID implements Serializable
 	private TermID termid;
 
 	/** the type of the relation */
-	private TermRelation relation;
+	private RelationType relation;
 
-	public ParentTermID(TermID parent, TermRelation relation)
+	public ParentTermID(TermID parent, RelationType relation)
 	{
 		this.termid = parent;
 		this.relation = relation;
@@ -37,7 +37,7 @@ public final class ParentTermID implements Serializable
 	/**
 	 * @return the relation
 	 */
-	public TermRelation getRelation()
+	public RelationType getRelation()
 	{
 		return relation;
 	}
