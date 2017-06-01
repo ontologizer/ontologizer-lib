@@ -55,14 +55,6 @@ public final class Edge<V,D> implements Serializable
 		return data;
 	}
 
-	void setSource(V source) {
-		this.source = source;
-	}
-
-	void setDest(V dest) {
-		this.dest = dest;
-	}
-
 	/**
 	 * Create a new edge with the associated data.
 	 *
