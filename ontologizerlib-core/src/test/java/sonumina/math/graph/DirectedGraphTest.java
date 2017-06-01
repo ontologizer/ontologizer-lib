@@ -6,8 +6,8 @@
  */
 package sonumina.math.graph;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static sonumina.math.graph.Edge.newEdge;
 
 import java.util.Arrays;
@@ -358,5 +358,93 @@ public class DirectedGraphTest
 		assertTrue(subgraph.areNeighbors(n0, n4));
 
 		assertFalse(subgraph.areNeighbors(n3, n4));
+	}
+
+	@Test
+	public void testMergeVertices()
+	{
+		/*
+		 * Build a graph like this
+		 *
+		 *       0
+		 *      / \
+		 *     /   \
+		 *    1     4
+		 *   / \   / \
+		 *  2   3 5   6
+		 *
+		 */
+
+		final DirectedGraph<TestData,Object> graph = new DirectedGraph<TestData,Object>();
+		final TestData n0 = new TestData("n0");
+		final TestData n1 = new TestData("n1");
+		final TestData n2 = new TestData("n2");
+		final TestData n3 = new TestData("n3");
+		final TestData n4 = new TestData("n4");
+		final TestData n5 = new TestData("n5");
+		final TestData n6 = new TestData("n6");
+
+		graph.addVertex(n0);
+		graph.addVertex(n1);
+		graph.addVertex(n2);
+		graph.addVertex(n3);
+		graph.addVertex(n4);
+		graph.addVertex(n5);
+		graph.addVertex(n6);
+
+		graph.addEdge(newEdge(n0,n1));
+		graph.addEdge(newEdge(n1,n2));
+		graph.addEdge(newEdge(n1,n3));
+		graph.addEdge(newEdge(n0,n4));
+		graph.addEdge(newEdge(n4,n5));
+		graph.addEdge(newEdge(n4,n6));
+
+		/*
+		 * Then merge 1 with 4 and 5, which should give
+		 *
+		 *       0
+		 *      /
+		 *     /
+		 *    1 --\
+		 *   / \   \
+		 *  2   3   6
+		 */
+		graph.mergeVertices(n1, Arrays.asList(n4,n5));
+
+		assertTrue(graph.containsVertex(n0));
+		assertTrue(graph.containsVertex(n1));
+		assertTrue(graph.containsVertex(n2));
+		assertTrue(graph.containsVertex(n3));
+		assertFalse(graph.containsVertex(n4));
+		assertFalse(graph.containsVertex(n5));
+		assertTrue(graph.containsVertex(n6));
+
+		TestData [][] neighbors = new TestData [][]
+		{
+			{n0, n1},
+			{n1, n2},
+			{n1, n3},
+			{n1, n6},
+		};
+
+		for (int i=0; i < neighbors.length; i++)
+		{
+			assertTrue(graph.areNeighbors(neighbors[i][0], neighbors[i][1]));
+		}
+
+		for (TestData v1 : graph)
+		{
+			loop:
+			for (TestData v2 : graph)
+			{
+				if (v1 == v2) continue loop;
+
+				for (int i=0; i < neighbors.length; i++)
+				{
+					if (v1 == neighbors[i][0] && v2 == neighbors[i][1]) continue loop;
+				}
+				assertFalse(graph.hasEdge(v1, v2));
+			}
+		}
 	}
 }

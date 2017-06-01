@@ -1,5 +1,7 @@
 package sonumina.math.graph;
 
+import static sonumina.math.graph.Edge.newEdge;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,9 +11,10 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Set;
-import java.util.Map.Entry;
 
 final class VertexAttributes<V,ED> implements Serializable
 {
@@ -1168,15 +1171,61 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 	{
 		for (V vertex2 : eqVertices)
 		{
+			/* New outgoing/ingoing edges to/from vertex1 */
+			Map<V,ArrayList<ED>> newOutgoing = new HashMap<V,ArrayList<ED>>();
+			Map<V,ArrayList<ED>> newIngoing = new HashMap<V,ArrayList<ED>>();
+
 			if (!vertices.containsKey(vertex2))
-				return;
+				throw new IllegalArgumentException("Vertex " + vertex2 + " not contained within the graph");
 
 			VertexAttributes<V,ED> vertexTwoAttributes = vertices.get(vertex2);
 			for (Edge<V,ED> e : vertexTwoAttributes.inEdges)
-				e.setDest(vertex1);
+			{
+				/* Remove this particular edge from the source */
+				vertices.get(e.getSource()).outEdges.remove(e);
+
+				/* Remember that fact */
+				ArrayList<ED> l = newIngoing.get(e.getSource());
+				if (l == null)
+				{
+					l = new ArrayList<ED>();
+					newIngoing.put(e.getSource(), l);
+				}
+				l.add(e.getData());
+			}
 
 			for (Edge<V,ED> e : vertexTwoAttributes.outEdges)
-				e.setSource(vertex1);
+			{
+				/* Remove this particular edge from the dest */
+				vertices.get(e.getDest()).inEdges.remove(e);
+
+				/* Remember that fact */
+				ArrayList<ED> l = newOutgoing.get(e.getDest());
+				if (l == null)
+				{
+					l = new ArrayList<ED>();
+					newOutgoing.put(e.getDest(), l);
+				}
+				l.add(e.getData());
+			}
+
+			for (V v : newIngoing.keySet())
+			{
+				if (v == vertex1) continue;
+				if (hasEdge(v, vertex1)) continue;
+
+				ArrayList<ED> d = newIngoing.get(v);
+				addEdge(newEdge(v, vertex1, d.get(0)));
+			}
+
+			for (V v : newOutgoing.keySet())
+			{
+				if (v == vertex1) continue;
+				if (hasEdge(v, vertex1)) continue;
+
+				ArrayList<ED> d = newOutgoing.get(v);
+				addEdge(newEdge(vertex1, v, d.get(0)));
+			}
 
 			vertices.remove(vertex2);
 		}
