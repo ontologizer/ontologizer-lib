@@ -196,13 +196,38 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 	}
 
 	/**
+	 * Add a new edge to the graph going from source to dest with the associcated data.
+	 *
+	 * @param source the source
+	 * @param dest the dest
+	 * @param data the associated data
+	 * @throws IllegalArgumentException if the edge is a link between two vertices which
+	 * 	 have already been added to the graph.
+	 */
+	public void addEdge(V source, V dest, ED data)
+	{
+		addEdge(newEdge(source,  dest,  data));
+	}
+
+	/**
+	 * Add a new edge into the graph with null data.
+	 * @param source
+	 * @param dest
+	 * @throws IllegalArgumentException if the edge is a link between two vertices which
+	 * 	 have already been added to the graph.
+	 */
+	public void addEdge(V source, V dest)
+	{
+		addEdge(source, dest, null);
+	}
+
+	/**
 	 * Add a new edge into the graph.
 	 *
 	 * @param edge the edge which links two vertices.
 	 *
-	 * @throws IllegalArgumentException if the edge
-	 * 			is a link between two vertices which
-	 * 			haven't been added to the graph.
+	 * @throws IllegalArgumentException if the edge is a link between two vertices which
+	 * 	 have already been added to the graph.
 	 */
 	public void addEdge(Edge<V,ED> edge)
 	{
