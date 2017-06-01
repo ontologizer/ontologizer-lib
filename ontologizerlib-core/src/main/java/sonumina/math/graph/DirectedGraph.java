@@ -229,7 +229,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 	 * @throws IllegalArgumentException if the edge is a link between two vertices which
 	 * 	 have already been added to the graph.
 	 */
-	public void addEdge(Edge<V,ED> edge)
+	private void addEdge(Edge<V,ED> edge)
 	{
 		VertexAttributes<V,ED> vaSource = vertices.get(edge.getSource());
 		VertexAttributes<V,ED> vaDest = vertices.get(edge.getDest());

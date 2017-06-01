@@ -8,7 +8,6 @@ package sonumina.math.graph;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static sonumina.math.graph.Edge.newEdge;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,10 +39,10 @@ public class DirectedGraphTest
 		graph.addVertex(c);
 		graph.addVertex(d);
 
-		graph.addEdge(new Edge<TestData,Void>(a,b,null));
-		graph.addEdge(new Edge<TestData,Void>(b,c,null));
-		graph.addEdge(new Edge<TestData,Void>(c,d,null));
-		graph.addEdge(new Edge<TestData,Void>(d,a,null));
+		graph.addEdge(a,b,null);
+		graph.addEdge(b,c,null);
+		graph.addEdge(c,d,null);
+		graph.addEdge(d,a,null);
 
 		graph.removeVertex(a);
 	}
@@ -84,15 +83,15 @@ public class DirectedGraphTest
 		            g
 		*/
 
-		graph.addEdge(newEdge(root,a));
-		graph.addEdge(newEdge(root,b));
-		graph.addEdge(newEdge(root,c));
-		graph.addEdge(newEdge(a,b));
-		graph.addEdge(newEdge(c,d));
-		graph.addEdge(newEdge(c,e));
-		graph.addEdge(newEdge(d,g));
-		graph.addEdge(newEdge(e,f));
-		graph.addEdge(newEdge(f,g));
+		graph.addEdge(root,a);
+		graph.addEdge(root,b);
+		graph.addEdge(root,c);
+		graph.addEdge(a,b);
+		graph.addEdge(c,d);
+		graph.addEdge(c,e);
+		graph.addEdge(d,g);
+		graph.addEdge(e,f);
+		graph.addEdge(f,g);
 
 		/* Validate results */
 		Iterator<Edge<TestData,Object>> iter = graph.getOutEdges(root);
@@ -271,12 +270,12 @@ public class DirectedGraphTest
 		graph.addVertex(n5);
 		graph.addVertex(n6);
 
-		graph.addEdge(newEdge(n0,n1));
-		graph.addEdge(newEdge(n1,n2));
-		graph.addEdge(newEdge(n1,n3));
-		graph.addEdge(newEdge(n0,n4));
-		graph.addEdge(newEdge(n4,n5));
-		graph.addEdge(newEdge(n4,n6));
+		graph.addEdge(n0,n1);
+		graph.addEdge(n1,n2);
+		graph.addEdge(n1,n3);
+		graph.addEdge(n0,n4);
+		graph.addEdge(n4,n5);
+		graph.addEdge(n4,n6);
 
 		final INeighbourGrabber<TestData> childGrabber = getChildNodeNeighbourGrabber(graph);
 		final HashSet<TestData> visited = new HashSet<TestData>();
@@ -338,12 +337,12 @@ public class DirectedGraphTest
 		graph.addVertex(n5);
 		graph.addVertex(n6);
 
-		graph.addEdge(newEdge(n0,n1));
-		graph.addEdge(newEdge(n1,n2));
-		graph.addEdge(newEdge(n1,n3));
-		graph.addEdge(newEdge(n0,n4));
-		graph.addEdge(newEdge(n4,n5));
-		graph.addEdge(newEdge(n4,n6));
+		graph.addEdge(n0,n1);
+		graph.addEdge(n1,n2);
+		graph.addEdge(n1,n3);
+		graph.addEdge(n0,n4);
+		graph.addEdge(n4,n5);
+		graph.addEdge(n4,n6);
 
 		DirectedGraph<TestData,Object> subgraph = graph.pathMaintainingSubGraph(new HashSet<>(Arrays.asList(n0, n3, n4)));
 		assertTrue(subgraph.containsVertex(n0));
@@ -392,12 +391,12 @@ public class DirectedGraphTest
 		graph.addVertex(n5);
 		graph.addVertex(n6);
 
-		graph.addEdge(newEdge(n0,n1));
-		graph.addEdge(newEdge(n1,n2));
-		graph.addEdge(newEdge(n1,n3));
-		graph.addEdge(newEdge(n0,n4));
-		graph.addEdge(newEdge(n4,n5));
-		graph.addEdge(newEdge(n4,n6));
+		graph.addEdge(n0,n1);
+		graph.addEdge(n1,n2);
+		graph.addEdge(n1,n3);
+		graph.addEdge(n0,n4);
+		graph.addEdge(n4,n5);
+		graph.addEdge(n4,n6);
 
 		/*
 		 * Then merge 1 with 4 and 5, which should give

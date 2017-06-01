@@ -2,7 +2,6 @@ package sonumina.math.graph;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static sonumina.math.graph.Edge.newEdge;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,15 +70,15 @@ public class SlimDirectedGraphViewTest
 		            g
 		*/
 
-		graph.addEdge(newEdge(root,a));
-		graph.addEdge(newEdge(root,b));
-		graph.addEdge(newEdge(root,c));
-		graph.addEdge(newEdge(a,b));
-		graph.addEdge(newEdge(c,d));
-		graph.addEdge(newEdge(c,e));
-		graph.addEdge(newEdge(d,g));
-		graph.addEdge(newEdge(e,f));
-		graph.addEdge(newEdge(f,g));
+		graph.addEdge(root,a);
+		graph.addEdge(root,b);
+		graph.addEdge(root,c);
+		graph.addEdge(a,b);
+		graph.addEdge(c,d);
+		graph.addEdge(c,e);
+		graph.addEdge(d,g);
+		graph.addEdge(e,f);
+		graph.addEdge(f,g);
 
 		SlimDirectedGraphView<TestData> sg = SlimDirectedGraphView.create(graph);
 		assertEquals(8, sg.getNumberOfVertices());
