@@ -7,7 +7,7 @@ import java.io.Serializable;
 import ontologizer.types.ByteString;
 
 /**
- * Instances of this class represent a single relation type (e.g., is_a).
+ * Instances of this class represent a single relation meaning (e.g., is_a).
  *
  * @author Sebastian Bauer
  */
@@ -15,28 +15,28 @@ public final class RelationType implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 
-	/** A default relation type that is the most unspecific one */
-	public static final RelationType UNKNOWN = new RelationType(b("unknown"), TermRelation.UNKOWN);
+	/** A default relation meaning that is the most unspecific one */
+	public static final RelationType UNKNOWN = new RelationType(b("unknown"), RelationMeaning.UNKOWN);
 
 	private final ByteString name;
-	private final TermRelation type;
+	private final RelationMeaning meaning;
 
 	/**
 	 * Constructs a new relation.
 	 *
 	 * @param name the name of the relation (e.g., is_a)
-	 * @param type the predefined type of the relation.
+	 * @param meaning the predefined meaning of the relation.
 	 */
-	public RelationType(ByteString name, TermRelation type)
+	public RelationType(ByteString name, RelationMeaning meaning)
 	{
 		this.name = name;
-		this.type = type;
+		this.meaning = meaning;
 	}
 
-	public RelationType(TermRelation type)
+	public RelationType(RelationMeaning type)
 	{
 		this.name = type.relationName();
-		this.type = type;
+		this.meaning = type;
 
 	}
 	/**
@@ -48,10 +48,10 @@ public final class RelationType implements Serializable
 	}
 
 	/**
-	 * @return the type of the relation.
+	 * @return the meaning of the relation.
 	 */
-	public TermRelation type()
+	public RelationMeaning meaning()
 	{
-		return type;
+		return meaning;
 	}
 }

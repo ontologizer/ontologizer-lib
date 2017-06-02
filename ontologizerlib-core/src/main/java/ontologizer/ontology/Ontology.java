@@ -581,7 +581,7 @@ public class Ontology implements Iterable<Term>, Serializable
 	 * @param vistingVertex
 	 * @param relationsToFollow
 	 */
-	public void walkToSource(Collection<TermID>  termIDSet, IVisitingGOVertex vistingVertex, final Set<TermRelation> relationsToFollow)
+	public void walkToSource(Collection<TermID>  termIDSet, IVisitingGOVertex vistingVertex, final Set<RelationMeaning> relationsToFollow)
 	{
 		graph.bfs(termIDsToTerms(termIDSet), new INeighbourGrabber<Term>() {
 			public Iterator<Term> grabNeighbours(Term t)

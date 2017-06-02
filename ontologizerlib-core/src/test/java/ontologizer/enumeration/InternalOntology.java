@@ -18,7 +18,7 @@ import ontologizer.ontology.Subset;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermContainer;
 import ontologizer.ontology.TermID;
-import ontologizer.ontology.TermRelation;
+import ontologizer.ontology.RelationMeaning;
 import ontologizer.types.ByteString;
 
 /**
@@ -43,7 +43,7 @@ public class InternalOntology
 		ArrayList<Subset> subsets = new ArrayList<Subset>();
 		subsets.add(subset);
 
-		RelationType isA = new RelationType(TermRelation.IS_A);
+		RelationType isA = new RelationType(RelationMeaning.IS_A);
 		/* Go Graph */
 		HashSet<Term> terms = new HashSet<Term>();
 		Term c1 = new Term("GO:0000001", "C1");

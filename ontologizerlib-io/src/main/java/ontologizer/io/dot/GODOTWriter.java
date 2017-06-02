@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import ontologizer.ontology.Ontology;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermID;
-import ontologizer.ontology.TermRelation;
+import ontologizer.ontology.RelationMeaning;
 import ontologizer.util.VersionInfo;
 import sonumina.math.graph.AbstractGraph.DotAttributesProvider;
 
@@ -139,7 +139,7 @@ public class GODOTWriter
 							String relationName;
 							String label;
 
-							TermRelation rel = graph.getDirectRelation(src.getID(), dest.getID()).type();
+							RelationMeaning rel = graph.getDirectRelation(src.getID(), dest.getID()).meaning();
 
 							/* TODO: Use fancy name from RelationType */
 							switch (rel)

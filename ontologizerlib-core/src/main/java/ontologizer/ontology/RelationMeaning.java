@@ -5,13 +5,11 @@ import static ontologizer.types.ByteString.b;
 import ontologizer.types.ByteString;
 
 /**
- * The relation a term can have to another.
+ * The meaning that a relation type can have.
  *
  * @author Sebastian Bauer
- *
- * TODO: Rename
  */
-public enum TermRelation
+public enum RelationMeaning
 {
 	IS_A(b("is_a")),
 	PART_OF_A(b("part_of")),
@@ -23,7 +21,7 @@ public enum TermRelation
 
 	private final ByteString relationName;
 
-	private TermRelation(ByteString relationName)
+	private RelationMeaning(ByteString relationName)
 	{
 		this.relationName = relationName;
 	}

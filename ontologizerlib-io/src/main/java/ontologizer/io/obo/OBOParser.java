@@ -44,7 +44,7 @@ import ontologizer.ontology.RelationTypePool;
 import ontologizer.ontology.Subset;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermID;
-import ontologizer.ontology.TermRelation;
+import ontologizer.ontology.RelationMeaning;
 import ontologizer.ontology.TermXref;
 import ontologizer.types.ByteString;
 import sonumina.collections.ReferencePool;
@@ -156,14 +156,14 @@ public class OBOParser
 	private RelationTypePool relationTypePool = new RelationTypePool();
 
 	/** The known relation types */
-	private final RelationType [] knownRelations = new RelationType[TermRelation.UNKOWN.ordinal()];
+	private final RelationType [] knownRelations = new RelationType[RelationMeaning.UNKOWN.ordinal()];
 
 	/* TODO: Find a better way (perhaps drop enums and use ints in the first place) */
-	private final static int IS_A = TermRelation.IS_A.ordinal();
-	private final static int PART_OF_A = TermRelation.PART_OF_A.ordinal();
-	private final static int REGULATES = TermRelation.REGULATES.ordinal();
-	private final static int NEGATIVELY_REGULATES = TermRelation.NEGATIVELY_REGULATES.ordinal();
-	private final static int POSITIVELY_REGULATES = TermRelation.POSITIVELY_REGULATES.ordinal();
+	private final static int IS_A = RelationMeaning.IS_A.ordinal();
+	private final static int PART_OF_A = RelationMeaning.PART_OF_A.ordinal();
+	private final static int REGULATES = RelationMeaning.REGULATES.ordinal();
+	private final static int NEGATIVELY_REGULATES = RelationMeaning.NEGATIVELY_REGULATES.ordinal();
+	private final static int POSITIVELY_REGULATES = RelationMeaning.POSITIVELY_REGULATES.ordinal();
 
 	/** Whether the relation has been in use */
 	private boolean [] referencedRelations = new boolean[knownRelations.length];
@@ -238,7 +238,7 @@ public class OBOParser
 
 		for (int i = 0; i < knownRelations.length; i++)
 		{
-			TermRelation tr = TermRelation.values()[i];
+			RelationMeaning tr = RelationMeaning.values()[i];
 			knownRelations[i] = new RelationType(tr.relationName(), tr);
 		}
 	}
@@ -691,7 +691,7 @@ public class OBOParser
 					{
 						return type;
 					}
-					return relationTypePool.map(new RelationType(new ByteString(buf, typeStart, typeEnd), TermRelation.UNKOWN));
+					return relationTypePool.map(new RelationType(new ByteString(buf, typeStart, typeEnd), RelationMeaning.UNKOWN));
 				}
 				referencedRelations[meaning] = true;
 				return knownRelations[meaning];

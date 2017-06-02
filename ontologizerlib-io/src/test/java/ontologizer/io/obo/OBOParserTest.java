@@ -19,7 +19,7 @@ import org.junit.rules.TemporaryFolder;
 import ontologizer.io.ParserFileInput;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermID;
-import ontologizer.ontology.TermRelation;
+import ontologizer.ontology.RelationMeaning;
 import ontologizer.types.ByteString;
 
 public class OBOParserTest
@@ -102,7 +102,7 @@ public class OBOParserTest
 		HashMap<String,Term> name2Term = new HashMap<String,Term>();
 		for (Term t : terms)
 			name2Term.put(t.getIDAsString(), t);
-		assertEquals(TermRelation.PART_OF_A, name2Term.get("GO:0000002").getParents()[0].getRelation().type());
+		assertEquals(RelationMeaning.PART_OF_A, name2Term.get("GO:0000002").getParents()[0].getRelation().meaning());
 		assertEquals("GO:0000001", name2Term.get("GO:0000002").getParents()[0].getRelated().toString());
 	}
 
@@ -126,7 +126,7 @@ public class OBOParserTest
 		HashMap<String,Term> name2Term = new HashMap<String,Term>();
 		for (Term t : terms)
 			name2Term.put(t.getIDAsString(), t);
-		assertEquals(TermRelation.REGULATES, name2Term.get("GO:0000002").getParents()[0].getRelation().type());
+		assertEquals(RelationMeaning.REGULATES, name2Term.get("GO:0000002").getParents()[0].getRelation().meaning());
 		assertEquals("GO:0000001", name2Term.get("GO:0000002").getParents()[0].getRelated().toString());
 	}
 
@@ -150,7 +150,7 @@ public class OBOParserTest
 		HashMap<String,Term> name2Term = new HashMap<String,Term>();
 		for (Term t : terms)
 			name2Term.put(t.getIDAsString(), t);
-		assertEquals(TermRelation.UNKOWN, name2Term.get("GO:0000002").getParents()[0].getRelation().type());
+		assertEquals(RelationMeaning.UNKOWN, name2Term.get("GO:0000002").getParents()[0].getRelation().meaning());
 		assertEquals("zzz", name2Term.get("GO:0000002").getParents()[0].getRelation().name().toString());
 		assertEquals("GO:0000001", name2Term.get("GO:0000002").getParents()[0].getRelated().toString());
 	}

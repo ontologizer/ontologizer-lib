@@ -20,7 +20,7 @@ import ontologizer.ontology.Subset;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermContainer;
 import ontologizer.ontology.TermID;
-import ontologizer.ontology.TermRelation;
+import ontologizer.ontology.RelationMeaning;
 import ontologizer.types.ByteString;
 
 /**
@@ -46,7 +46,7 @@ public class InternalOntology
 		subsets.add(subset);
 
 		/* An ontology */
-		RelationType isA = new RelationType(b("is_a"), TermRelation.IS_A);
+		RelationType isA = new RelationType(b("is_a"), RelationMeaning.IS_A);
 		HashSet<Term> terms = new HashSet<Term>();
 		Term c1 = new Term("GO:0000001", "C1");
 		Term c2 = new Term("GO:0000002", "C2", new ParentTermID(c1.getID(), isA));
