@@ -44,19 +44,6 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 	private LinkedHashMap<V,VertexAttributes<V,ED>> vertices;
 
 	/**
-	 * An interface to be used to weight edges.
-	 *
-	 * @author Sebastian Bauer
-	 *
-	 * @param <V> the edge type
-	 */
-	public static interface IEdgeWeighter<V, ED>
-	{
-		/** Return the weight of the given edge */
-		public int getWeight(Edge<V, ED> edge);
-	}
-
-	/**
 	 * Constructs the directed graph.
 	 */
 	public DirectedGraph()
