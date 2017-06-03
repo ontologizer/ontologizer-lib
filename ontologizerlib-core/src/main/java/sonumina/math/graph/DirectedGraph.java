@@ -139,13 +139,13 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 	public DirectedGraph<V,ED> copyGraph()
 	{
 		DirectedGraph<V,ED> copy = new DirectedGraph<V,ED>();
-		Iterator<V> nodeIt = this.getVertexIterator();
+		Iterator<V> nodeIt = iterator();
 		while (nodeIt.hasNext())
 		{
 			copy.addVertex(nodeIt.next());
 		}
 
-		nodeIt = this.getVertexIterator();
+		nodeIt = iterator();
 		while (nodeIt.hasNext())
 		{
 			V node = nodeIt.next();
@@ -163,7 +163,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 	public int getNumberEdges()
 	{
 		int sum = 0;
-		Iterator<V> nodeIt = this.getVertexIterator();
+		Iterator<V> nodeIt = iterator();
 		while (nodeIt.hasNext()){
 			V node = nodeIt.next();
 			sum += vertices.get(node).outEdges.size();
@@ -314,17 +314,6 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 		{
 			vaDest.inEdges.remove(edge);
 		}
-	}
-
-	/**
-	 * Returns the iterator which can be used for conveniently
-	 * iterating over all vertices contained within the graph.
-	 *
-	 * @return the iterator.
-	 */
-	public Iterator<V> getVertexIterator()
-	{
-		return vertices.keySet().iterator();
 	}
 
 
