@@ -43,7 +43,28 @@ public class DirectedGraphTest
 		graph.addEdge(c,d,null);
 		graph.addEdge(d,a,null);
 
+		assertTrue(graph.containsVertex(a));
+		assertTrue(graph.containsVertex(b));
+		assertTrue(graph.containsVertex(c));
+		assertTrue(graph.containsVertex(d));
+
 		graph.removeVertex(a);
+
+		assertFalse(graph.containsVertex(a));
+		assertTrue(graph.containsVertex(b));
+		assertTrue(graph.containsVertex(c));
+		assertTrue(graph.containsVertex(d));
+
+		try
+		{
+			graph.hasEdge(a, b);
+			assertTrue("Expected exception", false);
+		} catch (IllegalArgumentException exp)
+		{
+		}
+		assertTrue(graph.hasEdge(b, c));
+		assertTrue(graph.hasEdge(c, d));
+		assertFalse(graph.hasEdge(d, a));
 	}
 
 	@Test
