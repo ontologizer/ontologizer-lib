@@ -136,7 +136,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 				for (Edge<V,ED> o : va.outEdges)
 				{
 					if (!hasEdge(i.getSource(),o.getDest()))
-						addEdge(new Edge<V,ED>(i.getSource(),o.getDest(), null /* FIXME */));
+						addEdge(i.getSource(),o.getDest(), null /* FIXME */);
 				}
 			}
 
@@ -178,7 +178,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 			while (edgeIt.hasNext())
 			{
 				Edge<V,ED> e = edgeIt.next();
-				copy.addEdge(new Edge<V,ED>(e.getSource(), e.getDest(), e.getData()));
+				copy.addEdge(e.getSource(), e.getDest(), e.getData());
 			}
 		}
 		return copy;
