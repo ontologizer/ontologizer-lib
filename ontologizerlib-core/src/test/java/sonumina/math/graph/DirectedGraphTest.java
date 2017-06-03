@@ -20,7 +20,6 @@ import org.junit.Test;
 
 import sonumina.math.graph.AbstractGraph.INeighbourGrabber;
 import sonumina.math.graph.AbstractGraph.IVisitor;
-import sonumina.math.graph.DirectedGraph.IDistanceVisitor;
 
 public class DirectedGraphTest
 {

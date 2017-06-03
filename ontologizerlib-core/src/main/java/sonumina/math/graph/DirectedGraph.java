@@ -43,17 +43,6 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 	/** Contains the vertices associated to meta information (edges) */
 	private LinkedHashMap<V,VertexAttributes<V,ED>> vertices;
 
-	public interface IDistanceVisitor<VertexType>
-	{
-		/**
-		 * @param vertex
-		 * @param path
-		 * @param distance
-		 * @return false if visit should be never called again.
-		 */
-		boolean visit(VertexType vertex, List<VertexType> path, int distance);
-	}
-
 	/**
 	 * An interface to be used to weight edges.
 	 *
