@@ -10,7 +10,14 @@ package sonumina.math.graph;
  */
 public interface IEdgeWeighter<V, ED>
 {
-	/** Return the weight of the given edge */
-	public int getWeight(Edge<V, ED> edge);
+	/**
+	 * Return the weight of the edge spanning from src to dest and has data.
+	 *
+	 * @param src the source node
+	 * @param dest the dest node
+	 * @param data the data associated to the edge
+	 * @return the edge weight
+	 */
+	public int getWeight(V src, V dest, ED data);
 }
 

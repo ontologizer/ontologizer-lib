@@ -689,7 +689,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 	private int weightOf(Edge<V,ED> edge, IEdgeWeighter<V,ED> weighter)
 	{
 		int weight;
-		if (weighter != null) weight = weighter.getWeight(edge);
+		if (weighter != null) weight = weighter.getWeight(edge.getSource(), edge.getDest(), edge.getData());
 		else weight = 1;
 		return weight;
 	}
