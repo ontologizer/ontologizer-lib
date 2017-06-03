@@ -229,6 +229,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 	public boolean hasEdge(V source, V dest)
 	{
 		VertexAttributes<V,ED> vaSource = vertices.get(source);
+		if (vaSource == null) throw new IllegalArgumentException("Node " + source + " not contained within graph!");
 		for (Edge<V,ED> e : vaSource.outEdges)
 		{
 			if (e.getDest().equals(dest))
