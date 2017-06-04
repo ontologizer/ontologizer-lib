@@ -607,7 +607,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 		/* Place the starting node into the priorty queue. It has a distance of 0 and no parent */
 		VertexExtension ve = new VertexExtension(vertex,0,null);
 		queue.offer(ve);
-		map.put((V)ve.vertex,ve);
+		map.put(ve.vertex,ve);
 
 		while (!queue.isEmpty())
 		{
@@ -616,8 +616,8 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 
 			/* We iterate over the edges of the chosen node to find the neighbours */
 			Iterator<Edge<V,ED>> edgeIter;
-			if (againstFlow) edgeIter = getInEdges((V)next.vertex);
-			else edgeIter = getOutEdges((V)next.vertex);
+			if (againstFlow) edgeIter = getInEdges(next.vertex);
+			else edgeIter = getOutEdges(next.vertex);
 
 			while (edgeIter.hasNext())
 			{
@@ -660,11 +660,11 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 			VertexExtension curVe = v.getValue();
 			do
 			{
-				ll.addFirst((V)curVe.vertex);
+				ll.addFirst(curVe.vertex);
 				curVe = map.get(curVe.parent);
 			} while (curVe != null);
 
-			if (!visitor.visit((V)v.getValue().vertex,ll,v.getValue().distance))
+			if (!visitor.visit(v.getValue().vertex,ll,v.getValue().distance))
 				return;
 		}
 	}
@@ -778,11 +778,11 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 			VertexExtension curVe = v.getValue();
 			do
 			{
-				ll.addFirst((V)curVe.vertex); /* FIXME: (VertexType) is for the java compiler */
+				ll.addFirst(curVe.vertex);
 				curVe = map.get(curVe.parent);
 			} while (curVe != null);
 
-			if (!visitor.visit((V)v.getValue().vertex,ll,v.getValue().distance))  /* FIXME: (VertexType) is for the java compiler */
+			if (!visitor.visit(v.getValue().vertex,ll,v.getValue().distance))
 				return;
 		}
 	}
