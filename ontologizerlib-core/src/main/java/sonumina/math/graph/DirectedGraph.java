@@ -1011,7 +1011,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 					{
 						/* FIXME: Find a better solution than to null the data, e.g., let the caller decide
 						 * via appropriate interface */
-						graph.addEdge(new Edge<V,ED>(v1,vertex,null));
+						graph.addEdge(v1,vertex,null);
 					}
 					return true;
 				};
@@ -1100,7 +1100,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 					if (pUpperVertices.size() != vUpperVertices.size() - 1)
 					{
 						/* Here we know that the edge from p to v was relevant */
-						transitivitySubGraph.addEdge(new Edge<V,ED>(p,v,null));
+						transitivitySubGraph.addEdge(p, v, null);
 					} else
 					{
 						reducedInIteration = true;
@@ -1206,7 +1206,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 				if (hasEdge(v, vertex1)) continue;
 
 				ArrayList<ED> d = newIngoing.get(v);
-				addEdge(newEdge(v, vertex1, d.get(0)));
+				addEdge(v, vertex1, d.get(0));
 			}
 
 			for (V v : newOutgoing.keySet())
@@ -1215,7 +1215,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 				if (hasEdge(v, vertex1)) continue;
 
 				ArrayList<ED> d = newOutgoing.get(v);
-				addEdge(newEdge(vertex1, v, d.get(0)));
+				addEdge(vertex1, v, d.get(0));
 			}
 
 			vertices.remove(vertex2);
