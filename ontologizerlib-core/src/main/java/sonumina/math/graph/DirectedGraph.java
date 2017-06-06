@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.PriorityQueue;
@@ -527,26 +526,6 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 	}
 
 	/**
-	 * Returns the vertices in an Iterable that are connected by the given node.
-	 *
-	 * FIXME: Check if this is really returning descendants
-	 * FIXME: It does not
-	 *
-	 * @param v the vertex for which the descendants shall be returned
-	 * @return the iterable
-	 */
-	public Iterable<V> getDescendantVertices(V v)
-	{
-		VertexAttributes<V,ED> va = vertices.get(v);
-		assert(va != null);
-
-		List<V> descendant = new ArrayList<V>(va.outEdges.size());
-		for (Edge<V,ED> e : va.outEdges)
-			descendant.add(e.getDest());
-		return descendant;
-	}
-
-	/**
 	 * Calculates the shortest path from the given vertex to all vertices. Note that
 	 * negative weights are not supported!
 	 *
@@ -830,7 +809,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 			return 1;
 
 		int paths = 0;
-		for (V next : getDescendantVertices(source))
+		for (V next : getChildNodes(source))
 			paths += getNumberOfPaths(next,dest);
 		return paths;
 	}
@@ -850,7 +829,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 			return ret;
 		}
 
-		for (V next : getDescendantVertices(source)){
+		for (V next : getChildNodes(source)){
 			ArrayList<V> rec = getAllPathes(next, dest, pathes);
 			System.out.println("recur: "+rec);
 			pathes.addAll(rec);
