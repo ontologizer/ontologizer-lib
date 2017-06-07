@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import sonumina.collections.IntMapper;
-import sonumina.math.graph.AbstractGraph.IVisitor;
 
 /**
  * Instances of this class represent a slim view of a graph. Most attributes can be

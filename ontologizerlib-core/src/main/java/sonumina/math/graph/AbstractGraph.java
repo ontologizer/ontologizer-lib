@@ -23,35 +23,6 @@ public abstract class AbstractGraph<V> implements Serializable, IDirectedGraph<V
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * This interface is used as a callback mechanism by different search
-	 * methods.
-	 *
-	 * @author Sebastian Bauer
-	 */
-	public static interface IVisitor<V>
-	{
-		/**
-		 * Called for every vertex visited by the algorithm.
-		 *
-		 * @param vertex the vertex that has been just visited.
-		 *
-		 * @return false if algorithm should be stopped (i.e. no further
-		 *         calls to this method will be issued) otherwise true
-		 */
-		boolean visited(V vertex);
-	};
-
-	/**
-	 * This interface is used as a callback for the bfs and used to determine valid neighbors.
-	 *
-	 * @author Sebastian Bauer
-	 */
-	public static interface INeighbourGrabber<V>
-	{
-		Iterator<V> grabNeighbours(V t);
-	}
-
-	/**
 	 * Performs a breadth-first search onto the graph starting at a given
 	 * vertex. Vertices occurring in loops are visited only once.
 	 *

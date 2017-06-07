@@ -18,9 +18,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import sonumina.math.graph.AbstractGraph.INeighbourGrabber;
-import sonumina.math.graph.AbstractGraph.IVisitor;
-
 public class DirectedGraphTest
 {
 	@Test
