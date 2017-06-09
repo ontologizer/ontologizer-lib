@@ -92,7 +92,7 @@ public class OntologyTest
 		{
 			public int count = 0;
 
-			public boolean visited(Term term)
+			public boolean visited(TermID term)
 			{
 				count++;
 				System.out.println(term + " " + count);
@@ -270,6 +270,16 @@ public class OntologyTest
 		assertEquals(expectedTerms, termNames(slim.getTermChildren(new TermID("GO:0000007"))));
 	}
 
+	private static <T> Set<T> set(Iterable<T> iterable)
+	{
+		Set<T> set = new HashSet<T>();
+		for (T i : iterable)
+		{
+			set.add(i);
+		}
+		return set;
+	}
+
 	@Test
 	public void testGOLevelsEmpty()
 	{
@@ -281,7 +291,7 @@ public class OntologyTest
 		GOLevels twoLevels = graph.getGOLevels(new HashSet<TermID>(graph.getTermChildren(graph.getRootTerm().getID())));
 		assertEquals(1, twoLevels.getMaxLevel());
 
-		GOLevels allLevels = graph.getGOLevels(Ontology.termIDSet(graph.getGraph().getVertices()));
+		GOLevels allLevels = graph.getGOLevels(set(graph.getGraph().getVertices()));
 		assertEquals(20, allLevels.getMaxLevel());
 	}
 
@@ -298,7 +308,7 @@ public class OntologyTest
 	public void testGOLevelInternalOntology()
 	{
 		Ontology o = new InternalOntology().graph;
-		GOLevels levels = o.getGOLevels(Ontology.termIDSet(o.getGraph().getVertices()));
+		GOLevels levels = o.getGOLevels(set(o.getGraph().getVertices()));
 		assertEquals(5, levels.getMaxLevel());
 
 		assertEquals(0, levels.getTermLevel(new TermID("GO:0000001")));

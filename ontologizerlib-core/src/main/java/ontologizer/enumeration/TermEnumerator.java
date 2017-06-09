@@ -7,15 +7,14 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import ontologizer.association.Association;
 import ontologizer.association.Gene2Associations;
 import ontologizer.ontology.Ontology;
-import ontologizer.ontology.Term;
-import ontologizer.ontology.TermID;
 import ontologizer.ontology.Ontology.IVisitingGOVertex;
+import ontologizer.ontology.TermID;
 import ontologizer.types.ByteString;
 
 /**
@@ -168,16 +167,16 @@ public class TermEnumerator implements Iterable<TermID>
 				this.geneName = geneName;
 			}
 
-			public boolean visited(Term term)
+			public boolean visited(TermID tid)
 			{
-				if (graph.isRelevantTermID(term.getID()))
+				if (graph.isRelevantTermID(tid))
 				{
-					TermAnnotatedGenes termGenes = map.get(term.getID());
+					TermAnnotatedGenes termGenes = map.get(tid);
 
 					if (termGenes == null)
 					{
 						termGenes = new TermAnnotatedGenes();
-						map.put(term.getID(),termGenes);
+						map.put(tid,termGenes);
 					}
 					termGenes.totalAnnotated.add(geneName);
 				}
