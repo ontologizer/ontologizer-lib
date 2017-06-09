@@ -8,9 +8,8 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import ontologizer.ontology.Ontology;
-import ontologizer.ontology.Term;
-import ontologizer.ontology.TermID;
 import ontologizer.ontology.RelationMeaning;
+import ontologizer.ontology.TermID;
 import ontologizer.util.VersionInfo;
 import sonumina.math.graph.AbstractGraph.DotAttributesProvider;
 
@@ -93,7 +92,7 @@ public class GODOTWriter
 	public static void writeDOT(final Ontology graph, File file, TermID rootTerm, Set<TermID> terms, final IDotAttributesProvider provider, final String graphAttrs, final boolean reverseDirection, final boolean edgeLabels, Set<TermID> ignoreTerms)
 	{
 		/* Collect terms starting from the terms upto the root term and place them into nodeSet */
-		HashSet<Term> nodeSet = new HashSet<Term>();
+		HashSet<TermID> nodeSet = new HashSet<TermID>();
 		for (TermID term : terms)
 		{
 			if (!graph.termExists(term))
@@ -102,7 +101,7 @@ public class GODOTWriter
 			if (!nodeSet.contains(term))
 			{
 				for (TermID it : graph.getTermsOfInducedGraph(rootTerm,term))
-					nodeSet.add(graph.getTerm(it));
+					nodeSet.add(it);
 			}
 		}
 
@@ -115,16 +114,16 @@ public class GODOTWriter
 		/* We now have a list of nodes which can be placed into the output */
 		try
 		{
-			DOTWriter.write(graph.getGraph(),new FileOutputStream(file), nodeSet, new DotAttributesProvider<Term>()
+			DOTWriter.write(graph.getGraph(),new FileOutputStream(file), nodeSet, new DotAttributesProvider<TermID>()
 					{
 						/* Note that the default direction is assumed to be the opposite direction */
 						private String direction = reverseDirection?"":"dir=\"back\"";
 
 						@Override
-						public String getDotNodeName(Term vt) { return GODOTWriter.encodeTermID(vt.getID()); }
+						public String getDotNodeName(TermID vt) { return GODOTWriter.encodeTermID(vt); }
 
 						@Override
-						public String getDotNodeAttributes(Term vt) { return provider.getDotNodeAttributes(vt.getID());	}
+						public String getDotNodeAttributes(TermID vt) { return provider.getDotNodeAttributes(vt);	}
 
 						@Override
 						public String getDotGraphAttributes() { return graphAttrs; }
@@ -133,13 +132,13 @@ public class GODOTWriter
 						public String getDotHeader(){ return "/* Generated with OntologizerLib " + VersionInfo.getVersion() + " */"; }
 
 						@Override
-						public String getDotEdgeAttributes(Term src, Term dest)
+						public String getDotEdgeAttributes(TermID src, TermID dest)
 						{
 							String color;
 							String relationName;
 							String label;
 
-							RelationMeaning rel = graph.getDirectRelation(src.getID(), dest.getID()).meaning();
+							RelationMeaning rel = graph.getDirectRelation(src, dest).meaning();
 
 							/* TODO: Use fancy name from RelationType */
 							switch (rel)
@@ -164,12 +163,12 @@ public class GODOTWriter
 
 							if (edgeLabels)
 							{
-								label = provider.getDotEdgeAttributes(src.getID(), dest.getID());
+								label = provider.getDotEdgeAttributes(src, dest);
 								if (label == null)
 									label = "label=\"" + relationName + "\"";
 							} else label = null;
 
-							String tooltip = "tooltip=\"" + dest.getName() + " " + relationName + " " + src.getName() + "\"";
+							String tooltip = "tooltip=\"" + graph.getTerm(dest).getName() + " " + relationName + " " + graph.getTerm(src).getName() + "\"";
 							return "color=" + color + "," + direction + "," + tooltip + (label!=null?(","+label):"");
 						}
 					});
