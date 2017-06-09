@@ -523,12 +523,12 @@ public class Ontology implements Iterable<Term>, Serializable
 	 *
 	 * @author Sebastian Bauer
 	 */
-	public interface IVisitingGOVertex extends IVisitor<TermID>{};
+	public interface ITermIDVisitor extends IVisitor<TermID>{};
 
 	/**
 	 * Starting at the vertex representing goTermID walk to the source of the
 	 * DAG (ontology vertex) and call the method visiting of given object
-	 * implementimg IVisitingGOVertex.
+	 * implementimg ITermIDVisitor.
 	 *
 	 * @param goTermID
 	 *            the TermID to start with (note that visiting() is also called
@@ -536,7 +536,7 @@ public class Ontology implements Iterable<Term>, Serializable
 	 *
 	 * @param vistingVertex
 	 */
-	public void walkToSource(TermID goTermID, IVisitingGOVertex vistingVertex)
+	public void walkToSource(TermID goTermID, ITermIDVisitor vistingVertex)
 	{
 		ArrayList<TermID> set = new ArrayList<TermID>(1);
 		set.add(goTermID);
@@ -569,7 +569,7 @@ public class Ontology implements Iterable<Term>, Serializable
 	/**
 	 * Starting at the vertices within the goTermIDSet walk to the source of the
 	 * DAG (ontology vertex) and call the method visiting of given object
-	 * Implementing IVisitingGOVertex.
+	 * Implementing ITermIDVisitor.
 	 *
 	 * @param termIDSet
 	 *            the set of go TermsIDs to start with (note that visiting() is
@@ -577,7 +577,7 @@ public class Ontology implements Iterable<Term>, Serializable
 	 *
 	 * @param vistingVertex
 	 */
-	public void walkToSource(Collection<TermID> termIDSet, IVisitingGOVertex vistingVertex)
+	public void walkToSource(Collection<TermID> termIDSet, ITermIDVisitor vistingVertex)
 	{
 		graph.bfs(termIDSet, true, vistingVertex);
 	}
@@ -585,14 +585,14 @@ public class Ontology implements Iterable<Term>, Serializable
 	/**
 	 * Starting at the vertices within the goTermIDSet walk to the source of the
 	 * DAG (ontology vertex) and call the method visiting of given object
-	 * Implementing IVisitingGOVertex. Only relations in relationsToFollow are
+	 * Implementing ITermIDVisitor. Only relations in relationsToFollow are
 	 * considered.
 	 *
 	 * @param termIDSet
 	 * @param vistingVertex
 	 * @param relationsToFollow
 	 */
-	public void walkToSource(Collection<TermID>  termIDSet, IVisitingGOVertex vistingVertex, final Set<RelationMeaning> relationsToFollow)
+	public void walkToSource(Collection<TermID>  termIDSet, ITermIDVisitor vistingVertex, final Set<RelationMeaning> relationsToFollow)
 	{
 		graph.bfs(termIDSet, new INeighbourGrabber<TermID>() {
 			public Iterator<TermID> grabNeighbours(TermID t)
@@ -613,7 +613,7 @@ public class Ontology implements Iterable<Term>, Serializable
 	/**
 	 * Starting at the vertices within the goTermIDSet walk to the sinks of the
 	 * DAG and call the method visiting of given object implementing
-	 * IVisitingGOVertex.
+	 * ITermIDVisitor.
 	 *
 	 * @param goTermID
 	 *            the TermID to start with (note that visiting() is also called
@@ -622,7 +622,7 @@ public class Ontology implements Iterable<Term>, Serializable
 	 * @param vistingVertex
 	 */
 
-	public void walkToSinks(TermID goTermID, IVisitingGOVertex vistingVertex)
+	public void walkToSinks(TermID goTermID, ITermIDVisitor vistingVertex)
 	{
 		ArrayList<TermID> set = new ArrayList<TermID>(1);
 		set.add(goTermID);
@@ -632,7 +632,7 @@ public class Ontology implements Iterable<Term>, Serializable
 	/**
 	 * Starting at the vertices within the goTermIDSet walk to the sinks of the
 	 * DAG and call the method visiting of given object implementing
-	 * IVisitingGOVertex.
+	 * ITermIDVisitor.
 	 *
 	 * @param goTermIDSet
 	 *            the set of go TermsIDs to start with (note that visiting() is
@@ -640,7 +640,7 @@ public class Ontology implements Iterable<Term>, Serializable
 	 *
 	 * @param vistingVertex
 	 */
-	public void walkToSinks(Collection<TermID> goTermIDSet, IVisitingGOVertex vistingVertex)
+	public void walkToSinks(Collection<TermID> goTermIDSet, ITermIDVisitor vistingVertex)
 	{
 		graph.bfs(goTermIDSet, false, vistingVertex);
 	}
@@ -886,7 +886,7 @@ public class Ontology implements Iterable<Term>, Serializable
 		 *
 		 * @author Sebastian Bauer
 		 */
-		class Visitor implements IVisitingGOVertex
+		class Visitor implements ITermIDVisitor
 		{
 			public Ontology graph;
 			public HashSet<TermID> nodeSet;
@@ -942,7 +942,7 @@ public class Ontology implements Iterable<Term>, Serializable
 
 		final ArrayList<TermID> sharedParents = new ArrayList<TermID>();
 
-		walkToSource(t2, new IVisitingGOVertex()
+		walkToSource(t2, new ITermIDVisitor()
 		{
 			public boolean visited(TermID t2)
 			{

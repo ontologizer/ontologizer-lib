@@ -13,7 +13,7 @@ import java.util.Set;
 import ontologizer.association.Association;
 import ontologizer.association.Gene2Associations;
 import ontologizer.ontology.Ontology;
-import ontologizer.ontology.Ontology.IVisitingGOVertex;
+import ontologizer.ontology.Ontology.ITermIDVisitor;
 import ontologizer.ontology.TermID;
 import ontologizer.types.ByteString;
 
@@ -158,7 +158,7 @@ public class TermEnumerator implements Iterable<TermID>
 		 *
 		 * @author Sebastian Bauer
 		 */
-		class VisitingGOVertex implements IVisitingGOVertex
+		class VisitingGOVertex implements ITermIDVisitor
 		{
 			private ByteString geneName;
 

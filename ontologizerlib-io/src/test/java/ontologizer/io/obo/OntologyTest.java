@@ -22,7 +22,7 @@ import ontologizer.ontology.TermContainer;
 import ontologizer.ontology.TermID;
 import ontologizer.types.ByteString;
 import ontologizer.ontology.Ontology.GOLevels;
-import ontologizer.ontology.Ontology.IVisitingGOVertex;
+import ontologizer.ontology.Ontology.ITermIDVisitor;
 
 public class OntologyTest
 {
@@ -84,11 +84,11 @@ public class OntologyTest
 	public void testWalkToRoot()
 	{
 		/**
-		 * A basic visitor: It simply counts up the number of visisted terms.
+		 * A basic visitor: It simply counts up the number of visited terms.
 		 *
 		 * @author Sebastian Bauer
 		 */
-		class VisitingGOVertex implements IVisitingGOVertex
+		class TermIDVisitor implements ITermIDVisitor
 		{
 			public int count = 0;
 
@@ -111,22 +111,22 @@ public class OntologyTest
 		}
 		;
 
-		VisitingGOVertex vistingGOVertex = new VisitingGOVertex();
+		TermIDVisitor visitor = new TermIDVisitor();
 
 		/*
 		 * Note, if GO changes these values are no longer correct. But you can
 		 * verify them then via www.godatabase.org.
 		 */
-		graph.walkToSource(new TermID("GO:0008152"), vistingGOVertex);
-		assertEquals(3,vistingGOVertex.getCount());
-		vistingGOVertex.resetCount();
+		graph.walkToSource(new TermID("GO:0008152"), visitor);
+		assertEquals(3,visitor.getCount());
+		visitor.resetCount();
 
-		graph.walkToSource(new TermID("GO:0044237"), vistingGOVertex);
-		assertEquals(5,vistingGOVertex.getCount());
-		vistingGOVertex.resetCount();
+		graph.walkToSource(new TermID("GO:0044237"), visitor);
+		assertEquals(5,visitor.getCount());
+		visitor.resetCount();
 
-		graph.walkToSource(new TermID("GO:0006281"), vistingGOVertex);
-		assertEquals(19,vistingGOVertex.getCount());
+		graph.walkToSource(new TermID("GO:0006281"), visitor);
+		assertEquals(19,visitor.getCount());
 	}
 
 	/**
