@@ -21,7 +21,7 @@ import ontologizer.ontology.Term;
 import ontologizer.ontology.TermContainer;
 import ontologizer.ontology.TermID;
 import ontologizer.types.ByteString;
-import ontologizer.ontology.Ontology.GOLevels;
+import ontologizer.ontology.Ontology.TermLevels;
 import ontologizer.ontology.Ontology.ITermIDVisitor;
 
 public class OntologyTest
@@ -283,15 +283,15 @@ public class OntologyTest
 	@Test
 	public void testGOLevelsEmpty()
 	{
-		GOLevels noLevels = graph.getGOLevels(new HashSet<TermID>());
+		TermLevels noLevels = graph.getTermLevels(new HashSet<TermID>());
 		assertEquals(-1, noLevels.getMaxLevel());
 		assertEquals(-1, noLevels.getTermLevel(graph.getLeafTermIDs().iterator().next()));
 
 		/* Level 0 and 1 */
-		GOLevels twoLevels = graph.getGOLevels(new HashSet<TermID>(graph.getTermChildren(graph.getRootTerm().getID())));
+		TermLevels twoLevels = graph.getTermLevels(new HashSet<TermID>(graph.getTermChildren(graph.getRootTerm().getID())));
 		assertEquals(1, twoLevels.getMaxLevel());
 
-		GOLevels allLevels = graph.getGOLevels(set(graph.getGraph().getVertices()));
+		TermLevels allLevels = graph.getTermLevels(set(graph.getGraph().getVertices()));
 		assertEquals(20, allLevels.getMaxLevel());
 	}
 
@@ -308,7 +308,7 @@ public class OntologyTest
 	public void testGOLevelInternalOntology()
 	{
 		Ontology o = new InternalOntology().graph;
-		GOLevels levels = o.getGOLevels(set(o.getGraph().getVertices()));
+		TermLevels levels = o.getTermLevels(set(o.getGraph().getVertices()));
 		assertEquals(5, levels.getMaxLevel());
 
 		assertEquals(0, levels.getTermLevel(new TermID("GO:0000001")));

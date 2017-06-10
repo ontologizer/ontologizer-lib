@@ -955,7 +955,7 @@ public class Ontology implements Iterable<Term>, Serializable
 		return sharedParents;
 	}
 
-	static public class GOLevels
+	public static class TermLevels
 	{
 		private HashMap<Integer,HashSet<TermID>> level2terms = new HashMap<Integer,HashSet<TermID>>();
 		private HashMap<TermID,Integer> terms2level = new HashMap<TermID,Integer>();
@@ -1008,7 +1008,7 @@ public class Ontology implements Iterable<Term>, Serializable
 	 * @param termids
 	 * @return levels of the terms as defined in the set.
 	 */
-	public GOLevels getGOLevels(final Set<TermID> termids)
+	public TermLevels getTermLevels(final Set<TermID> termids)
 	{
 		DirectedGraph<TermID,RelationType> transGraph;
 		Term transRoot;
@@ -1024,7 +1024,7 @@ public class Ontology implements Iterable<Term>, Serializable
 			transRoot = rootTerm;
 		}
 
-		final GOLevels levels = new GOLevels();
+		final TermLevels levels = new TermLevels();
 
 		transGraph.singleSourceLongestPath(transRoot.getID(), new IDistanceVisitor<TermID>()
 				{
