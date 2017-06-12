@@ -14,10 +14,6 @@
 		<version>0.2-SNAPSHOT</version>
 	</parent>
 
-	<properties>
-		<jdt.core.version>3.12.3</jdt.core.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>com.beust</groupId>
