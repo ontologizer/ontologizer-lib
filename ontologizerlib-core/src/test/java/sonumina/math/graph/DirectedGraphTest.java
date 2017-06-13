@@ -6,6 +6,7 @@
  */
 package sonumina.math.graph;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -320,6 +321,64 @@ public class DirectedGraphTest
 			/* Can happen but did not occur yet */
 			Assert.assertFalse(true);
 		}
+	}
+
+	@Test
+	public void testRemoveVertexMaintainConnectivity()
+	{
+		/*
+		 * Build a graph like this
+		 *
+		 *       0
+		 *      / \
+		 *     /   \
+		 *    1     4
+		 *   / \   / \
+		 *  2   3 5   6
+		 *
+		 */
+
+		final DirectedGraph<TestData,Integer> graph = new DirectedGraph<>();
+		final TestData n0 = new TestData("n0");
+		final TestData n1 = new TestData("n1");
+		final TestData n2 = new TestData("n2");
+		final TestData n3 = new TestData("n3");
+		final TestData n4 = new TestData("n4");
+		final TestData n5 = new TestData("n5");
+		final TestData n6 = new TestData("n6");
+
+		graph.addVertex(n0);
+		graph.addVertex(n1);
+		graph.addVertex(n2);
+		graph.addVertex(n3);
+		graph.addVertex(n4);
+		graph.addVertex(n5);
+		graph.addVertex(n6);
+
+		graph.addEdge(n0, n1, 1);
+		graph.addEdge(n1, n2, 1);
+		graph.addEdge(n1, n3, 1);
+		graph.addEdge(n0, n4, 1);
+		graph.addEdge(n4, n5, 1);
+		graph.addEdge(n4, n6, 1);
+
+		/* Now remove 4, this should merge edges 0-4 and 4-5 to 0-5 and 0-4 and 4-6 to 0-6 */
+		graph.removeVertexMaintainConnectivity(n4,  new IEdgeDataMerger<Integer>()
+		{
+			@Override
+			public Integer merge(List<Integer> data)
+			{
+				int sum = 0;
+				for (int a : data)
+				{
+					sum += a;
+				}
+				return sum;
+			}
+		});
+
+		assertEquals(graph.getEdge(n0, n5).getData().intValue(), 2);
+		assertEquals(graph.getEdge(n0, n6).getData().intValue(), 2);
 	}
 
 	@Test

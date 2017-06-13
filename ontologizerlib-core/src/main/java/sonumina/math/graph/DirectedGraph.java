@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.PriorityQueue;
@@ -96,27 +97,67 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 	}
 
 	/**
-	 * Removed the given vertex and all edges associated to it.
+	 * Remove the given vertex and all edges associated to it but keep
+	 * the connectivity of the graph.
 	 *
-	 * @param vertex
+	 * @param vertex the vertex to be removed
 	 */
 	private void removeVertexMaintainConnectivity(V vertex)
 	{
-		VertexAttributes<V,ED> va = vertices.get(vertex);
-		if (va != null)
-		{
-			/* Connect each the source of each in edges to the dest of each out edge */
-			for (Edge<V,ED> i : va.inEdges)
-			{
-				for (Edge<V,ED> o : va.outEdges)
-				{
-					if (!hasEdge(i.getSource(),o.getDest()))
-						addEdge(i.getSource(),o.getDest(), null /* FIXME */);
-				}
-			}
+		removeVertexMaintainConnectivity(vertex, null);
+	}
 
-			removeVertex(vertex);
+	/**
+	 * Remove the given vertex and all edges associated to it but keep
+	 * the connectivity of the graph.
+	 *
+	 * @param vertex the vertex to be removed
+	 * @param merger the merger that is used to merge edge data of the to be removed edges.
+	 */
+	public void removeVertexMaintainConnectivity(V vertex, IEdgeDataMerger<ED> merger)
+	{
+		VertexAttributes<V,ED> va = vertices.get(vertex);
+		if (va == null)
+		{
+			throw new IllegalArgumentException("Vertex " + vertex + " not in graph.");
 		}
+
+		/* Connect each the source of each in edges to the dest of each out edge. Merge
+		 * edges along the way.*/
+		for (Edge<V,ED> i : va.inEdges)
+		{
+			for (Edge<V,ED> o : va.outEdges)
+			{
+				ED newData;
+				Edge<V, ED> currentEdge = getEdge(i.getSource(), o.getDest());
+
+				if (merger != null)
+				{
+					List<ED> l = new ArrayList<ED>(3);
+					l.add(i.getData());
+					l.add(o.getData());
+
+					if (currentEdge != null)
+					{
+						l.add(currentEdge.getData());
+					}
+					newData = merger.merge(l);
+				} else
+				{
+					newData = null;
+				}
+
+				/* Remove existing edge, because we are creating a new one */
+				if (currentEdge != null)
+				{
+					removeConnections(i.getSource(), o.getDest());
+				}
+
+				addEdge(i.getSource(), o.getDest(), newData);
+			}
+		}
+
+		removeVertex(vertex);
 	}
 
 	/**
@@ -994,9 +1035,10 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 	 * maintained.
 	 *
 	 * @param verticesToBeIncluded
+	 * @param merger that is called for to merge various edge data along the merged paths.
 	 * @return the path maintaining subgraph
 	 */
-	public DirectedGraph<V,ED> pathMaintainingSubGraph(Set<V> verticesToBeIncluded)
+	public DirectedGraph<V,ED> pathMaintainingSubGraph(Set<V> verticesToBeIncluded, IEdgeDataMerger<ED> merger)
 	{
 		DirectedGraph<V,ED> transitiveClosure = compactedSubgraph(verticesToBeIncluded);
 		DirectedGraph<V,ED> transitivitySubGraph;
@@ -1054,6 +1096,18 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 		} while (reducedInIteration);
 
 		return transitivitySubGraph;
+	}
+
+	/**
+	 * Returns a sub graph with selected vertices, in which path relationships are
+	 * maintained. Edge data may be discarded.
+	 *
+	 * @param verticesToBeIncluded
+	 * @return the path maintaining subgraph
+	 */
+	public DirectedGraph<V,ED> pathMaintainingSubGraph(Set<V> verticesToBeIncluded)
+	{
+		return pathMaintainingSubGraph(verticesToBeIncluded, null);
 	}
 
 	/**
