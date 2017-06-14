@@ -281,7 +281,7 @@ public class OntologyTest
 	}
 
 	@Test
-	public void testGOLevelsEmpty()
+	public void testIfTermLevelsAreEmpty()
 	{
 		TermLevels noLevels = graph.getTermLevels(new HashSet<TermID>());
 		assertEquals(-1, noLevels.getMaxLevel());
@@ -305,7 +305,7 @@ public class OntologyTest
 	}
 
 	@Test
-	public void testGOLevelInternalOntology()
+	public void testGetTermLevelOnInternalOntology()
 	{
 		Ontology o = new InternalOntology().graph;
 		TermLevels levels = o.getTermLevels(set(o.getGraph().getVertices()));
