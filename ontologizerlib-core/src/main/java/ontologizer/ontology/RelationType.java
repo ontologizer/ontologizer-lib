@@ -7,7 +7,7 @@ import java.io.Serializable;
 import ontologizer.types.ByteString;
 
 /**
- * Instances of this class represent a single relation meaning (e.g., is_a).
+ * Instances of this class represent a single relation type (e.g., is_a).
  *
  * @author Sebastian Bauer
  */
