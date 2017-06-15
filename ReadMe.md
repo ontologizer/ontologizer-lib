@@ -9,7 +9,7 @@ Core components from [Ontologizer](http://ontologizer.de) for
 
 ## Use Library
 
-Use the following snippet for your `pom.xml`
+Use the following snippet for your `pom.xml` for the current release version:
 
 ```
 <!-- https://mvnrepository.com/artifact/de.ontologizer/ontologizerlib-core -->
@@ -25,6 +25,28 @@ Use the following snippet for your `pom.xml`
     <version>0.1</version>
 </dependency>
 ```
+
+Snapshots are available via jfrog. Use the following snippet in your `pom.xml`
+to confiure Maven to resolve them:
+
+```
+<repositories>
+    ...
+    <repository>
+        <id>jfrog-oss-snapshots</id>
+        <url>http://oss.jfrog.org/artifactory/oss-snapshot-local</url>
+        <releases>
+            <enabled>false</enabled>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
+    </repository>
+    ...
+</repositories>
+```
+
+Current snapshot version is `0.2-SNAPSHOT`.
 
 ## Development
 
