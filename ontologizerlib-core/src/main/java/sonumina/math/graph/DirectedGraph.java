@@ -166,35 +166,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 	 */
 	public Iterable<V> getVertices()
 	{
-		return new Iterable<V>()
-		{
-			private Iterator<V> iter = vertices.keySet().iterator();
-
-			@Override
-			public Iterator<V> iterator()
-			{
-				return new Iterator<V>()
-				{
-					@Override
-					public boolean hasNext()
-					{
-						return iter.hasNext();
-					}
-
-					@Override
-					public V next()
-					{
-						return iter.next();
-					}
-
-					@Override
-					public void remove()
-					{
-						throw new UnsupportedOperationException();
-					}
-				};
-			}
-		};
+		return immutable(vertices.keySet());
 	}
 
 	/**
