@@ -26,8 +26,8 @@ Use the following snippet for your `pom.xml` for the current release version:
 </dependency>
 ```
 
-Snapshots are available via jfrog. Use the following snippet in your `pom.xml`
-to confiure Maven to resolve them:
+Snapshots are available via [JFrog OSS](https://oss.jfrog.org). Use the following
+snippet in your `pom.xml` to configure Maven to resolve them:
 
 ```
 <repositories>
