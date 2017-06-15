@@ -1,5 +1,6 @@
 package sonumina.math.graph;
 
+import static sonumina.collections.ReadOnlyIterable.immutable;
 import static sonumina.math.graph.Edge.newEdge;
 
 import java.io.Serializable;
@@ -431,7 +432,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 	{
 		VertexAttributes<V,ED> va = vertices.get(v);
 		assert(va != null);
-		return va.inEdges.iterator();
+		return immutable(va.inEdges).iterator();
 	}
 
 	@Override
@@ -494,7 +495,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 	{
 		VertexAttributes<V,ED> va = vertices.get(v);
 		assert(va != null);
-		return va.outEdges.iterator();
+		return immutable(va.outEdges).iterator();
 	}
 
 	@Override
