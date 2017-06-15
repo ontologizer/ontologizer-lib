@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import sonumina.collections.Map;
 import sonumina.math.graph.DirectedGraph;
 import sonumina.math.graph.Edge;
 import sonumina.math.graph.IDistanceVisitor;
@@ -141,7 +142,7 @@ public class Ontology implements Iterable<Term>, Serializable
 	 */
 	public SlimDirectedGraphView<Term> getSlimGraphView()
 	{
-		return SlimDirectedGraphView.create(graph, new SlimDirectedGraphView.Map<TermID,Term>()
+		return SlimDirectedGraphView.create(graph, new Map<TermID,Term>()
 		{
 			@Override
 			public Term map(TermID key)

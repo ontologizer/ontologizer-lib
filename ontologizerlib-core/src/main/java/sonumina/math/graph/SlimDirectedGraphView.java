@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import sonumina.collections.IntMapper;
+import sonumina.collections.Map;
 
 /**
  * Instances of this class represent a slim view of a graph. Most attributes can be
@@ -368,14 +369,6 @@ public final class SlimDirectedGraphView<VertexType> implements Serializable
 		SlimDirectedGraphView<V> g = new SlimDirectedGraphView<V>();
 		init(g, graph);
 		return g;
-	}
-
-	/**
-	 * Simple functional interface to provide a map form one type to another
-	 */
-	public static interface Map<K,V>
-	{
-		public V map(K key);
 	}
 
 	/**
