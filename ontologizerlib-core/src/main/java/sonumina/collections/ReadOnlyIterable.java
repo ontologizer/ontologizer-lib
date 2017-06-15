@@ -45,7 +45,7 @@ public class ReadOnlyIterable<T> implements Iterable<T>
 		};
 	}
 
-	public static <T> ReadOnlyIterable<T> readOnly(Iterable<T> shieldedIterable)
+	public static <T> ReadOnlyIterable<T> immutable(Iterable<T> shieldedIterable)
 	{
 		return new ReadOnlyIterable<T>(shieldedIterable);
 	}
