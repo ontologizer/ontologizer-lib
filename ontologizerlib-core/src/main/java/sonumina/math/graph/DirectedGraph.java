@@ -1,6 +1,7 @@
 package sonumina.math.graph;
 
 import static sonumina.collections.ImmutableIterable.immutable;
+import static sonumina.collections.ImmutableMappedIterable.immutable;
 import static sonumina.math.graph.Edge.newEdge;
 
 import java.io.Serializable;
@@ -407,37 +408,24 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 		return immutable(va.inEdges).iterator();
 	}
 
+	/**
+	 * Maps edges to the source vertex.
+	 */
+	private sonumina.collections.Map<Edge<V, ED>, V> edgeToSourceMap = new sonumina.collections.Map<Edge<V, ED>, V>()
+	{
+		@Override
+		public V map(Edge<V, ED> key)
+		{
+			return key.getSource();
+		}
+	};
+
 	@Override
 	public Iterable<V> getParentNodes(V v)
 	{
-		final Iterator<Edge<V,ED>> iter = getInEdges(v);
-
-		return new Iterable<V>()
-		{
-			@Override
-			public Iterator<V> iterator()
-			{
-				return new Iterator<V>()
-				{
-					@Override
-					public boolean hasNext()
-					{
-						return iter.hasNext();
-					}
-
-					@Override
-					public V next()
-					{
-						return iter.next().getSource();
-					}
-
-					@Override
-					public void remove()
-					{
-					}
-				};
-			}
-		};
+		VertexAttributes<V,ED> va = vertices.get(v);
+		assert(va != null);
+		return immutable(va.inEdges, edgeToSourceMap);
 	}
 
 	/**
@@ -470,37 +458,24 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 		return immutable(va.outEdges).iterator();
 	}
 
+	/**
+	 * Maps edges to their dest vertices.
+	 */
+	private sonumina.collections.Map<Edge<V, ED>, V> edgeToDestMap = new sonumina.collections.Map<Edge<V, ED>, V>()
+	{
+		@Override
+		public V map(Edge<V, ED> key)
+		{
+			return key.getDest();
+		}
+	};
+
 	@Override
 	public Iterable<V> getChildNodes(V v)
 	{
-		final Iterator<Edge<V,ED>> iter = getOutEdges(v);
-
-		return new Iterable<V>()
-		{
-			@Override
-			public Iterator<V> iterator()
-			{
-				return new Iterator<V>()
-				{
-					@Override
-					public boolean hasNext()
-					{
-						return iter.hasNext();
-					}
-
-					@Override
-					public V next()
-					{
-						return iter.next().getDest();
-					}
-
-					@Override
-					public void remove()
-					{
-					}
-				};
-			}
-		};
+		VertexAttributes<V,ED> va = vertices.get(v);
+		assert(va != null);
+		return immutable(va.outEdges, edgeToDestMap);
 	}
 
 	/**
