@@ -58,6 +58,15 @@
 		<url>https://github.com/ontologizer/ontologizerlib</url>
 	</scm>
 
+	<!-- Where snapshots are uploaded -->
+	<distributionManagement>
+		<snapshotRepository>
+			<id>jfrog-snapshots</id>
+			<name>The ontologizerlib Snapshot Repository</name>
+			<url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
+		</snapshotRepository>
+	</distributionManagement>
+
 	<dependencies>
 		<!-- JUnit testing -->
 		<dependency>
@@ -303,18 +312,5 @@
 				<module>ontologizerlib-benchmark</module>
 			</modules>
 		</profile>
-
-		<profile>
-			<id>jfrog-snapshots</id>
-			<distributionManagement>
-				<snapshotRepository>
-					<id>jfrog-snapshots</id>
-					<name>The ontologizerlib Snapshot Repository</name>
-					<url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
-					<uniqueVersion>true</uniqueVersion>
-				</snapshotRepository>
-			</distributionManagement>
-		</profile>
-
 	</profiles>
 </project>
