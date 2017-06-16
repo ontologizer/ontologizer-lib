@@ -9,10 +9,10 @@ import java.util.List;
 
 import org.junit.Test;
 
-public class ReadOnlyIterableTest
+public class ImmutableIterableTest
 {
 	@Test
-	public void testWhetherReadOnlyIterableThrowsException()
+	public void testWhetherImmutableIterableThrowsException()
 	{
 		/* Arrays.asList() will result in unmodifiable iterators
 		 * so we construct a proper ArrayList from the result.
@@ -24,7 +24,7 @@ public class ReadOnlyIterableTest
 		iterator.next();
 		iterator.remove();
 
-		iterator = new ReadOnlyIterable<>(list).iterator();
+		iterator = new ImmutableIterable<>(list).iterator();
 		iterator.next();
 		try
 		{

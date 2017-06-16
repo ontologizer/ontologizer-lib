@@ -1,6 +1,6 @@
 package sonumina.math.graph;
 
-import static sonumina.collections.ReadOnlyIterable.immutable;
+import static sonumina.collections.ImmutableIterable.immutable;
 import static sonumina.math.graph.Edge.newEdge;
 
 import java.io.Serializable;

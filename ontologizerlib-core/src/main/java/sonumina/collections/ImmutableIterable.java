@@ -9,11 +9,11 @@ import java.util.Iterator;
  *
  * @author Sebastian Bauer
  */
-public class ReadOnlyIterable<T> implements Iterable<T>
+public class ImmutableIterable<T> implements Iterable<T>
 {
 	private Iterable<T> shieldedIterable;
 
-	public ReadOnlyIterable(Iterable<T> shieldedIterable)
+	public ImmutableIterable(Iterable<T> shieldedIterable)
 	{
 		this.shieldedIterable = shieldedIterable;
 	}
@@ -45,8 +45,8 @@ public class ReadOnlyIterable<T> implements Iterable<T>
 		};
 	}
 
-	public static <T> ReadOnlyIterable<T> immutable(Iterable<T> shieldedIterable)
+	public static <T> ImmutableIterable<T> immutable(Iterable<T> shieldedIterable)
 	{
-		return new ReadOnlyIterable<T>(shieldedIterable);
+		return new ImmutableIterable<T>(shieldedIterable);
 	}
 }
