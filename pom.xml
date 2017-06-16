@@ -121,7 +121,7 @@
 					<reportOutputDirectory>${project.reporting.outputDirectory}/apidocs/api/</reportOutputDirectory>
 				</configuration>
 				<executions>
-					<!--  The aggregation javadoc -->
+					<!-- The aggregation javadoc -->
 					<execution>
 						<id>aggregate</id>
 						<goals>
@@ -132,7 +132,7 @@
 						</configuration>
 					</execution>
 
-					<!--  Javadoc of each single project to spot errors in the compile phase -->
+					<!-- Javadoc of each single project to spot errors in the compile phase -->
 					<execution>
 						<id>javadoc</id>
 						<goals>
