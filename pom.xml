@@ -304,9 +304,9 @@
 
 	<profiles>
 		<profile>
-			<id>not-one-seven</id>
+			<id>benchmark</id>
 			<activation>
-				<jdk>!1.7</jdk>
+				<property><name>benchmark</name></property>
 			</activation>
 			<modules>
 				<module>ontologizerlib-benchmark</module>
