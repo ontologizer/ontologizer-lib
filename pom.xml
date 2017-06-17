@@ -19,6 +19,7 @@
 		<module>ontologizerlib-core</module>
 		<module>ontologizerlib-io</module>
 		<module>ontologizerlib-io-common</module>
+		<module>ontologizerlib-io-gen</module>
 	</modules>
 
 	<!-- Inherit artifact from SonaType OSS pom.xml Following this article: 
