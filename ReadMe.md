@@ -34,7 +34,7 @@ snippet in your `pom.xml` to configure Maven to resolve them:
     ...
     <repository>
         <id>jfrog-oss-snapshots</id>
-        <url>http://oss.jfrog.org/artifactory/oss-snapshot-local</url>
+        <url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
         <releases>
             <enabled>false</enabled>
         </releases>
