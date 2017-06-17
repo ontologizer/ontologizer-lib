@@ -21,8 +21,12 @@ public final class RelationType implements Serializable
 	private final ByteString name;
 	private final RelationMeaning meaning;
 
+	/** The type of relation propagates along its destination/object */
+	private final boolean propagating;
+
 	/**
-	 * Constructs a new relation.
+	 * Constructs a new relation. Depending on the relation meaning it
+	 * is supposed to propagate annotations or not.
 	 *
 	 * @param name the name of the relation (e.g., is_a)
 	 * @param meaning the predefined meaning of the relation.
@@ -31,6 +35,17 @@ public final class RelationType implements Serializable
 	{
 		this.name = name;
 		this.meaning = meaning;
+		switch (meaning)
+		{
+		case	IS_A:
+		case	PART_OF_A:
+				propagating = true;
+				break;
+
+		default:
+				propagating = false;
+				break;
+		}
 	}
 
 	public RelationType(RelationMeaning type)
@@ -52,5 +67,13 @@ public final class RelationType implements Serializable
 	public RelationMeaning meaning()
 	{
 		return meaning;
+	}
+
+	/**
+	 * @return whether the relation propagates annotation relations.
+	 */
+	public boolean isPropagating()
+	{
+		return propagating;
 	}
 }
