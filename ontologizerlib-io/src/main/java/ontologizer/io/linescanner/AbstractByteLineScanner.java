@@ -9,7 +9,7 @@ import java.io.InputStream;
  *
  * @author Sebastian Bauer
  */
-abstract public class AbstractByteLineScanner
+public abstract class AbstractByteLineScanner
 {
 	private InputStream is;
 	private final int BUF_SIZE = 65536;
