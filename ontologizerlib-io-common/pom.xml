@@ -6,7 +6,7 @@
 	<packaging>jar</packaging>
 
 	<name>${project.groupId}:${project.artifactId}</name>
-	<description>The ontologizerlib-common contains some common definitions for other modules</description>
+	<description>The ontologizerlib-io-common module contains some common definitions for other modules</description>
 	<url>https://github.com/ontologizer/ontologizerlib</url>
 
 	<parent>
