@@ -35,8 +35,7 @@ public final class RelationType implements Serializable
 
 	public RelationType(RelationMeaning type)
 	{
-		this.name = type.relationName();
-		this.meaning = type;
+		this(type.relationName(), type);
 
 	}
 	/**
