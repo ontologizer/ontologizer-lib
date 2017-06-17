@@ -99,10 +99,10 @@ public class OBOByteLineScannerGenerator
 			int nextOutDegree = tree.getOutDegree(next);
 			if (nextOutDegree == 1)
 			{
-				/* Merge next with current */
 				Edge<Integer, String>  ne = tree.getOutEdges(next).next();
 				Integer nextnext = ne.getDest();
 
+				/* Merge current label with next label */
 				String newLabel = e.getData() + ne.getData();
 				tree.removeConnections(current, next);
 				tree.addEdge(current, next, newLabel);
