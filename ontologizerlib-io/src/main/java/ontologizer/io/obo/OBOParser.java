@@ -337,7 +337,6 @@ public class OBOParser
 
 		class OBOByteLineScanner extends AbstractByteLineScanner
 		{
-			private int linenum;
 			private long millis = 0;
 			public int currentTerm = 0;
 
@@ -432,7 +431,6 @@ public class OBOParser
 			@Override
 			public boolean newLine(byte[] buf, int start, int len)
 			{
-				linenum++;
 				updateProgress();
 
 				if (len == 0)
@@ -476,7 +474,7 @@ public class OBOParser
 
 					if (buf[start + len - 1] != ']')
 					{
-						exception = new OBOParserException("Unclosed stanza", getLineContens(), linenum);
+						exception = new OBOParserException("Unclosed stanza", getLineContens(), getLineNum());
 						return false;
 					}
 
@@ -487,7 +485,7 @@ public class OBOParser
 					else if (equalsIgnoreCase(line, start, len, TYPEDEF_KEYWORD)) currentStanza = Stanza.TYPEDEF;
 					else
 					{
-						exception = new OBOParserException("Unknown stanza type", getLineContens(), linenum);
+						exception = new OBOParserException("Unknown stanza type", getLineContens(), getLineNum());
 						return false;
 					}
 					currentTerm++;

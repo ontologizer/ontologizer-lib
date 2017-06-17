@@ -21,6 +21,8 @@ public abstract class AbstractByteLineScanner
 	private byte [] pushedBytes;
 	private int pushedCurrent = -1;
 
+	private int lineNum;
+
 	public AbstractByteLineScanner(InputStream is)
 	{
 		this.is = is;
@@ -41,6 +43,7 @@ public abstract class AbstractByteLineScanner
 			{
 				if (byteBuf[pos] == '\n')
 				{
+					lineNum++;
 					if (!newLine(byteBuf, line_start, pos - line_start))
 					{
 						availableStart = pos + 1;
@@ -57,7 +60,18 @@ public abstract class AbstractByteLineScanner
 			read_offset = read - line_start;
 		}
 		if (read_offset != 0)
+		{
+			lineNum++;
 			newLine(byteBuf, 0, read_offset);
+		}
+	}
+
+	/**
+	 * @return the current line number
+	 */
+	protected final int getLineNum()
+	{
+		return lineNum;
 	}
 
 	/**
