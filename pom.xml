@@ -16,6 +16,7 @@
 
 	<modules>
 		<module>ontologizerlib-build-helper</module>
+		<module>ontologizerlib-common</module>
 		<module>ontologizerlib-core</module>
 		<module>ontologizerlib-io</module>
 	</modules>
