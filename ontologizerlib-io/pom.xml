@@ -20,6 +20,12 @@
 			<artifactId>ontologizerlib-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+                <dependency>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>ontologizerlib-io-common</artifactId>
+                        <version>${project.version}</version>
+                </dependency>
 	</dependencies>
 
 	<build>
