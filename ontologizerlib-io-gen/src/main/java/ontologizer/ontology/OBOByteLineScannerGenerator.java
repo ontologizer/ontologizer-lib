@@ -8,6 +8,12 @@ import java.util.Iterator;
 import sonumina.math.graph.DirectedGraph;
 import sonumina.math.graph.Edge;
 
+/**
+ * This class represents a simple parser generator for reading obo files. For now
+ * it just generates a simple value parser for term keywords.
+ *
+ * @author Sebastian Bauer
+ */
 public class OBOByteLineScannerGenerator
 {
 	/**
@@ -174,6 +180,7 @@ public class OBOByteLineScannerGenerator
 	 */
 	public void generateKeywordIfClauses()
 	{
+		/* Graph represents some vertices with ids (which are itself not relevant) with labels */
 		final DirectedGraph<Integer, String> tree = new DirectedGraph<Integer, String>();
 
 		Integer root = new Integer(0);
