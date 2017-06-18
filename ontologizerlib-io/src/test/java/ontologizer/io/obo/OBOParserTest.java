@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -59,6 +60,21 @@ public class OBOParserTest
 		assertEquals(nRelations,relations);
 		assertTrue(id2Term.containsKey("GO:0008150"));
 		assertEquals(0,id2Term.get("GO:0008150").getParents().length);
+	}
+
+	@Test
+	public void testName() throws IOException, OBOParserException
+	{
+		File tmp = File.createTempFile("onto", ".obo");
+		PrintWriter pw = new PrintWriter(tmp);
+		pw.append("[term]\nname: test\nid: GO:00000001");
+		pw.close();
+
+		OBOParser oboParser = new OBOParser(new ParserFileInput(tmp.getCanonicalPath()));
+		oboParser.doParse();
+		Set<Term> terms = oboParser.getTermMap();
+		assertEquals(1, terms.size());
+		assertEquals(b("test"), terms.iterator().next().getName());
 	}
 
 	@Test
