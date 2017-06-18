@@ -18,9 +18,9 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import ontologizer.io.ParserFileInput;
+import ontologizer.ontology.RelationMeaning;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermID;
-import ontologizer.ontology.RelationMeaning;
 import ontologizer.types.ByteString;
 
 public class OBOParserTest
