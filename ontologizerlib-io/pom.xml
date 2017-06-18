@@ -38,14 +38,6 @@
 				<filtering>true</filtering>
 			</resource>
 		</resources>
-
-		<!-- Consider test sources as test resources for accessing source files from a test -->
-		<testResources>
-			<testResource>
-				<directory>src/test/java</directory>
-			</testResource>
-		</testResources>
-
 		<plugins>
 			<!-- Specify the dependencies to copy -->
 			<plugin>
