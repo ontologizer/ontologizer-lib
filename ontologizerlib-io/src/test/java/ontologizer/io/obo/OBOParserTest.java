@@ -91,11 +91,13 @@ public class OBOParserTest
 	{
 		File tmp = File.createTempFile("onto", ".obo");
 		PrintWriter pw = new PrintWriter(tmp);
-		pw.append("[term]\nname: test\\\ntest\\\ntest\n");
+		pw.append("[term]\nname: test\\\ntest\\\ntest\nid: GO:00000001");
 		pw.close();
 
 		OBOParser oboParser = new OBOParser(new ParserFileInput(tmp.getCanonicalPath()));
 		oboParser.doParse();
+		Set<Term> terms = oboParser.getTermMap();
+		assertEquals(1, terms.size());
 	}
 
 	@Test
