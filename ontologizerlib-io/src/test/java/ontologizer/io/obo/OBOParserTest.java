@@ -98,6 +98,7 @@ public class OBOParserTest
 		oboParser.doParse();
 		Set<Term> terms = oboParser.getTermMap();
 		assertEquals(1, terms.size());
+		assertEquals(b("testtesttest"), terms.iterator().next().getName());
 	}
 
 	@Test
