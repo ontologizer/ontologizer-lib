@@ -23,7 +23,7 @@ public class ParsedContainerTest
 	@Before
 	public void setUp() throws Exception
 	{
-		oboParser = new OBOParser(new ParserFileInput(OBOParserTest.GOtermsOBOFile));
+		oboParser = new OBOParser(new ParserFileInput(OBOParserFullTest.GOtermsOBOFile));
 		oboParser.doParse();
 		container = new TermContainer(oboParser.getTermMap(), oboParser.getFormatVersion(), oboParser.getDate());
 	}
