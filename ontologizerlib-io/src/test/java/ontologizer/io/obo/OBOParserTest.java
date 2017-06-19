@@ -16,6 +16,7 @@ import java.util.Set;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.junit.rules.TestName;
 
 import ontologizer.io.ParserFileInput;
 import ontologizer.ontology.RelationMeaning;
@@ -25,6 +26,67 @@ import ontologizer.types.ByteString;
 
 public class OBOParserTest
 {
+	@Rule
+	public TestName testName = new TestName();
+
+	/**
+	 * Return the path to a file that contains the comment of the current test.
+	 *
+	 * @return an absolute path.
+	 *
+	 * @throws IOException
+	 */
+	private String getTestCommentAsPath() throws IOException
+	{
+		return TestSourceUtils.getCommentOfTestAsTmpFilePath(OBOParserTest.class,
+			testName.getMethodName());
+	}
+
+	/**
+	 * Return an obo parser suitable to parse the comment of the current test.
+	 *
+	 * @param options the options submitted to the parser.
+	 *
+	 * @return the obo parser
+	 *
+	 * @throws IOException
+	 */
+	private OBOParser getTestCommentAsOBOParser(int options) throws IOException
+	{
+		return new OBOParser(new ParserFileInput(getTestCommentAsPath()), options);
+	}
+
+	/**
+	 * Returns an obo parser that has already parses the comment of the current
+	 * test.
+	 *
+	 * @param options the obo parser options to customize the parser's behaviour.
+	 * @return the obo parser
+	 *
+	 * @throws IOException
+	 * @throws OBOParserException
+	 */
+	private OBOParser parseTestComment(int options) throws IOException, OBOParserException
+	{
+		OBOParser oboParser = getTestCommentAsOBOParser(options);
+		oboParser.doParse();
+		return oboParser;
+	}
+
+	/**
+	 * Returns an obo parser that has already parsed the comment of the current
+	 * test.
+	 *
+	 * @return the obo parser
+	 *
+	 * @throws IOException
+	 * @throws OBOParserException
+	 */
+	private OBOParser parseTestComment() throws IOException, OBOParserException
+	{
+		return parseTestComment(0);
+	}
+
 	/* internal fields */
 	public static final String GOtermsOBOFile = OBOParserTest.class.
 			getClassLoader().getResource("gene_ontology.1_2.obo.gz").getPath();
@@ -62,16 +124,15 @@ public class OBOParserTest
 		assertEquals(0,id2Term.get("GO:0008150").getParents().length);
 	}
 
+	///
+	/// [term]
+	/// name: test
+	/// id: GO:0000001
+	///
 	@Test
 	public void testName() throws IOException, OBOParserException
 	{
-		File tmp = File.createTempFile("onto", ".obo");
-		PrintWriter pw = new PrintWriter(tmp);
-		pw.append("[term]\nname: test\nid: GO:00000001");
-		pw.close();
-
-		OBOParser oboParser = new OBOParser(new ParserFileInput(tmp.getCanonicalPath()));
-		oboParser.doParse();
+		OBOParser oboParser = parseTestComment();
 		Set<Term> terms = oboParser.getTermMap();
 		assertEquals(1, terms.size());
 		assertEquals(b("test"), terms.iterator().next().getName());
@@ -86,38 +147,35 @@ public class OBOParserTest
 			assertTrue(t.getSynonyms() == null || t.getSynonyms().length == 0);
 	}
 
+	/// [term]
+	/// name: test\
+	/// test\
+	/// test
+	/// id: GO:0000001
 	@Test
 	public void testMultiline() throws IOException, OBOParserException
 	{
-		File tmp = File.createTempFile("onto", ".obo");
-		PrintWriter pw = new PrintWriter(tmp);
-		pw.append("[term]\nname: test\\\ntest\\\ntest\nid: GO:00000001");
-		pw.close();
-
-		OBOParser oboParser = new OBOParser(new ParserFileInput(tmp.getCanonicalPath()));
-		oboParser.doParse();
+		OBOParser oboParser = parseTestComment();
 		Set<Term> terms = oboParser.getTermMap();
 		assertEquals(1, terms.size());
 		assertEquals(b("testtesttest"), terms.iterator().next().getName());
 	}
 
+	/// [term]
+	/// name: test
+	/// id: GO:0000001
+	///
+	/// [term]
+	/// name: test2
+	/// id: GO:0000002
+	///
+	/// relationship: part_of GO:0000001 ! test
 	@Test
 	public void testPartOf() throws IOException, OBOParserException
 	{
-		File tmp = tmpFolder.newFile();
-		PrintWriter pw = new PrintWriter(tmp);
-		pw.append("[term]\n" +
-		          "name: test\n" +
-				  "id: GO:0000001\n\n" +
-		          "[term]\n" +
-				  "name: test2\n" +
-		          "id: GO:0000002\n\n" +
-		          "relationship: part_of GO:0000001 ! test\n");
-		pw.close();
-
-		OBOParser oboParser = new OBOParser(new ParserFileInput(tmp.getCanonicalPath()));
-		oboParser.doParse();
+		OBOParser oboParser = parseTestComment();
 		ArrayList<Term> terms = new ArrayList<Term>(oboParser.getTermMap());
+		assertEquals(2, terms.size());
 		HashMap<String,Term> name2Term = new HashMap<String,Term>();
 		for (Term t : terms)
 			name2Term.put(t.getIDAsString(), t);
@@ -125,22 +183,19 @@ public class OBOParserTest
 		assertEquals("GO:0000001", name2Term.get("GO:0000002").getParents()[0].getRelated().toString());
 	}
 
+	/// [term]
+	/// name: test
+	/// id: GO:0000001
+	///
+	/// [term]
+	/// name: test2
+	/// id: GO:0000002
+	///
+	/// relationship: regulates GO:0000001 ! test
 	@Test
 	public void testRegulates() throws IOException, OBOParserException
 	{
-		File tmp = tmpFolder.newFile();
-		PrintWriter pw = new PrintWriter(tmp);
-		pw.append("[term]\n" +
-		          "name: test\n" +
-				  "id: GO:0000001\n\n" +
-		          "[term]\n" +
-				  "name: test2\n" +
-		          "id: GO:0000002\n\n" +
-		          "relationship: regulates GO:0000001 ! test\n");
-		pw.close();
-
-		OBOParser oboParser = new OBOParser(new ParserFileInput(tmp.getCanonicalPath()));
-		oboParser.doParse();
+		OBOParser oboParser = parseTestComment();
 		ArrayList<Term> terms = new ArrayList<Term>(oboParser.getTermMap());
 		HashMap<String,Term> name2Term = new HashMap<String,Term>();
 		for (Term t : terms)
@@ -149,22 +204,18 @@ public class OBOParserTest
 		assertEquals("GO:0000001", name2Term.get("GO:0000002").getParents()[0].getRelated().toString());
 	}
 
+	/// [term]
+	/// name: test
+	/// id: GO:0000001
+	///
+	/// [term]
+	/// name: test2
+	/// id: GO:0000002
+	/// relationship: zzz GO:0000001 ! test
 	@Test
 	public void testUnknownRelationship() throws IOException, OBOParserException
 	{
-		File tmp = tmpFolder.newFile();
-		PrintWriter pw = new PrintWriter(tmp);
-		pw.append("[term]\n" +
-		          "name: test\n" +
-				  "id: GO:0000001\n\n" +
-		          "[term]\n" +
-				  "name: test2\n" +
-		          "id: GO:0000002\n\n" +
-		          "relationship: zzz GO:0000001 ! test\n");
-		pw.close();
-
-		OBOParser oboParser = new OBOParser(new ParserFileInput(tmp.getCanonicalPath()));
-		oboParser.doParse();
+		OBOParser oboParser = parseTestComment();
 		ArrayList<Term> terms = new ArrayList<Term>(oboParser.getTermMap());
 		HashMap<String,Term> name2Term = new HashMap<String,Term>();
 		for (Term t : terms)
@@ -174,20 +225,15 @@ public class OBOParserTest
 		assertEquals("GO:0000001", name2Term.get("GO:0000002").getParents()[0].getRelated().toString());
 	}
 
+	/// [term]
+	/// name: test
+	/// id: GO:0000001
+	/// synonym: "test2"
+	/// synonym: "test3" EXACT []
 	@Test
 	public void testSynonyms() throws IOException, OBOParserException
 	{
-		File tmp = tmpFolder.newFile();
-		PrintWriter pw = new PrintWriter(tmp);
-		pw.append("[term]\n" +
-		          "name: test\n" +
-				  "id: GO:0000001\n" +
-		          "synonym: \"test2\"\n" +
-				  "synonym: \"test3\" EXACT []\n");
-		pw.close();
-
-		OBOParser oboParser = new OBOParser(new ParserFileInput(tmp.getCanonicalPath()));
-		oboParser.doParse();
+		OBOParser oboParser = parseTestComment();
 		ArrayList<Term> terms = new ArrayList<Term>(oboParser.getTermMap());
 		assertEquals(1, terms.size());
 		String [] expected = new String[]{"test2","test3"};
@@ -196,43 +242,32 @@ public class OBOParserTest
 			assertEquals(expected[i],terms.get(0).getSynonyms()[i].toString());
 	}
 
+	/// [term]
+	/// name: test
+	/// id: GO:0000001
+	/// def: "This is a so-called \"test\""
 	@Test
 	public void testDef() throws IOException, OBOParserException
 	{
-		File tmp = tmpFolder.newFile();
-		PrintWriter pw = new PrintWriter(tmp);
-		pw.append("[term]\n" +
-		          "name: test\n" +
-				  "id: GO:0000001\n" +
-		          "def: \"This is a so-called \\\"test\\\"\"\n");
-		pw.close();
-
-		OBOParser oboParser = new OBOParser(new ParserFileInput(tmp.getCanonicalPath()),OBOParser.PARSE_DEFINITIONS);
-		oboParser.doParse();
+		OBOParser oboParser = parseTestComment(OBOParser.PARSE_DEFINITIONS);
 		ArrayList<Term> terms = new ArrayList<Term>(oboParser.getTermMap());
 		assertEquals(1, terms.size());
 		assertEquals("This is a so-called \"test\"", terms.get(0).getDefinition().toString());
 	}
 
+	/// [term]
+	/// name: test
+	/// id: GO:0000001
+	///
+	/// [term]
+	/// name: test2
+	/// id: GO:0000002
+	/// equivalent_to: GO:0000001
+	/// equivalent_to: GO:0000003 ! comment
 	@Test
 	public void testEquivalent() throws IOException, OBOParserException
 	{
-		File tmp = tmpFolder.newFile();
-		PrintWriter pw = new PrintWriter(tmp);
-		pw.append("[term]\n" +
-		          "name: test\n" +
-				  "id: GO:0000001\n" +
-		          "def: \"This is a so-called \\\"test\\\"\"\n\n"+
-				  "[term]\n" +
-				  "name: test2\n" +
-				  "id: GO:0000002\n" +
-				  "equivalent_to: GO:0000001\n" +
-				  "equivalent_to: GO:0000003 ! comment\n");
-		pw.close();
-
-		OBOParser oboParser = new OBOParser(new ParserFileInput(tmp.getCanonicalPath()));
-		oboParser.doParse();
-
+		OBOParser oboParser = parseTestComment();
 		ArrayList<Term> terms = new ArrayList<Term>(oboParser.getTermMap());
 		HashMap<String,Term> name2Term = new HashMap<String,Term>();
 		for (Term t : terms)
@@ -246,38 +281,26 @@ public class OBOParserTest
 			assertTrue(ids.contains(id.toString()));
 	}
 
+	/// [term]
+	/// name: test
+	/// id: GO:0000001
+	/// is_obsolete: true
 	@Test
 	public void testObsolete() throws IOException, OBOParserException
 	{
-		File tmp = tmpFolder.newFile();
-		PrintWriter pw = new PrintWriter(tmp);
-		pw.append("[term]\n" +
-		          "name: test\n" +
-				  "id: GO:0000001\n" +
-		          "def: \"This is a so-called \\\"test\\\"\"\n" +
-				  "is_obsolete: true");
-		pw.close();
-
-		OBOParser oboParser = new OBOParser(new ParserFileInput(tmp.getCanonicalPath()),OBOParser.PARSE_XREFS);
-		oboParser.doParse();
+		OBOParser oboParser = parseTestComment();
 		ArrayList<Term> terms = new ArrayList<Term>(oboParser.getTermMap());
 		assertTrue(terms.get(0).isObsolete());
 	}
 
+	/// [term]
+	/// name: test
+	/// id: GO:0000001
+	/// xref: db:ID "WW"
 	@Test
 	public void testXRef() throws IOException, OBOParserException
 	{
-		File tmp = tmpFolder.newFile();
-		PrintWriter pw = new PrintWriter(tmp);
-		pw.append("[term]\n" +
-		          "name: test\n" +
-				  "id: GO:0000001\n" +
-		          "def: \"This is a so-called \\\"test\\\"\"\n" +
-				  "xref: db:ID \"WW\"");
-		pw.close();
-
-		OBOParser oboParser = new OBOParser(new ParserFileInput(tmp.getCanonicalPath()),OBOParser.PARSE_XREFS);
-		oboParser.doParse();
+		OBOParser oboParser = parseTestComment(OBOParser.PARSE_XREFS);
 		ArrayList<Term> terms = new ArrayList<Term>(oboParser.getTermMap());
 		assertEquals(1, terms.size());
 		assertEquals("db",terms.get(0).getXrefs()[0].getDatabase());
@@ -285,20 +308,14 @@ public class OBOParserTest
 		assertEquals("WW",terms.get(0).getXrefs()[0].getXrefName());
 	}
 
+	/// [term]
+	/// name: test
+	/// id: GO:0000001
+	/// xref: db:ID  "WW"
 	@Test
 	public void testXRef2Spaces() throws IOException, OBOParserException
 	{
-		File tmp = tmpFolder.newFile();
-		PrintWriter pw = new PrintWriter(tmp);
-		pw.append("[term]\n" +
-		          "name: test\n" +
-				  "id: GO:0000001\n" +
-		          "def: \"This is a so-called \\\"test\\\"\"\n" +
-				  "xref: db:ID  \"WW\"");
-		pw.close();
-
-		OBOParser oboParser = new OBOParser(new ParserFileInput(tmp.getCanonicalPath()),OBOParser.PARSE_XREFS);
-		oboParser.doParse();
+		OBOParser oboParser = parseTestComment(OBOParser.PARSE_XREFS);
 		ArrayList<Term> terms = new ArrayList<Term>(oboParser.getTermMap());
 		assertEquals(1, terms.size());
 		assertEquals("db",terms.get(0).getXrefs()[0].getDatabase());
@@ -306,20 +323,14 @@ public class OBOParserTest
 		assertEquals("WW",terms.get(0).getXrefs()[0].getXrefName());
 	}
 
+	/// [term]
+	/// name: test
+	/// id: GO:0000001
+	/// xref: db:ID
 	@Test
 	public void testSimpleXRef() throws IOException, OBOParserException
 	{
-		File tmp = tmpFolder.newFile();
-		PrintWriter pw = new PrintWriter(tmp);
-		pw.append("[term]\n" +
-		          "name: test\n" +
-				  "id: GO:0000001\n" +
-		          "def: \"This is a so-called \\\"test\\\"\"\n" +
-				  "xref: db:ID");
-		pw.close();
-
-		OBOParser oboParser = new OBOParser(new ParserFileInput(tmp.getCanonicalPath()),OBOParser.PARSE_XREFS);
-		oboParser.doParse();
+		OBOParser oboParser = parseTestComment(OBOParser.PARSE_XREFS);
 		ArrayList<Term> terms = new ArrayList<Term>(oboParser.getTermMap());
 		assertEquals(1, terms.size());
 		assertEquals("db",terms.get(0).getXrefs()[0].getDatabase());
@@ -327,23 +338,18 @@ public class OBOParserTest
 		assertNull(terms.get(0).getXrefs()[0].getXrefName());
 	}
 
+	/// subsetdef: subset \"Subset\"
+	/// [term]
+	/// name: test
+	/// id: GO:0000001
+	/// subset: subset
+	/// [term]
+	/// name: test2
+	/// id: GO:0000002
 	@Test
 	public void testSubset() throws IOException, OBOParserException
 	{
-		File tmp = tmpFolder.newFile();
-		PrintWriter pw = new PrintWriter(tmp);
-		pw.append("subsetdef: subset \"Subset\"\n" +
-		          "[term]\n" +
-				  "name: test\n" +
-		          "id: GO:0000001\n" +
-				  "subset: subset\n" +
-		          "[term]\n" +
-				  "name: test2\n" +
-		          "id: GO:0000002\n");
-		pw.close();
-
-		OBOParser oboParser = new OBOParser(new ParserFileInput(tmp.getCanonicalPath()),OBOParser.PARSE_DEFINITIONS);
-		oboParser.doParse();
+		OBOParser oboParser = parseTestComment();
 		ArrayList<Term> terms = new ArrayList<Term>(oboParser.getTermMap());
 		assertEquals(2, terms.size());
 		assertEquals(1, terms.get(0).getSubsets().length);
@@ -351,37 +357,27 @@ public class OBOParserTest
 		assertEquals(0, terms.get(1).getSubsets().length);
 	}
 
+	/// [term]
+	/// name: test
+	/// id: GO:0000001
+	/// alt_id: GO:0000003
 	@Test
 	public void testAltId() throws IOException, OBOParserException
 	{
-		File tmp = tmpFolder.newFile();
-		PrintWriter pw = new PrintWriter(tmp);
-		pw.append("[term]\n" +
-		          "name: test\n" +
-				  "id: GO:0000001\n" +
-		          "alt_id: GO:0000003\n");
-		pw.close();
-
-		OBOParser oboParser = new OBOParser(new ParserFileInput(tmp.getCanonicalPath()),OBOParser.PARSE_DEFINITIONS);
-		oboParser.doParse();
+		OBOParser oboParser = parseTestComment();
 		ArrayList<Term> terms = new ArrayList<Term>(oboParser.getTermMap());
 		assertEquals(1, terms.size());
 		assertEquals("GO:0000003", terms.get(0).getAlternatives()[0].toString());
 	}
 
+	/// [term
+	/// import: sss
 	@Test
 	public void testExceptions() throws IOException
 	{
-		File tmp = tmpFolder.newFile();
-		PrintWriter pw = new PrintWriter(tmp);
-		pw.append("[term\nimport: sss\n");
-		pw.close();
-
-
-		OBOParser oboParser = new OBOParser(new ParserFileInput(tmp.getCanonicalPath()));
 		try
 		{
-			oboParser.doParse();
+			parseTestComment();
 			assertTrue("Exception asserted", false);
 		} catch (OBOParserException ex)
 		{
@@ -393,11 +389,11 @@ public class OBOParserTest
 	@Test
 	public void testExceptions2() throws IOException
 	{
+		/* We have to go without parseTestComment() due to an additional white-space after term */
 		File tmp = tmpFolder.newFile();
 		PrintWriter pw = new PrintWriter(tmp);
 		pw.append("[term \nimport: sss\n");
 		pw.close();
-
 
 		OBOParser oboParser = new OBOParser(new ParserFileInput(tmp.getCanonicalPath()));
 		try
@@ -411,18 +407,13 @@ public class OBOParserTest
 		}
 	}
 
+	/// [term]
+	/// name: test
+	/// id: prefix:test
 	@Test
 	public void testArbitraryID() throws IOException, OBOParserException
 	{
-		File tmp = tmpFolder.newFile();
-		PrintWriter pw = new PrintWriter(tmp);
-		pw.append("[term]\n" +
-		          "name: test\n" +
-				  "id: prefix:test\n");
-		pw.close();
-
-		OBOParser oboParser = new OBOParser(new ParserFileInput(tmp.getCanonicalPath()),0);
-		oboParser.doParse();
+		OBOParser oboParser = parseTestComment();
 		ArrayList<Term> terms = new ArrayList<Term>(oboParser.getTermMap());
 		assertEquals(1, terms.size());
 	}
