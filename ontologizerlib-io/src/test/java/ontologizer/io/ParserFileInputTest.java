@@ -1,4 +1,4 @@
-package ontologizer.io.obo;
+package ontologizer.io;
 
 import static org.junit.Assert.assertEquals;
 
@@ -15,7 +15,7 @@ import org.junit.rules.TemporaryFolder;
 import ontologizer.io.IParserInput;
 import ontologizer.io.ParserFileInput;
 
-public class OBOParserFileInputTest
+public class ParserFileInputTest
 {
 	@Rule
 	public TemporaryFolder tmpFolder = new TemporaryFolder();
