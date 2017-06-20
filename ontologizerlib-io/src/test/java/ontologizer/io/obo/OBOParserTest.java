@@ -18,6 +18,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.rules.TestName;
 
+import ontologizer.TestSourceUtils;
 import ontologizer.io.ParserFileInput;
 import ontologizer.ontology.RelationMeaning;
 import ontologizer.ontology.Term;
