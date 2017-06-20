@@ -11,13 +11,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
 import ontologizer.association.Association;
+import ontologizer.io.ParserFileInput;
 import ontologizer.io.annotation.AssociationParser;
-import ontologizer.io.obo.OBOParser;
+import ontologizer.io.obo.OBOOntologyCreator;
 import ontologizer.io.obo.OBOParserException;
-import ontologizer.io.obo.OBOParserFileInput;
 import ontologizer.ontology.Ontology;
-import ontologizer.ontology.TermContainer;
 import ontologizer.ontology.TermID;
 import ontologizer.types.ByteString;
 
@@ -27,9 +27,12 @@ import ontologizer.types.ByteString;
  * <p>
  * Loads an OBO and a gene annotation file and computes the information content for each term. A
  * text file mapping the term ID to information content is then written out.
+ *
+ * Note that in this example only direct annotations are considered.
  * </p>
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
+ * @author Sebastian Bauer
  */
 public class App {
 
@@ -42,7 +45,7 @@ public class App {
 
 		try {
 			// Load Ontology from file
-			Ontology ontology = parseObo(args[0]);
+			Ontology ontology = OBOOntologyCreator.create(args[0]);
 
 			// Load associations
 			List<Association> associations = parseAssociations(args[1], ontology);
@@ -66,25 +69,11 @@ public class App {
 		}
 	}
 
-	private static Ontology parseObo(String pathObo) throws IOException, OBOParserException {
-		System.err.println("Reading ontology from OBO file " + pathObo + " ...");
-		OBOParser parser = new OBOParser(new OBOParserFileInput(pathObo));
-		String parseResult = parser.doParse();
-
-		System.err.println("Information about parse result:");
-		System.err.println(parseResult);
-		TermContainer termContainer =
-				new TermContainer(parser.getTermMap(), parser.getFormatVersion(), parser.getDate());
-		final Ontology ontology = Ontology.create(termContainer);
-		System.err.println("=> done reading OBO file");
-		return ontology;
-	}
-
 	private static List<Association> parseAssociations(String pathGaf, Ontology ontology)
 			throws IOException {
 		System.err.println("Reading associations from GAF file " + pathGaf + " ...");
 		AssociationParser parser =
-				new AssociationParser(new OBOParserFileInput(pathGaf), ontology.getTermMap());
+				new AssociationParser(new ParserFileInput(pathGaf), ontology.getTermMap());
 		while (!parser.parse())
 			try {
 				Thread.sleep(100);
@@ -103,13 +92,13 @@ public class App {
 
 		for (Association a : associations) {
 			if (!termToDbId.containsKey(a.getTermID())) {
-				termToDbId.put(a.getTermID(), new HashSet<ByteString>());
+				termToDbId.put(a.getTermID(), new HashSet<>());
 			}
 			termToDbId.get(a.getTermID()).add(a.getDB_Object());
 		}
 
-		// From this, derive absolute frequencies for annotation of dabase object ID with term
-		Map<TermID, Integer> termFreqAbs = new HashMap<TermID, Integer>();
+		// From this, derive absolute frequencies for annotation of database object ID with term
+		Map<TermID, Integer> termFreqAbs = new HashMap<>();
 		for (TermID t : termToDbId.keySet()) {
 			termFreqAbs.put(t, termToDbId.get(t).size());
 		}
@@ -130,9 +119,7 @@ public class App {
 			Map<TermID, Double> informationContent) throws FileNotFoundException {
 		System.err.println("Writing ontology as .txt file to " + pathTxt + " ...");
 		PrintWriter out = new PrintWriter(new File(pathTxt));
-		for (Entry<TermID, Double> e : informationContent.entrySet()) {
-			out.println(e.getKey() + "\t" + e.getValue());
-		}
+		informationContent.entrySet().forEach(e -> out.println(e.getKey() + "\t" + e.getValue()));
 		out.close();
 		System.err.println("=> done writing DOT file");
 	}

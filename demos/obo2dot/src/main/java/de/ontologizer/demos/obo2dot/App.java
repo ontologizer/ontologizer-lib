@@ -4,14 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+
 import ontologizer.io.dot.AbstractDotAttributesProvider;
 import ontologizer.io.dot.GODOTWriter;
-import ontologizer.io.obo.OBOParser;
+import ontologizer.io.obo.OBOOntologyCreator;
 import ontologizer.io.obo.OBOParserException;
-import ontologizer.io.obo.OBOParserFileInput;
 import ontologizer.ontology.Ontology;
-import ontologizer.ontology.Term;
-import ontologizer.ontology.TermContainer;
 import ontologizer.ontology.TermID;
 
 /**
@@ -22,6 +20,7 @@ import ontologizer.ontology.TermID;
  * </p>
  *
  * @author <a href="mailto:manuel.holtgrewe@bihealth.de">Manuel Holtgrewe</a>
+ * @author Sebastian Bauer
  */
 public class App {
 
@@ -34,7 +33,7 @@ public class App {
 
 		try {
 			// Load Ontology from file
-			Ontology ontology = parseObo(args[0]);
+			Ontology ontology = OBOOntologyCreator.create(args[0]);
 
 			// Write Ontology as DOT
 			writeObo(ontology, args[1]);
@@ -51,26 +50,13 @@ public class App {
 		}
 	}
 
-	private static Ontology parseObo(String pathObo) throws IOException, OBOParserException {
-		System.err.println("Reading ontology from OBO file " + pathObo + " ...");
-		OBOParser parser = new OBOParser(new OBOParserFileInput(pathObo));
-		String parseResult = parser.doParse();
-
-		System.err.println("Information about parse result:");
-		System.err.println(parseResult);
-		TermContainer termContainer =
-				new TermContainer(parser.getTermMap(), parser.getFormatVersion(), parser.getDate());
-		final Ontology ontology = Ontology.create(termContainer);
-		System.err.println("=> done reading OBO file");
-		return ontology;
-	}
-
 	private static void writeObo(Ontology ontology, String pathDot) {
 		System.err.println("Writing ontology as DOT file to " + pathDot + " ...");
-		final Set<TermID> terms = new HashSet<TermID>();
-		for (Term t : ontology.getGraph().getVertices())
-			terms.add(t.getID());
-		GODOTWriter.writeDOT(ontology, new File(pathDot), ontology.getRootTerm().getID(), terms,
+
+		Set<TermID> termIDs = new HashSet<TermID>();
+		ontology.forEach(t -> termIDs.add(t.getID()));
+
+		GODOTWriter.writeDOT(ontology, new File(pathDot), ontology.getRootTerm().getID(), termIDs,
 				new AbstractDotAttributesProvider());
 		System.err.println("=> done writing DOT file");
 	}
