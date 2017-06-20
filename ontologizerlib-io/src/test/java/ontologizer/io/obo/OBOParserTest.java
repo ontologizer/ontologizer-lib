@@ -16,38 +16,17 @@ import java.util.Set;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.junit.rules.TestName;
 
-import ontologizer.TestSourceUtils;
+import ontologizer.TestBase;
 import ontologizer.io.ParserFileInput;
 import ontologizer.ontology.RelationMeaning;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermID;
-import sonumina.test.TestClass;
 
-public class OBOParserTest
+public class OBOParserTest extends TestBase
 {
 	@Rule
 	public TemporaryFolder tmpFolder = new TemporaryFolder();
-
-	@Rule
-	public TestName testName = new TestName();
-
-	@Rule
-	public TestClass testClass = new TestClass();
-
-	/**
-	 * Return the path to a file that contains the comment of the current test.
-	 *
-	 * @return an absolute path.
-	 *
-	 * @throws IOException
-	 */
-	private String getTestCommentAsPath() throws IOException
-	{
-		return TestSourceUtils.getCommentOfTestAsTmpFilePath(testClass.getTestClass(),
-			testName.getMethodName());
-	}
 
 	/**
 	 * Return an obo parser suitable to parse the comment of the current test.
