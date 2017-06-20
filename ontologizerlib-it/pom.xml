@@ -20,12 +20,14 @@
 			<groupId>de.ontologizer</groupId>
 			<artifactId>ontologizerlib-core</artifactId>
 			<version>${project.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>ontologizerlib-io</artifactId>
 			<version>${project.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
