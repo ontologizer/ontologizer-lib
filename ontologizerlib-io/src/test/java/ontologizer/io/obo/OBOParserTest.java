@@ -23,6 +23,7 @@ import ontologizer.io.ParserFileInput;
 import ontologizer.ontology.RelationMeaning;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermID;
+import sonumina.test.TestClass;
 
 public class OBOParserTest
 {
@@ -31,6 +32,9 @@ public class OBOParserTest
 
 	@Rule
 	public TestName testName = new TestName();
+
+	@Rule
+	public TestClass testClass = new TestClass();
 
 	/**
 	 * Return the path to a file that contains the comment of the current test.
@@ -41,7 +45,7 @@ public class OBOParserTest
 	 */
 	private String getTestCommentAsPath() throws IOException
 	{
-		return TestSourceUtils.getCommentOfTestAsTmpFilePath(OBOParserTest.class,
+		return TestSourceUtils.getCommentOfTestAsTmpFilePath(testClass.getTestClass(),
 			testName.getMethodName());
 	}
 
