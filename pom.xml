@@ -20,7 +20,7 @@
 		<module>ontologizerlib-io</module>
 		<module>ontologizerlib-io-common</module>
 		<module>ontologizerlib-io-gen</module>
-		<module>ontologizerlib-tests</module>
+		<module>ontologizerlib-it</module>
 		<module>ontologizerlib-test-helper</module>
 	</modules>
 

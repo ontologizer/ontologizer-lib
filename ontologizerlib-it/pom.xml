@@ -2,11 +2,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>ontologizerlib-tests</artifactId>
+	<artifactId>ontologizerlib-it</artifactId>
 	<packaging>jar</packaging>
 
 	<name>${project.groupId}:${project.artifactId}</name>
-	<description>The ontologizerlib-tests module contains tests that very the working of several modules in concert (more like an integration test)</description>
+	<description>The ontologizerlib-it module contains tests that very the working of several modules in concert</description>
 	<url>https://github.com/ontologizer/ontologizerlib</url>
 
 	<parent>
