@@ -24,6 +24,7 @@ public class TestBase
 	 */
 	protected String getTestCommentAsPath() throws IOException
 	{
+		/* TODO: We could also make the source avaible as a dedicated rule */
 		return TestSourceUtils.getCommentOfTestAsTmpFilePath(testClass.getTestClass(),
 			testName.getMethodName());
 	}
