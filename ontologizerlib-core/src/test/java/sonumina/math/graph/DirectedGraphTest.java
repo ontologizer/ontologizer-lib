@@ -224,7 +224,7 @@ public class DirectedGraphTest
 			}
 		};
 
-		graph.dfs(root,childGrabber, new MyVisitor());
+		Algorithms.dfs(root, childGrabber, new MyVisitor());
 		Assert.assertEquals(graph.getNumberOfVertices(), visited.size());
 
 		visited.clear();

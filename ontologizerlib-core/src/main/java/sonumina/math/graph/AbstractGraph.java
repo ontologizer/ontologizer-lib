@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Stack;
 
 /**
  * An abstract class for graphs.
@@ -71,37 +70,6 @@ public abstract class AbstractGraph<V> implements Serializable, IDirectedGraph<V
 						else return getChildNodes(t).iterator();
 					}
 				}, visitor);
-	}
-
-	/**
-	 * Performs a depth-first like search starting at the given vertex.
-	 *
-	 * @param vertex
-	 * @param visitor
-	 */
-	public void dfs(V vertex, INeighbourGrabber<V> grabber, IVisitor<V> visitor)
-	{
-		HashSet<V> visited = new HashSet<V>();
-		Stack<V> stack = new Stack<V>();
-
-		visited.add(vertex);
-		stack.push(vertex);
-
-		while (!stack.isEmpty())
-		{
-			V v = stack.pop();
-			visitor.visited(v);
-
-			Iterator<V> iter = grabber.grabNeighbours(v);
-			while (iter.hasNext())
-			{
-				V n = iter.next();
-				if (visited.contains(n)) continue;
-				stack.push(n);
-				visited.add(n);
-			}
-
-		}
 	}
 
 	private void getDFSShotcutLinks(V v, HashMap<V,V> map, HashSet<V> visited, ArrayList<V> upwardQueue, INeighbourGrabber<V> grabber, IVisitor<V> visitor)
