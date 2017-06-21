@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import sonumina.collections.Map;
 import sonumina.math.graph.DirectedGraph;
 import sonumina.math.graph.Edge;
+import sonumina.math.graph.IDirectedGraph;
 import sonumina.math.graph.IDistanceVisitor;
 import sonumina.math.graph.INeighbourGrabber;
 import sonumina.math.graph.IVisitor;
@@ -28,7 +29,7 @@ import sonumina.math.graph.SlimDirectedGraphView;
  *
  * @author Sebastian Bauer
  */
-public class Ontology implements Iterable<Term>, Serializable
+public class Ontology implements Iterable<Term>, IDirectedGraph<TermID>, Serializable
 {
 	private static final long serialVersionUID = 1L;
 
@@ -1257,6 +1258,18 @@ public class Ontology implements Iterable<Term>, Serializable
 		}
 
 		this.graph.mergeVertices(t1.getID(), termIDList(eqTerms));
+	}
+
+	@Override
+	public Iterable<TermID> getParentNodes(TermID v)
+	{
+		return graph.getParentNodes(v);
+	}
+
+	@Override
+	public Iterable<TermID> getChildNodes(TermID v)
+	{
+		return graph.getChildNodes(v);
 	}
 
 	/**
