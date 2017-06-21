@@ -1,7 +1,11 @@
 package sonumina.math.graph;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+
+import sonumina.collections.TinyQueue;
 
 /**
  * This class encompasses certain algorithms.
@@ -71,5 +75,80 @@ public class Algorithms
 		double denominator 	= (double)(numberNeighbors*(numberNeighbors-1));
 		double C 			= (double)numEdgesNeighborhood / denominator;
 		return C;
+	}
+
+	/**
+	 * Performs a breadth-first search onto the graph starting at a given
+	 * set of vertices. Vertices occurring in loops are visited only once.
+	 *
+	 * @param initial defines the set of vertices to start with.
+	 *
+	 * @param grabber a object of a class implementing INeighbourGrabber which
+	 *        returns the nodes which should be visited next.
+	 *
+	 * @param visitor a object of a class implementing IVisitor. For every
+	 *        vertex visited by the algorithm the visitor.visited() method is
+	 *        called. Note that the method is also called for the vertices
+	 *        specified by initialSet (in arbitrary order)
+	 */
+	public static <V> void bfs(Collection<V> initial, INeighbourGrabber<V> grabber, IVisitor<V> visitor)
+	{
+		HashSet<V> visited = new HashSet<V>();
+
+		/* Add all nodes into the queue */
+		TinyQueue<V> queue = new TinyQueue<V>();
+		for (V vertex  : initial)
+		{
+			queue.offer(vertex);
+			visited.add(vertex);
+			if (!visitor.visited(vertex))
+				return;
+		}
+
+		while (!queue.isEmpty())
+		{
+			/* Remove head of the queue */
+			V head = queue.poll();
+
+			/* Add not yet visited neighbors of old head to the queue
+			 * and mark them as visited. */
+			Iterator<V> neighbours = grabber.grabNeighbours(head);
+
+			while (neighbours.hasNext())
+			{
+				V neighbour = neighbours.next();
+
+				if (!visited.contains(neighbour))
+				{
+					queue.offer(neighbour);
+					visited.add(neighbour);
+					if (!visitor.visited(neighbour))
+						return;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Performs a breadth-first search onto the graph starting at a given
+	 * vertex. Vertices occurring in loops are visited only once.
+	 *
+	 * @param vertex defines the vertex to start with.
+	 *
+	 * @param grabber a object of a class implementing INeighbourGrabber which
+	 *        returns the nodes which should be visited next.
+	 *
+	 * @param visitor a object of a class implementing IVisitor. For every
+	 *        vertex visited by the algorithm the visitor.visited() method is
+	 *        called. Note that the method is also called for the vertex
+	 *        represented by vertex.
+	 *
+	 * @see IVisitor
+	 */
+	public static <V> void bfs(V vertex, INeighbourGrabber<V> grabber, IVisitor<V> visitor)
+	{
+		ArrayList<V> initial = new ArrayList<V>(1);
+		initial.add(vertex);
+		bfs(initial,grabber,visitor);
 	}
 }

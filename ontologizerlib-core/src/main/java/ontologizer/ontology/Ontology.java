@@ -1,5 +1,7 @@
 package ontologizer.ontology;
 
+import static sonumina.math.graph.Algorithms.bfs;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -595,7 +597,7 @@ public class Ontology implements Iterable<Term>, Serializable
 	 */
 	public void walkToSource(Collection<TermID>  termIDSet, ITermIDVisitor vistingVertex, final Set<RelationMeaning> relationsToFollow)
 	{
-		graph.bfs(termIDSet, new INeighbourGrabber<TermID>() {
+		bfs(termIDSet, new INeighbourGrabber<TermID>() {
 			public Iterator<TermID> grabNeighbours(TermID t)
 			{
 				Iterator<Edge<TermID,RelationType>> inIter = graph.getInEdges(t);
