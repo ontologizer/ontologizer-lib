@@ -1,5 +1,8 @@
 package sonumina.math.graph;
 
+import static sonumina.math.graph.Grabbers.inGrabber;
+import static sonumina.math.graph.Grabbers.outGrabber;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -57,19 +60,9 @@ public abstract class AbstractGraph<V> implements Serializable, IDirectedGraph<V
 	 *
 	 * @see IVisitor
 	 */
-	public void bfs(Collection<V> initial, final boolean againstFlow, IVisitor<V> visitor)
+	public void bfs(Collection<V> initial, boolean againstFlow, IVisitor<V> visitor)
 	{
-		Algorithms.bfs(initial,
-				new INeighbourGrabber<V>()
-				{
-					public Iterator<V> grabNeighbours(V t)
-					{
-						/* If bfs is done against flow neighbours can be found via the
-						 * in-going edges otherwise via the outgoing edges */
-						if (againstFlow) return getParentNodes(t).iterator();
-						else return getChildNodes(t).iterator();
-					}
-				}, visitor);
+		Algorithms.bfs(initial, againstFlow?inGrabber(this):outGrabber(this), visitor);
 	}
 
 	private void getDFSShotcutLinks(V v, HashMap<V,V> map, HashSet<V> visited, ArrayList<V> upwardQueue, INeighbourGrabber<V> grabber, IVisitor<V> visitor)
