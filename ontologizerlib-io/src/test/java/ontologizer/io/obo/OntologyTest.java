@@ -1,5 +1,6 @@
 package ontologizer.io.obo;
 
+import static ontologizer.ontology.TermID.tid;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -16,13 +17,13 @@ import org.junit.Test;
 import ontologizer.io.ParserFileInput;
 import ontologizer.ontology.Namespace;
 import ontologizer.ontology.Ontology;
+import ontologizer.ontology.Ontology.ITermIDVisitor;
+import ontologizer.ontology.Ontology.TermLevels;
 import ontologizer.ontology.Subset;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermContainer;
 import ontologizer.ontology.TermID;
 import ontologizer.types.ByteString;
-import ontologizer.ontology.Ontology.TermLevels;
-import ontologizer.ontology.Ontology.ITermIDVisitor;
 
 public class OntologyTest
 {
@@ -50,13 +51,13 @@ public class OntologyTest
 	@Test
 	public void testRoot()
 	{
-		Set<String> terms;
+		Set<TermID> terms;
 
-		terms = graph.getTermChildrenAsStrings("GO:0000000");
+		terms = graph.getTermChildren(tid("GO:0000000"));
 		assertTrue("Test we get some Set<String> object back", terms != null);
 		assertEquals("Root has three descendants",3, terms.size());
 
-		terms = graph.getTermParentsAsStrings("GO:0000000");
+		terms = graph.getTermParents(tid("GO:0000000"));
 		assertTrue("Test we gat some Set<String> object back", terms != null);
 		assertTrue("Root has no ancestors", terms.size() == 0);
 	}
