@@ -17,61 +17,15 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import ontologizer.TestBase;
 import ontologizer.io.ParserFileInput;
 import ontologizer.ontology.RelationMeaning;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermID;
 
-public class OBOParserTest extends TestBase
+public class OBOParserTest extends OBOParserTestBase
 {
 	@Rule
 	public TemporaryFolder tmpFolder = new TemporaryFolder();
-
-	/**
-	 * Return an obo parser suitable to parse the comment of the current test.
-	 *
-	 * @param options the options submitted to the parser.
-	 *
-	 * @return the obo parser
-	 *
-	 * @throws IOException
-	 */
-	private OBOParser getTestCommentAsOBOParser(int options) throws IOException
-	{
-		return new OBOParser(new ParserFileInput(getTestCommentAsPath()), options);
-	}
-
-	/**
-	 * Returns an obo parser that has already parses the comment of the current
-	 * test.
-	 *
-	 * @param options the obo parser options to customize the parser's behaviour.
-	 * @return the obo parser
-	 *
-	 * @throws IOException
-	 * @throws OBOParserException
-	 */
-	private OBOParser parseTestComment(int options) throws IOException, OBOParserException
-	{
-		OBOParser oboParser = getTestCommentAsOBOParser(options);
-		oboParser.doParse();
-		return oboParser;
-	}
-
-	/**
-	 * Returns an obo parser that has already parsed the comment of the current
-	 * test.
-	 *
-	 * @return the obo parser
-	 *
-	 * @throws IOException
-	 * @throws OBOParserException
-	 */
-	private OBOParser parseTestComment() throws IOException, OBOParserException
-	{
-		return parseTestComment(0);
-	}
 
 	///
 	/// [term]
