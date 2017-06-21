@@ -9,5 +9,5 @@ import java.util.Iterator;
  */
 public interface INeighbourGrabber<V>
 {
-	Iterator<V> grabNeighbours(V t);
+	Iterator<V> grabNeighbours(V v);
 }
