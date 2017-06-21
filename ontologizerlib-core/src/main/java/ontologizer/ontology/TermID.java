@@ -10,7 +10,7 @@ import ontologizer.util.Util;
  * This is a simple wrapper class for representing a term identifier such
  * as GO:0001004.
  *
- * The class is immutable.
+ * Objects of this class are immutable.
  *
  * @author Sebastian Bauer
  *
