@@ -40,7 +40,11 @@ public class OBOOntologyCreator
 	 */
 	public static Ontology create(String oboPath) throws IOException, OBOParserException
 	{
-		OBOParser parser = new OBOParser(new ParserFileInput(oboPath));
+		return create(new OBOParser(new ParserFileInput(oboPath)));
+	}
+
+	public static Ontology create(OBOParser parser) throws IOException, OBOParserException
+	{
 		parser.doParse();
 		TermContainer termContainer = new TermContainer(parser.getTermMap(), parser.getFormatVersion(), parser.getDate());
 		return Ontology.create(termContainer);
