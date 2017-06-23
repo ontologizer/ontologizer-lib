@@ -16,6 +16,9 @@ import ontologizer.ontology.Ontology;
 import ontologizer.ontology.Ontology.ITermIDVisitor;
 import ontologizer.ontology.TermID;
 import ontologizer.types.ByteString;
+import sonumina.math.graph.Algorithms;
+import sonumina.math.graph.Grabbers;
+import sonumina.math.graph.INeighbourGrabber;
 
 /**
  * This class encapsulates the enumeration of explicit and implicit
@@ -50,20 +53,40 @@ public class TermEnumerator implements Iterable<TermID>
 
 	private HashMap<TermID,TermAnnotatedGenes> map;
 
+	/**
+	 * If set to true, annotations are only propagated via relation types that have
+	 * the propagating property set to true
+	 */
+	private boolean respectPropagationProperty;
+
 	/** Holds the number of suspicious annotations */
 //	private int suspiciousCount;
 
 	/**
+	 * Construct the enumerator with propagating annotation through all relations.
+	 *
+	 * @param ont the ontology to work on
+	 */
+	public TermEnumerator(Ontology ont)
+	{
+		this(ont, false);
+	}
+
+	/**
 	 * Construct the enumerator.
 	 *
-	 * @param graph the GO graph
+	 * @param ont the ontology to work on
+	 * @param respectAnnotationPropagationRules if set to true, annotations are only
+	 *  propagated via relation types that have the propagating property set to true
 	 */
-	public TermEnumerator(Ontology graph)
+	public TermEnumerator(Ontology ont, boolean respectAnnotationPropagationRules)
 	{
-		this.graph = graph;
+		this.graph = ont;
+		this.respectPropagationProperty = respectAnnotationPropagationRules;
 
 		map = new HashMap<TermID,TermAnnotatedGenes>();
 	}
+
 
 	/**
 	 *
@@ -187,8 +210,37 @@ public class TermEnumerator implements Iterable<TermID>
 		/* Create the visting */
 		VisitingGOVertex vistingGOVertex = new VisitingGOVertex(geneName);
 
-		/* Walk from goTerm to source by using vistingGOVertex */
-		graph.walkToSource(termIDSet,vistingGOVertex);
+		/* Construct different grabber depending whether the propagation
+		 * property shall be respected or not.
+		 */
+		INeighbourGrabber<TermID> grabber;
+		if (!respectPropagationProperty)
+		{
+			grabber = Grabbers.inGrabber(graph);
+		} else
+		{
+			/* Java 8 would be handy here, but not yet */
+			grabber = new INeighbourGrabber<TermID>()
+			{
+				@Override
+				public Iterator<TermID> grabNeighbours(TermID v)
+				{
+					List<TermID> parents = new ArrayList<TermID>();
+
+					for (TermID p : graph.getParentNodes(v))
+					{
+						if (graph.getDirectRelation(p,v).isPropagating())
+						{
+							parents.add(p);
+						}
+					}
+					return parents.iterator();
+				}
+			};
+		}
+
+		/* Start propagation */
+		Algorithms.bfs(termIDSet, grabber, vistingGOVertex);
 	}
 
 	/**
