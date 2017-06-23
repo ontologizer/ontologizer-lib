@@ -53,11 +53,8 @@ public class TermEnumerator implements Iterable<TermID>
 
 	private HashMap<TermID,TermAnnotatedGenes> map;
 
-	/**
-	 * If set to true, annotations are only propagated via relation types that have
-	 * the propagating property set to true
-	 */
-	private boolean respectPropagationProperty;
+	/** The grabber that is used to propagate annotations */
+	private INeighbourGrabber<TermID> grabber;
 
 	/** Holds the number of suspicious annotations */
 //	private int suspiciousCount;
@@ -82,9 +79,38 @@ public class TermEnumerator implements Iterable<TermID>
 	public TermEnumerator(Ontology ont, boolean respectAnnotationPropagationRules)
 	{
 		this.graph = ont;
-		this.respectPropagationProperty = respectAnnotationPropagationRules;
 
 		map = new HashMap<TermID,TermAnnotatedGenes>();
+
+		/* Construct different grabber depending whether the propagation
+		 * property shall be respected or not.
+		 */
+
+		if (!respectAnnotationPropagationRules)
+		{
+			grabber = Grabbers.inGrabber(graph);
+		} else
+		{
+			/* Java 8 would be handy here, but not yet */
+			grabber = new INeighbourGrabber<TermID>()
+			{
+				@Override
+				public Iterator<TermID> grabNeighbours(TermID v)
+				{
+					List<TermID> parents = new ArrayList<TermID>();
+
+					for (TermID p : graph.getParentNodes(v))
+					{
+						if (graph.getDirectRelation(p,v).isPropagating())
+						{
+							parents.add(p);
+						}
+					}
+					return parents.iterator();
+				}
+			};
+		}
+
 	}
 
 
@@ -209,35 +235,6 @@ public class TermEnumerator implements Iterable<TermID>
 
 		/* Create the visting */
 		VisitingGOVertex vistingGOVertex = new VisitingGOVertex(geneName);
-
-		/* Construct different grabber depending whether the propagation
-		 * property shall be respected or not.
-		 */
-		INeighbourGrabber<TermID> grabber;
-		if (!respectPropagationProperty)
-		{
-			grabber = Grabbers.inGrabber(graph);
-		} else
-		{
-			/* Java 8 would be handy here, but not yet */
-			grabber = new INeighbourGrabber<TermID>()
-			{
-				@Override
-				public Iterator<TermID> grabNeighbours(TermID v)
-				{
-					List<TermID> parents = new ArrayList<TermID>();
-
-					for (TermID p : graph.getParentNodes(v))
-					{
-						if (graph.getDirectRelation(p,v).isPropagating())
-						{
-							parents.add(p);
-						}
-					}
-					return parents.iterator();
-				}
-			};
-		}
 
 		/* Start propagation */
 		Algorithms.bfs(termIDSet, grabber, vistingGOVertex);
