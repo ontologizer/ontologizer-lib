@@ -128,6 +128,9 @@ public class OBOParser
 	/** Input source of the OBO data, e.g., a source that delivers gene_ontology.obo */
 	IParserInput input;
 
+	/** Whether the parser has parsed the whole input successfully */
+	private boolean parsed;
+
 	/** The current parse options */
 	private int options;
 
@@ -330,6 +333,11 @@ public class OBOParser
 	 */
 	public String doParse(final IOBOParserProgress progress) throws IOException, OBOParserException
 	{
+		if (parsed)
+		{
+			return getParseDiagnostics();
+		}
+
 		long startMillis = System.currentTimeMillis();
 
 		if (progress != null)
@@ -896,6 +904,7 @@ public class OBOParser
 
 		long durationMillis = System.currentTimeMillis() - startMillis;
 		logger.log(Level.INFO, "Got " + terms.size() + " terms and " + numberOfRelations + " relations in " + durationMillis + " ms");
+		parsed = true;
 		return this.getParseDiagnostics();
 	}
 
