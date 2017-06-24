@@ -21,31 +21,18 @@ public class TermContainer extends TermMap implements Iterable<Term>, Serializab
 {
 	private static final long serialVersionUID = 1L;
 
-	/** To allow easy iteration over all GO terms */
-	private List<Term> termList;
-
 	/** Format version of the gene_ontology.obo file */
 	private ByteString formatVersion;
 
 	/** Date of the OBO file */
 	private ByteString date;
 
-	public TermContainer(Iterable<Term> terms, ByteString format, ByteString datum)
+	public TermContainer(Collection<Term> terms, ByteString format, ByteString datum)
 	{
-		super(terms);
+		super(terms, terms.size());
 
 		formatVersion = format;
 		date = datum;
-
-		int initialCapacity = 100;
-		if (terms instanceof Collection)
-		{
-			initialCapacity = ((Collection<Term>)terms).size();
-		}
-		/* Build our data structures linked list */
-		termList = new ArrayList<Term>(initialCapacity);
-		for (Term entry : terms)
-			termList.add(entry);
 	}
 
 	/**
@@ -53,7 +40,7 @@ public class TermContainer extends TermMap implements Iterable<Term>, Serializab
 	 */
 	public int termCount()
 	{
-		return termList.size();
+		return size();
 	}
 
 	public ByteString getFormatVersion()
@@ -106,10 +93,4 @@ public class TermContainer extends TermMap implements Iterable<Term>, Serializab
 		sb.append("A total of " + termCount() + " terms were identified.\n");
 		return sb.toString();
 	}
-
-	public Iterator<Term> iterator()
-	{
-		return termList.iterator();
-	}
-
 }

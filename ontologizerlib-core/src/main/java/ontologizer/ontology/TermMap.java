@@ -1,9 +1,11 @@
 package ontologizer.ontology;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.Map;
+
+import sonumina.collections.IntMap;
+import sonumina.collections.IntMapper;
 
 /**
  * A simple class mapping term ids to actual terms.
@@ -14,8 +16,8 @@ public class TermMap implements Iterable<Term>, Serializable
 {
 	private static final long serialVersionUID = 1L;
 
-	/** The set of terms */
-	private Map<TermID, Term> map = new HashMap<TermID, Term>();
+	private IntMapper<TermID> termIDMapper;
+	private Term [] terms;
 
 	private TermMap()
 	{
@@ -26,9 +28,9 @@ public class TermMap implements Iterable<Term>, Serializable
 	 *
 	 * @param terms
 	 */
-	protected TermMap(Iterable<Term> terms)
+	protected TermMap(Iterable<Term> terms, int size)
 	{
-		init(terms);
+		init(terms, size);
 	}
 
 	/**
@@ -36,10 +38,18 @@ public class TermMap implements Iterable<Term>, Serializable
 	 *
 	 * @param terms
 	 */
-	private void init(Iterable<Term> terms)
+	private void init(Iterable<Term> terms, int size)
 	{
-		for (Term t : terms)
-			map.put(t.getID(), t);
+		this.terms = new Term[size];
+		termIDMapper = IntMapper.create(terms, size, new IntMap<Term, TermID>()
+		{
+			@Override
+			public TermID map(Term key, int index)
+			{
+				TermMap.this.terms[index] = key;
+				return key.getID();
+			}
+		});
 	}
 
 	/**
@@ -50,7 +60,12 @@ public class TermMap implements Iterable<Term>, Serializable
 	 */
 	public Term get(TermID tid)
 	{
-		return map.get(tid);
+		int idx = termIDMapper.getIndex(tid);
+		if (idx == -1)
+		{
+			return null;
+		}
+		return terms[idx];
 	}
 
 	/**
@@ -59,16 +74,50 @@ public class TermMap implements Iterable<Term>, Serializable
 	 * @param terms
 	 * @return the term map
 	 */
-	public static TermMap create(Iterable<Term> terms)
+	public static TermMap create(Iterable<Term> terms, int size)
 	{
 		TermMap map = new TermMap();
-		map.init(terms);
+		map.init(terms, size);
 		return map;
+	}
+
+	public static TermMap create(Collection<Term> terms)
+	{
+		return create(terms, terms.size());
 	}
 
 	@Override
 	public Iterator<Term> iterator()
 	{
-		return map.values().iterator();
+		return new Iterator<Term>()
+		{
+			int index;
+
+			@Override
+			public boolean hasNext()
+			{
+				return index < terms.length;
+			}
+
+			@Override
+			public Term next()
+			{
+				return terms[index++];
+			}
+
+			@Override
+			public void remove()
+			{
+				throw new UnsupportedOperationException();
+			}
+		};
+	}
+
+	/**
+	 * @return the number of terms in this map.
+	 */
+	public int size()
+	{
+		return terms.length;
 	}
 }
