@@ -36,6 +36,21 @@ public final class IntMapper<T> implements Serializable
 		}
 	}
 
+	private <K> IntMapper(Iterable<K> iterable, int size, Map<K,T> map)
+	{
+		item = new Object[size];
+		item2Index = new ObjectIntHashMap<T>(size);
+
+		int i = 0;
+		for (K k : iterable)
+		{
+			T t = map.map(k);
+			item[i] = t;
+			item2Index.put(t, i);
+			i++;
+		}
+	}
+
 	/**
 	 * Get the object with index i.
 	 *
@@ -107,5 +122,19 @@ public final class IntMapper<T> implements Serializable
 	public static <T> IntMapper<T> create(Iterable<T> iterable, int size)
 	{
 		return new IntMapper<T>(iterable, size);
+	}
+
+	/**
+	 * Create a new int mapper from the given iterable with each element being mapped
+	 * via map.
+	 *
+	 * @param iterable
+	 * @param size
+	 * @param map
+	 * @return the intmap.
+	 */
+	public static <K,V> IntMapper<V> create(Iterable<K> iterable, int size, Map<K,V> map)
+	{
+		return new IntMapper<V>(iterable, size, map);
 	}
 }
