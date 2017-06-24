@@ -1,10 +1,12 @@
 package ontologizer.enumeration;
 
+import static java.util.Arrays.asList;
+import static ontologizer.ontology.TermID.tid;
 import static ontologizer.types.ByteString.b;
 import static org.junit.Assert.assertEquals;
-import static ontologizer.ontology.TermID.tid;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -23,6 +25,25 @@ import ontologizer.ontology.Ontology;
  */
 public class TermEnumeratorTest extends OBOParserTestBase
 {
+	/**
+	 * Create two associations: item1 is associated to GO:0000002 and
+	 * item2 to GO:0000003.
+	 *
+	 * @return the list of associations
+	 */
+	private static List<Gene2Associations> createAssociations()
+	{
+		/* Create item 1 that is annotated to test2  */
+		Gene2Associations item1Associations = new Gene2Associations(b("item1"));
+		item1Associations.add(new Association(b("item1"), "GO:0000002"));
+
+		/* Create item 2 that is annotated to test3  */
+		Gene2Associations item2Associations = new Gene2Associations(b("item2"));
+		item2Associations.add(new Association(b("item2"), "GO:0000003"));
+
+		return asList(item1Associations, item2Associations);
+	}
+
 	/// [term]
 	/// name: test
 	/// id: GO:0000001
@@ -46,18 +67,11 @@ public class TermEnumeratorTest extends OBOParserTestBase
 		OBOParser parser = parseTestComment();
 		Ontology ontology = OBOOntologyCreator.create(parser);
 
-		/* Create item 1 that is annotated to test2  */
-		Gene2Associations item1Associations = new Gene2Associations(b("item1"));
-		item1Associations.add(new Association(b("item1"), "GO:0000002"));
-
-		/* Create item 2 that is annotated to test3  */
-		Gene2Associations item2Associations = new Gene2Associations(b("item2"));
-		item2Associations.add(new Association(b("item2"), "GO:0000003"));
+		List<Gene2Associations> associations = createAssociations();
 
 		/* Push annotations to the enumerator */
 		TermEnumerator te = new TermEnumerator(ontology);
-		te.push(item1Associations);
-		te.push(item2Associations);
+		associations.stream().forEach(te::push);
 
 		/* We will end up with three annotated terms*/
 		assertEquals(3, te.getTotalNumberOfAnnotatedTerms());
@@ -70,8 +84,7 @@ public class TermEnumeratorTest extends OBOParserTestBase
 
 		/* Create enumerator of a different flavour */
 		te = new TermEnumerator(ontology, true);
-		te.push(item1Associations);
-		te.push(item2Associations);
+		associations.stream().forEach(te::push);
 
 		/* We will end up with three annotated terms*/
 		assertEquals(3, te.getTotalNumberOfAnnotatedTerms());
