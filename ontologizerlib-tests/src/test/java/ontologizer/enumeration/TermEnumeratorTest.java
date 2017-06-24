@@ -63,9 +63,7 @@ public class TermEnumeratorTest extends OBOParserTestBase
 	public void testPropagationFlavours() throws IOException, OBOParserException
 	{
 		/* Here we test different propagation flavour */
-
-		OBOParser parser = parseTestComment();
-		Ontology ontology = OBOOntologyCreator.create(parser);
+		Ontology ontology = OBOOntologyCreator.create(parseTestComment());
 
 		List<Gene2Associations> associations = createAssociations();
 
