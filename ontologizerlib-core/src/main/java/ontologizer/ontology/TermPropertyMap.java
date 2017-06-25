@@ -24,6 +24,8 @@ public class TermPropertyMap<K> implements Serializable
 
 	private int ambiguities;
 
+	private static final Collection<TermID> EMPTY_COLLECTION = Arrays.asList();
+
 	/**
 	 * Construct a term property map that maps arbitrary keys to terms.
 	 *
@@ -82,7 +84,12 @@ public class TermPropertyMap<K> implements Serializable
 		@Override
 		public Collection<TermID> map(Term key)
 		{
-			return Arrays.asList(key.getAlternatives());
+			TermID [] alternatives = key.getAlternatives();
+			if (alternatives == null || alternatives.length == 0)
+			{
+				return EMPTY_COLLECTION;
+			}
+			return Arrays.asList(alternatives);
 		}
 	};
 }
