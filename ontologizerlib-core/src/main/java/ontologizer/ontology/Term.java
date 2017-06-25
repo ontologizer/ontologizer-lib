@@ -400,6 +400,8 @@ public class Term implements ITerm, Serializable
 
 		Optional obsolete(boolean obsolete);
 
+		Optional altId(TermID altId);
+
 		Term build();
 	}
 
@@ -475,6 +477,13 @@ public class Term implements ITerm, Serializable
 		public Optional obsolete(boolean obsolete)
 		{
 			term.obsolete = obsolete;
+			return this;
+		}
+
+		@Override
+		public Optional altId(TermID altTermId)
+		{
+			term.addAlternativeId(altTermId);
 			return this;
 		}
 
