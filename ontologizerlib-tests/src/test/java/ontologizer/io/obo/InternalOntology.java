@@ -1,5 +1,6 @@
 package ontologizer.io.obo;
 
+import static ontologizer.ontology.TermID.tid;
 import static ontologizer.types.ByteString.EMPTY;
 import static ontologizer.types.ByteString.b;
 
@@ -15,12 +16,12 @@ import ontologizer.association.AssociationContainer;
 import ontologizer.ontology.Ontology;
 import ontologizer.ontology.ParentTermID;
 import ontologizer.ontology.Prefix;
+import ontologizer.ontology.RelationMeaning;
 import ontologizer.ontology.RelationType;
 import ontologizer.ontology.Subset;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermContainer;
 import ontologizer.ontology.TermID;
-import ontologizer.ontology.RelationMeaning;
 import ontologizer.types.ByteString;
 
 /**
