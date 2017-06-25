@@ -1,6 +1,7 @@
 package ontologizer.ontology;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collection;
 
 import sonumina.collections.IntMapper;
@@ -74,4 +75,14 @@ public class TermPropertyMap<K> implements Serializable
 	{
 		return ambiguities;
 	}
+
+	/** Map term to alternative term ids */
+	public static final Map<Term,Collection<TermID>> term2AltIdMap = new Map<Term,Collection<TermID>>()
+	{
+		@Override
+		public Collection<TermID> map(Term key)
+		{
+			return Arrays.asList(key.getAlternatives());
+		}
+	};
 }

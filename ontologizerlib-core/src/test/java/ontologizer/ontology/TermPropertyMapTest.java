@@ -4,14 +4,11 @@ import static ontologizer.ontology.TermID.tid;
 import static ontologizer.types.ByteString.b;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import sonumina.collections.Map;
 
 public class TermPropertyMapTest
 {
@@ -34,15 +31,7 @@ public class TermPropertyMapTest
 	@Test
 	public void testTermPropertyMap()
 	{
-		TermPropertyMap<TermID> altIdMap = new TermPropertyMap<TermID>(container, new Map<Term,Collection<TermID>>()
-		{
-			@Override
-			public Collection<TermID> map(Term key)
-			{
-				return Arrays.asList(key.getAlternatives());
-			}
-		});
-		Assert.assertEquals(tid("T:0000000"),altIdMap.get(tid("T:1000000")));
+		TermPropertyMap<TermID> altIdMap = new TermPropertyMap<TermID>(container, TermPropertyMap.term2AltIdMap);Assert.assertEquals(tid("T:0000000"),altIdMap.get(tid("T:1000000")));
 		Assert.assertEquals(tid("T:0000001"),altIdMap.get(tid("T:1000001")));
 		Assert.assertEquals(tid("T:0000002"),altIdMap.get(tid("T:1000002")));
 	}
