@@ -120,4 +120,12 @@ public class TermMap implements Iterable<Term>, Serializable
 	{
 		return terms.length;
 	}
+
+	/**
+	 * @return the term id mapper associated to this instance.
+	 */
+	public IntMapper<TermID> getTermIDMapper()
+	{
+		return termIDMapper;
+	}
 }
