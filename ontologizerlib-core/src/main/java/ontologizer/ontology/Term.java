@@ -17,6 +17,8 @@ public class Term implements ITerm, Serializable
 {
 	private static final long serialVersionUID = 1L;
 
+	private static final TermID[] EMPTY_TID_ARRAY = new TermID[]{};
+
 	/** The id ("accession number") of this GO term */
 	private TermID id;
 
@@ -330,6 +332,10 @@ public class Term implements ITerm, Serializable
 	@Override
 	public TermID[] getAlternatives()
 	{
+		if (alternatives == null)
+		{
+			return EMPTY_TID_ARRAY;
+		}
 		TermID [] alts = new TermID[alternatives.size()];
 		return alternatives.toArray(alts);
 	}
