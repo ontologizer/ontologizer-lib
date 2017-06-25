@@ -324,4 +324,12 @@ public class OntologyTest
 		assertEquals(5, levels.getTermLevel(new TermID("GO:0000010")));
 		assertEquals(5, levels.getTermLevel(new TermID("GO:0000011")));
 	}
+
+	@Test
+	public void testAlternativeId()
+	{
+		Ontology o = new InternalOntology().graph;
+		Term t = o.getTermIncludingAlternatives("GO:1000011");
+		assertEquals("GO:0000011", t.getID().toString());
+	}
 }

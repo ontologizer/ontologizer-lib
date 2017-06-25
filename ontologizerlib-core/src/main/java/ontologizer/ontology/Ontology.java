@@ -57,7 +57,7 @@ public class Ontology implements Iterable<Term>, IDirectedGraph<TermID>, Seriali
 	 * Terms often have alternative IDs (mostly from term merges). This map is used by
 	 * getTermIncludingAlternatives(String termIdString) and initialized there lazily.
 	 */
-	private HashMap<String, String> alternativeId2primaryId;
+	private volatile TermPropertyMap<TermID> alternativeMap;
 
 	/**
 	 * Construct an Ontology graph from the given container.
@@ -667,53 +667,37 @@ public class Ontology implements Iterable<Term>, IDirectedGraph<TermID>, Seriali
 	 */
 	public Term getTermIncludingAlternatives(String termId)
 	{
-
-		// try using the primary id
 		Term term = getTerm(termId);
 		if (term != null)
 			return term;
 
-		/*
-		 *  no term with this primary id exists -> use alternative ids
-		 */
+		/* No term with this primary id could be found, try alternatives */
+		setupAltIdMap();
 
-		// do we already have a mapping between alternative ids and primary ids ?
-		if (alternativeId2primaryId == null)
-			setUpMappingAlternativeId2PrimaryId();
-
-		// try to find a mapping to a primary term-id
-		if (alternativeId2primaryId.containsKey(termId)){
-			String primaryId 	= alternativeId2primaryId.get(termId);
-			term 				= termContainer.get(primaryId);
-		}
-
-		// term still null?
-		if (term == null)
+		TermID tid = alternativeMap.get(new TermID(termId));
+		if (tid != null)
 		{
-			/* GO Term Container doesn't include the root term so we have to handle
-			 * this case for our own.
-			 */
-			try
-			{
-				TermID id = new TermID(termId);
-				if (id.id == rootTerm.getID().id)
-					return rootTerm;
-			} catch (IllegalArgumentException iea)
-			{
-			}
+			term = termContainer.get(tid);
 		}
+
 		return term;
 	}
 
-	private void setUpMappingAlternativeId2PrimaryId() {
-		alternativeId2primaryId = new HashMap<String, String>();
-		for (Term t : this.termContainer){
-			String primaryId = t.getIDAsString();
-			for (TermID alternativeTermId : t.getAlternatives()){
-				alternativeId2primaryId.put(alternativeTermId.toString(), primaryId);
+	/**
+	 * Setup the alternative id map if this hasn't been done before.
+	 */
+	private void setupAltIdMap()
+	{
+		if (alternativeMap == null)
+		{
+			synchronized (this)
+			{
+				if (alternativeMap == null)
+				{
+					alternativeMap = new TermPropertyMap<TermID>(termContainer, TermPropertyMap.term2AltIdMap);
+				}
 			}
 		}
-
 	}
 
 	/**
