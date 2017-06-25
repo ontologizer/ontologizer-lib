@@ -59,6 +59,7 @@ public class InternalOntology
 		Term c9 = new Term("GO:0000009", "C9", new ParentTermID(c7.getID(), isA));
 		Term c10 = new Term("GO:0000010", "C10", new ParentTermID(c9.getID(), isA));
 		Term c11 = new Term("GO:0000011", "C11", new ParentTermID(c9.getID(), isA));
+		c11.addAlternativeId(tid("GO:1000011"));
 
 		c1.setSubsets(subsets);
 		c2.setSubsets(subsets);
