@@ -69,6 +69,14 @@ public class TermMap implements Iterable<Term>, Serializable
 	}
 
 	/**
+	 * @return the term corresponding to the given index.
+	 */
+	public final Term get(int index)
+	{
+		return terms[index];
+	}
+
+	/**
 	 * Create a term id map.
 	 *
 	 * @param terms
