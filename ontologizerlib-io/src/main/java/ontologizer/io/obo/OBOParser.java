@@ -229,6 +229,11 @@ public class OBOParser
 	 * Options can be combined via logical or. Valid options are:
 	 * <ul>
 	 * <li>PARSE_DEFINITIONS - to gather the textual definition entry.
+	 * <li>PARSE_XREFS - to gather xrefs.
+	 * <li>PARSE_INTERSECTIONS - to gather intersection entries.
+	 * <li>SETNAMEEQUALTOID - to set the name to the actual term id if no name
+	 *  property is defined.
+	 * <li>IGNORE_SYNONYMS - to ignore synonyms.
 	 * </ul>
 	 *
 	 * @param input defines the input wrapping the stanza files
