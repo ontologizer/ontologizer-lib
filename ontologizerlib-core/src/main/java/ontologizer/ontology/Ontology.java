@@ -643,6 +643,7 @@ public class Ontology implements Iterable<Term>, IDirectedGraph<TermID>, Seriali
 			} catch (IllegalArgumentException iea)
 			{
 			}
+			return null;
 		}
 		/*
 		 * In order to avoid the returning of terms that
