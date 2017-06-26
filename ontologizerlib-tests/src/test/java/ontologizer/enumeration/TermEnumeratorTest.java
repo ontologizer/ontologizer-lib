@@ -13,7 +13,6 @@ import org.junit.Test;
 import ontologizer.association.Association;
 import ontologizer.association.Gene2Associations;
 import ontologizer.io.obo.OBOOntologyCreator;
-import ontologizer.io.obo.OBOParser;
 import ontologizer.io.obo.OBOParserException;
 import ontologizer.io.obo.OBOParserTestBase;
 import ontologizer.ontology.Ontology;
