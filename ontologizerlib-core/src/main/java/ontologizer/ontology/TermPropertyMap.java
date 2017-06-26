@@ -57,6 +57,9 @@ public class TermPropertyMap<K> implements Serializable
 	}
 
 	/**
+	 * Return the term id associated with the given key.
+	 *
+	 * @param key the key to be sought
 	 * @return term id that is associated to a term with the given key value
 	 *  or null, if no such term exists.
 	 */
