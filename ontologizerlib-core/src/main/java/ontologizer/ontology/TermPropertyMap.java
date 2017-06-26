@@ -74,6 +74,18 @@ public class TermPropertyMap<K> implements Serializable
 	}
 
 	/**
+	 * The index of the term id associated with the given key.
+	 *
+	 * @param key the key to be sought
+	 * @return the index of the term id associated with the given key or -1 if the
+	 *  key is not present.
+	 */
+	public int getIndex(K key)
+	{
+		return keyMap.getIfAbsent(key, -1);
+	}
+
+	/**
 	 * @return the number of ambiguities.
 	 */
 	public int getAmbiguities()
