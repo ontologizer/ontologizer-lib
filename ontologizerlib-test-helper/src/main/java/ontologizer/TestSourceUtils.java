@@ -24,6 +24,8 @@ import java.io.PrintWriter;
  */
 public class TestSourceUtils
 {
+	public final static int DECODE_TABS = 1 << 0;
+
 	/**
 	 * Return the java source to the given class.
 	 *
@@ -72,7 +74,7 @@ public class TestSourceUtils
 	 * @return the comment
 	 * @throws IOException
 	 */
-	public static String getCommentOfTest(Class<?> cl, String testName) throws IOException
+	public static String getCommentOfTest(Class<?> cl, String testName, int options) throws IOException
 	{
 		BufferedReader br = new BufferedReader(getJavaSourceReader(cl));
 		StringBuilder comment = new StringBuilder();
@@ -92,7 +94,12 @@ public class TestSourceUtils
 				/* Tests must all be public. We assume they are written on the same line */
 				if (line.contains("public") && line.contains(testName + "()"))
 				{
-					return comment.toString();
+					String str = comment.toString();
+					if ((options & DECODE_TABS) != 0)
+					{
+						return str.replace("\\t", "\t");
+					}
+					return str;
 				}
 
 				if (line.startsWith("@"))
@@ -113,16 +120,30 @@ public class TestSourceUtils
 	 *
 	 * @param cl the class from where to extract the comment.
 	 * @param testName the name of the test from which to extract the comment.
+	 * @param options or'ed mask of options like DECODE_TABS.
 	 * @return the absolute path to a temporary file that contains the comments of the given test.
 	 * @throws IOException
 	 */
-	public static String getCommentOfTestAsTmpFilePath(Class<?> cl, String testName) throws IOException
+	public static String getCommentOfTestAsTmpFilePath(Class<?> cl, String testName, int options) throws IOException
 	{
-		String comment = getCommentOfTest(cl, testName);
+		String comment = getCommentOfTest(cl, testName, options);
 		File tmp = File.createTempFile("onto", ".obo");
 		PrintWriter pw = new PrintWriter(tmp);
 		pw.append(comment);
 		pw.close();
 		return tmp.getCanonicalPath();
+	}
+
+	/**
+	 * Return a path to a temporary file that contains the comment of the given test.
+	 *
+	 * @param cl the class from where to extract the comment.
+	 * @param testName the name of the test from which to extract the comment.
+	 * @return the absolute path to a temporary file that contains the comments of the given test.
+	 * @throws IOException
+	 */
+	public static String getCommentOfTestAsTmpFilePath(Class<?> cl, String testName) throws IOException
+	{
+		return getCommentOfTestAsTmpFilePath(cl, testName);
 	}
 }

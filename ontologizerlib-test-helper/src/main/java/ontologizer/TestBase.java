@@ -18,14 +18,27 @@ public class TestBase
 	/**
 	 * Return the path to a file that contains the comment of the current test.
 	 *
+	 * @param options or'ed mask of options from TextSourceUtils.
+	 * @return an absolute path.
+	 *
+	 * @throws IOException
+	 */
+	protected String getTestCommentAsPath(int options) throws IOException
+	{
+		/* TODO: We could also make the source avaible as a dedicated rule */
+		return TestSourceUtils.getCommentOfTestAsTmpFilePath(testClass.getTestClass(),
+			testName.getMethodName(), options);
+	}
+
+	/**
+	 * Return the path to a file that contains the comment of the current test.
+	 *
 	 * @return an absolute path.
 	 *
 	 * @throws IOException
 	 */
 	protected String getTestCommentAsPath() throws IOException
 	{
-		/* TODO: We could also make the source avaible as a dedicated rule */
-		return TestSourceUtils.getCommentOfTestAsTmpFilePath(testClass.getTestClass(),
-			testName.getMethodName());
+		return getTestCommentAsPath(0);
 	}
 }
