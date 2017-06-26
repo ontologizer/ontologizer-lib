@@ -21,6 +21,9 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+
+import ontologizer.TestBase;
+import ontologizer.TestSourceUtils;
 import ontologizer.association.Association;
 import ontologizer.association.AssociationContainer;
 import ontologizer.io.ParserFileInput;
@@ -29,7 +32,7 @@ import ontologizer.io.obo.OBOParserException;
 import ontologizer.ontology.TermContainer;
 import ontologizer.types.ByteString;
 
-public class AssociationParserTest
+public class AssociationParserTest extends TestBase
 {
 	private static final String OBO_FILE = AssociationParserTest.class.
 			getClassLoader().getResource("gene_ontology.1_2.obo.gz").getPath();
@@ -210,21 +213,20 @@ public class AssociationParserTest
 		}
 	}
 
+	///
+	/// DB\tDBOBJID\tSYMBOL1\t\tGO:0005763\tPMID:00000\tEVIDENCE\t\tC\tSYNONYM1|SYNONYM2\tgene\ttaxon:4932\t20121212\tSBA
+	/// DB\tDBOBJID\tSYMBOL2\t\tGO:0005760\tPMID:00000\tEVIDENCE\t\tC\t\tgene\ttaxon:4932\t20121212\tSBA
+	///
 	@Test
 	public void testAmbiguousGAFCaseB() throws IOException, OBOParserException
 	{
-		File tmp = tmpFolder.newFile("testAmbiguousGAFCaseB.gaf");
-		BufferedWriter bw = new BufferedWriter(new FileWriter(tmp));
-		bw.write("DB\tDBOBJID\tSYMBOL1\t\tGO:0005763\tPMID:00000\tEVIDENCE\t\tC\tSYNONYM1|SYNONYM2\tgene\ttaxon:4932\t20121212\tSBA\n");
-		bw.write("DB\tDBOBJID\tSYMBOL2\t\tGO:0005760\tPMID:00000\tEVIDENCE\t\tC\t\tgene\ttaxon:4932\t20121212\tSBA\n");
-		bw.flush();
-		bw.close();
+		String gafFile = getTestCommentAsPath(TestSourceUtils.DECODE_TABS);
 
 		OBOParser oboParser = new OBOParser(new ParserFileInput(OBO_FILE));
 		oboParser.doParse();
 
 		WarningCapture warningCapture = new WarningCapture();
-		AssociationParser ap = new AssociationParser(new ParserFileInput(tmp.getAbsolutePath()), new TermContainer(oboParser.getTermMap(), EMPTY, EMPTY), null, warningCapture);
+		AssociationParser ap = new AssociationParser(new ParserFileInput(gafFile), new TermContainer(oboParser.getTermMap(), EMPTY, EMPTY), null, warningCapture);
 		AssociationContainer assoc = new AssociationContainer(ap.getAssociations(), ap.getAnnotationMapping());
 
 		assertEquals(2, assoc.getAllAnnotatedGenes().size());
