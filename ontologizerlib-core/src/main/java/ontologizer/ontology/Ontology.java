@@ -674,13 +674,12 @@ public class Ontology implements Iterable<Term>, IDirectedGraph<TermID>, Seriali
 		/* No term with this primary id could be found, try alternatives */
 		setupAltIdMap();
 
-		TermID tid = alternativeMap.get(new TermID(termId));
-		if (tid != null)
+		int index = alternativeMap.getIndex(new TermID(termId));
+		if (index == -1)
 		{
-			term = termContainer.get(tid);
+			return null;
 		}
-
-		return term;
+		return termContainer.get(index);
 	}
 
 	/**
