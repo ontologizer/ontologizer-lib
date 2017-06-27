@@ -69,11 +69,27 @@ public class AssociationParser
 	private int dbObjectWarnings;
 
 	/**
-	 * Construct the association parser object. The given file name will
-	 * parsed. Convenience constructor when not using progress monitor.
+	 * Construct the association parser object. This form of constructor
+	 * creates a dumb parser that will not resolve terms properties, instead
+	 * it parses the entire file.
 	 *
-	 * @param input
-	 * @param terms
+	 * @param input describes the input to be parsed
+	 * @throws IOException
+	 */
+	public AssociationParser(IParserInput input) throws IOException
+	{
+		this(input,null,null);
+	}
+
+	/**
+	 * Construct the association parser object. The given input will
+	 * parsed and resolved using the given terms (i.e., alt_id
+	 * are respected). Convenience constructor when not using
+	 * progress monitor.
+	 *
+	 * @param input describes the input to be parsed
+	 * @param terms describes the terms that are known and whose property
+	 *  shall be considered during parsing.
 	 * @throws IOException
 	 */
 	public AssociationParser(IParserInput input, TermMap terms) throws IOException
@@ -86,9 +102,10 @@ public class AssociationParser
 	 * Construct the association parser object. The given file name will
 	 * parsed. Convenience constructor when not using progress monitor.
 	 *
-	 * @param input
-	 * @param terms
-	 * @param names
+	 * @param input describes the input to be parsed
+	 * @param terms describes the terms that are known and whose property
+	 *  shall be considered during parsing.
+	 * @param names an additional filter of
 	 * @throws IOException
 	 */
 	public AssociationParser(IParserInput input, TermMap terms, HashSet<ByteString> names) throws IOException
