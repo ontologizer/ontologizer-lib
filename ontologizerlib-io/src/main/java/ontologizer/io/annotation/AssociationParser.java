@@ -29,6 +29,8 @@ import ontologizer.types.ByteString;
  * @author Peter Robinson, Sebastian Bauer
  * @see Association
  * @see <A HREF="http://www.geneontology.org">www.geneontology.org</A>
+ *
+ * TODO: Conceive a general resolve and filter interface
  */
 
 public class AssociationParser
