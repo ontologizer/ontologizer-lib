@@ -78,6 +78,17 @@ public class AssociationParserTest extends TestBase
 	}
 
 	@Test
+	public void testWithoutTermMap() throws IOException
+	{
+		AssociationParser ap = new AssociationParser(new ParserFileInput(ASSOCIATION_FILE));
+		assertEquals(ap.getFileType(),AssociationParser.Type.GAF);
+		assertEquals(87599, ap.getAssociations().size());
+
+		Association a = ap.getAssociations().get(0);
+		assertEquals("S000007287",a.getDB_Object().toString());
+	}
+
+	@Test
 	public void testUncompressed() throws IOException, OBOParserException
 	{
 		/* As testSimple() but bypasses auto decompression by manually decompressing
