@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Stack;
 
 import sonumina.collections.TinyQueue;
@@ -128,6 +129,31 @@ public class Algorithms
 				}
 			}
 		}
+	}
+
+	/**
+	 * Return vertices in breath-first-search order.
+	 *
+	 * @param initial defines the set of vertices to start with.
+	 *
+	 * @param grabber a object of a class implementing INeighbourGrabber which
+	 *        returns the nodes which should be visited next.
+	 *
+	 * @return vertices in breath-first-search order.
+	 */
+	public static <V> List<V> bfsOrder(Collection<V> initial, INeighbourGrabber<V> grabber)
+	{
+		final List<V> vertices = new ArrayList<V>();
+		bfs(initial, grabber, new IVisitor<V>()
+		{
+			@Override
+			public boolean visited(V vertex)
+			{
+				vertices.add(vertex);
+				return true;
+			}
+		});
+		return vertices;
 	}
 
 	/**
