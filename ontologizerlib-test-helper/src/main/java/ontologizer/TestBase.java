@@ -19,26 +19,29 @@ public class TestBase
 	 * Return the path to a file that contains the comment of the current test.
 	 *
 	 * @param options or'ed mask of options from TextSourceUtils.
+	 * @param suffix the suffix of the file name to generate (should contain the dot)
 	 * @return an absolute path.
 	 *
 	 * @throws IOException
 	 */
-	protected String getTestCommentAsPath(int options) throws IOException
+	protected String getTestCommentAsPath(String suffix, int options) throws IOException
 	{
 		/* TODO: We could also make the source avaible as a dedicated rule */
 		return TestSourceUtils.getCommentOfTestAsTmpFilePath(testClass.getTestClass(),
-			testName.getMethodName(), options);
+			testName.getMethodName(), suffix, options);
 	}
 
 	/**
 	 * Return the path to a file that contains the comment of the current test.
 	 *
+	 * @param suffix the suffix of the file name to generate (should contain the dot)
+	 *
 	 * @return an absolute path.
 	 *
 	 * @throws IOException
 	 */
-	protected String getTestCommentAsPath() throws IOException
+	protected String getTestCommentAsPath(String suffix) throws IOException
 	{
-		return getTestCommentAsPath(0);
+		return getTestCommentAsPath(suffix, 0);
 	}
 }

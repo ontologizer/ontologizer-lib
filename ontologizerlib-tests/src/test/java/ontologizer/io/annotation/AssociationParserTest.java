@@ -231,7 +231,7 @@ public class AssociationParserTest extends TestBase
 	@Test
 	public void testAmbiguousGAFCaseB() throws IOException, OBOParserException
 	{
-		String gafFile = getTestCommentAsPath(TestSourceUtils.DECODE_TABS);
+		String gafFile = getTestCommentAsPath(".gaf", TestSourceUtils.DECODE_TABS);
 
 		OBOParser oboParser = new OBOParser(new ParserFileInput(OBO_FILE));
 		oboParser.doParse();

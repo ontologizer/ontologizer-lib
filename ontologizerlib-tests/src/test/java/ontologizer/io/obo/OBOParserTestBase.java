@@ -23,7 +23,7 @@ public class OBOParserTestBase extends TestBase
 	 */
 	protected OBOParser getTestCommentAsOBOParser(int options) throws IOException
 	{
-		return new OBOParser(new ParserFileInput(getTestCommentAsPath()), options);
+		return new OBOParser(new ParserFileInput(getTestCommentAsPath(".obo")), options);
 	}
 
 	/**

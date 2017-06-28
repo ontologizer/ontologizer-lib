@@ -120,14 +120,15 @@ public class TestSourceUtils
 	 *
 	 * @param cl the class from where to extract the comment.
 	 * @param testName the name of the test from which to extract the comment.
+	 * @param suffix the suffix of the file name to generate (should contain the dot)
 	 * @param options or'ed mask of options like DECODE_TABS.
 	 * @return the absolute path to a temporary file that contains the comments of the given test.
 	 * @throws IOException
 	 */
-	public static String getCommentOfTestAsTmpFilePath(Class<?> cl, String testName, int options) throws IOException
+	public static String getCommentOfTestAsTmpFilePath(Class<?> cl, String testName, String suffix, int options) throws IOException
 	{
 		String comment = getCommentOfTest(cl, testName, options);
-		File tmp = File.createTempFile("onto", ".obo");
+		File tmp = File.createTempFile("onto", suffix);
 		PrintWriter pw = new PrintWriter(tmp);
 		pw.append(comment);
 		pw.close();
@@ -139,11 +140,12 @@ public class TestSourceUtils
 	 *
 	 * @param cl the class from where to extract the comment.
 	 * @param testName the name of the test from which to extract the comment.
+	 * @param suffix the suffix of the file name to generate (should contain the dot)
 	 * @return the absolute path to a temporary file that contains the comments of the given test.
 	 * @throws IOException
 	 */
-	public static String getCommentOfTestAsTmpFilePath(Class<?> cl, String testName) throws IOException
+	public static String getCommentOfTestAsTmpFilePath(Class<?> cl, String testName, String suffix) throws IOException
 	{
-		return getCommentOfTestAsTmpFilePath(cl, testName);
+		return getCommentOfTestAsTmpFilePath(cl, testName, suffix);
 	}
 }
