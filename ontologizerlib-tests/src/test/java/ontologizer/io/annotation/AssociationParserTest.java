@@ -64,10 +64,10 @@ public class AssociationParserTest extends TestBase
 		assertEquals("S000004009",a.getDB_Object().toString());
 
 		AssociationContainer ac = new AssociationContainer(ap.getAssociations(), ap.getAnnotationMapping());
-		Assert.assertEquals("number of parsed associations", nAssociations, ap.getAssociations().size());
-		Assert.assertEquals("number of parsed synonyms", nSynonyms,ap.getAnnotationMapping().getNumberOfSynonyms());
-		Assert.assertEquals("number of parsed DB objects", nDBObjects,ap.getAnnotationMapping().getSymbols().length);
-		Assert.assertEquals("number of annotated genes", nAnnotatedGenes,ac.getAllAnnotatedGenes().size());
+		assertEquals("number of parsed associations", nAssociations, ap.getAssociations().size());
+		assertEquals("number of parsed synonyms", nSynonyms,ap.getAnnotationMapping().getNumberOfSynonyms());
+		assertEquals("number of parsed DB objects", nDBObjects,ap.getAnnotationMapping().getSymbols().length);
+		assertEquals("number of annotated genes", nAnnotatedGenes,ac.getAllAnnotatedGenes().size());
 
 		for (int i=0; i<someGenes.length; i++) {
 			Assert.assertEquals(ac.get(b(someGenes[i])).getAssociations().size(), someGeneTermCounts[i]);
