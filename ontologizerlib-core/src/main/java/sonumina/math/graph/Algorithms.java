@@ -1,7 +1,6 @@
 package sonumina.math.graph;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -96,7 +95,7 @@ public class Algorithms
 	 *        called. Note that the method is also called for the vertices
 	 *        specified by initialSet (in arbitrary order)
 	 */
-	public static <V> void bfs(Collection<V> initial, INeighbourGrabber<V> grabber, IVisitor<V> visitor)
+	public static <V> void bfs(Iterable<V> initial, INeighbourGrabber<V> grabber, IVisitor<V> visitor)
 	{
 		HashSet<V> visited = new HashSet<V>();
 
@@ -144,7 +143,7 @@ public class Algorithms
 	 *
 	 * @return vertices in breath-first-search order.
 	 */
-	public static <V> List<V> bfsOrder(Collection<V> initial, INeighbourGrabber<V> grabber)
+	public static <V> List<V> bfsOrder(Iterable<V> initial, INeighbourGrabber<V> grabber)
 	{
 		final List<V> vertices = new ArrayList<V>();
 		bfs(initial, grabber, new IVisitor<V>()
