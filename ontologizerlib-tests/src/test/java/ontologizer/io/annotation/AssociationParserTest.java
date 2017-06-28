@@ -10,12 +10,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 import org.junit.Assert;
 import org.junit.Rule;
@@ -118,43 +115,39 @@ public class AssociationParserTest extends TestBase
 		assertEquals("S000004009",a.getDB_Object().toString());
 	}
 
+	/// # Comment1
+	/// DB\tDBOBJID2\tSYMBOL\t\tGO:0005760\tPMID:00000\tEVIDENCE\t\tC\t\tgene\ttaxon:4932\t20121212\tSBA
 	@Test
 	public void testSkipHeader() throws IOException, OBOParserException
 	{
-		File tmp = tmpFolder.newFile("testSkipHeaeder.gaf");
-		BufferedWriter bw = new BufferedWriter(new FileWriter(tmp));
-		bw.write("# Comment1\n");
-		bw.write("DB\tDBOBJID2\tSYMBOL\t\tGO:0005760\tPMID:00000\tEVIDENCE\t\tC\t\tgene\ttaxon:4932\t20121212\tSBA\n");
-		bw.flush();
-		bw.close();
+		String gafFile = getTestCommentAsPath(".gaf", TestSourceUtils.DECODE_TABS);
 
 		OBOParser oboParser = new OBOParser(new ParserFileInput(OBO_FILE));
 		oboParser.doParse();
 
-		AssociationParser ap = new AssociationParser(new ParserFileInput(tmp.getAbsolutePath()), new TermContainer(oboParser.getTermMap(), EMPTY, EMPTY));
+		AssociationParser ap = new AssociationParser(new ParserFileInput(gafFile), new TermContainer(oboParser.getTermMap(), EMPTY, EMPTY));
 		AssociationContainer assoc = new AssociationContainer(ap.getAssociations(), ap.getAnnotationMapping());
 
 		assertEquals(1, assoc.getAllAnnotatedGenes().size());
 	}
 
+	/// DB\tDBOBJID2\tSYMBOL\t\tGO:0005760\tPMID:00000\tEVIDENCE\t\tC\t\tgene\ttaxon:4932\t20121212\tSBA
 	@Test
 	public void testReadFromCompressedFile() throws IOException, OBOParserException
 	{
-		File tmp = tmpFolder.newFile("testReadFromCompressedFile.gaf.gz");
-		Writer bw = new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(tmp)));
-		bw.write("DB\tDBOBJID2\tSYMBOL\t\tGO:0005760\tPMID:00000\tEVIDENCE\t\tC\t\tgene\ttaxon:4932\t20121212\tSBA\n");
-		bw.flush();
-		bw.close();
+		String gafFile = getTestCommentAsPath(".gaf", TestSourceUtils.DECODE_TABS);
 
 		OBOParser oboParser = new OBOParser(new ParserFileInput(OBO_FILE));
 		oboParser.doParse();
 
-		AssociationParser ap = new AssociationParser(new ParserFileInput(tmp.getAbsolutePath()), new TermContainer(oboParser.getTermMap(), EMPTY, EMPTY));
+		AssociationParser ap = new AssociationParser(new ParserFileInput(gafFile), new TermContainer(oboParser.getTermMap(), EMPTY, EMPTY));
 		AssociationContainer assoc = new AssociationContainer(ap.getAssociations(), ap.getAnnotationMapping());
 
 		assertEquals(1, assoc.getAllAnnotatedGenes().size());
 	}
 
+	/// DB\tDBOBJID1\tSYMBOL\t\tGO:0005763\tPMID:00000\tEVIDENCE\t\tC\tSYNONYM1|SYNONYM2\tgene\ttaxon:4932\t20121212\tSBA
+	/// DB\tDBOBJID2\tSYMBOL\t\tGO:0005760\tPMID:00000\tEVIDENCE\t\tC\t\tgene\ttaxon:4932\t20121212\tSBA
 	@Test
 	public void testAmbiguousGAFCaseA() throws IOException, OBOParserException
 	{
@@ -180,21 +173,19 @@ public class AssociationParserTest extends TestBase
 		assertEquals(true, assoc.isSynonym(new ByteString("DBOBJID2")));
 	}
 
+	///
+	///
+	/// DB\tDBOBJID\tSYMBOL1\t\tGO:0005763\tPMID:00000\tEVIDENCE\t\tC\tSYNONYM1|SYNONYM2\tgene\ttaxon:4932\t20121212\tSBA
+	/// DB\tDBOBJID2\tSYMBOL2\t\tGO:0005760\tPMID:00000\tEVIDENCE\t\tC\t\tgene\ttaxon:4932\t20121212\tSBA
 	@Test
 	public void testTwoEntries() throws IOException, OBOParserException
 	{
-		File tmp = tmpFolder.newFile("testTwoEntries.gaf");
-		BufferedWriter bw = new BufferedWriter(new FileWriter(tmp));
-		bw.write("\n\n");
-		bw.write("DB\tDBOBJID\tSYMBOL1\t\tGO:0005763\tPMID:00000\tEVIDENCE\t\tC\tSYNONYM1|SYNONYM2\tgene\ttaxon:4932\t20121212\tSBA\n");
-		bw.write("DB\tDBOBJID2\tSYMBOL2\t\tGO:0005760\tPMID:00000\tEVIDENCE\t\tC\t\tgene\ttaxon:4932\t20121212\tSBA\n");
-		bw.flush();
-		bw.close();
+		String gafFile = getTestCommentAsPath(".gaf", TestSourceUtils.DECODE_TABS);
 
 		OBOParser oboParser = new OBOParser(new ParserFileInput(OBO_FILE));
 		oboParser.doParse();
 
-		AssociationParser ap = new AssociationParser(new ParserFileInput(tmp.getAbsolutePath()), new TermContainer(oboParser.getTermMap(), EMPTY, EMPTY));
+		AssociationParser ap = new AssociationParser(new ParserFileInput(gafFile), new TermContainer(oboParser.getTermMap(), EMPTY, EMPTY));
 		AssociationContainer assoc = new AssociationContainer(ap.getAssociations(), ap.getAnnotationMapping());
 
 		assertEquals(2,assoc.getAllAnnotatedGenes().size());
