@@ -130,15 +130,11 @@ public class Ontology implements Iterable<Term>, IDirectedGraph<TermID>, Seriali
 	}
 
 	/**
-	 * @return the term in topological order.
+	 * @return the term ids in topological order.
 	 */
-	public ArrayList<Term> getTermsInTopologicalOrder()
+	public List<TermID> getTermsInTopologicalOrder()
 	{
-		List<TermID> topOrderTid = Algorithms.topologicalOrder(graph);
-		ArrayList<Term> topOrderT = new ArrayList<Term>(topOrderTid.size());
-		for (TermID tid : topOrderTid)
-			topOrderT.add(getTerm(tid));
-		return topOrderT;
+		return Algorithms.topologicalOrder(graph);
 	}
 
 	/**
