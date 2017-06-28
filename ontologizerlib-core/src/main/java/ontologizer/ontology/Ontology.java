@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import sonumina.collections.Map;
+import sonumina.math.graph.Algorithms;
 import sonumina.math.graph.DirectedGraph;
 import sonumina.math.graph.Edge;
 import sonumina.math.graph.IDirectedGraph;
@@ -133,7 +134,7 @@ public class Ontology implements Iterable<Term>, IDirectedGraph<TermID>, Seriali
 	 */
 	public ArrayList<Term> getTermsInTopologicalOrder()
 	{
-		ArrayList<TermID> topOrderTid = graph.topologicalOrder();
+		List<TermID> topOrderTid = Algorithms.topologicalOrder(graph);
 		ArrayList<Term> topOrderT = new ArrayList<Term>(topOrderTid.size());
 		for (TermID tid : topOrderTid)
 			topOrderT.add(getTerm(tid));

@@ -2,9 +2,12 @@ package sonumina.math.graph;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import sonumina.collections.TinyQueue;
@@ -208,5 +211,70 @@ public class Algorithms
 				visited.add(n);
 			}
 		}
+	}
+
+	/**
+	 * Returns the vertices in a topological order. Note that if the length
+	 * of the returned differs from the number of vertices we have a cycle.
+	 *
+	 * @return a list of vertices in a topological order.
+	 */
+	public static <V> List<V> topologicalOrder(AbstractGraph<V> graph)
+	{
+		/* Gather structure */
+		Map<V,LinkedList<V>> vertex2Children = new HashMap<V,LinkedList<V>>();
+		Map<V,Integer> vertex2NumParents = new HashMap<V,Integer>();
+		LinkedList<V> verticesWithNoParents = new LinkedList<V>();
+
+		for (V v : graph.getVertices())
+		{
+			/* Build list of children */
+			LinkedList<V> vChild = new LinkedList<V>();
+			for (V c : graph.getChildNodes(v))
+				vChild.add(c);
+
+			vertex2Children.put(v, vChild);
+
+			/* Determine the number of parents for each node */
+			int numParents = 0;
+			Iterator<V> parentIterator = graph.getParentNodes(v).iterator();
+			while (parentIterator.hasNext())
+			{
+				parentIterator.next();
+				numParents++;
+			}
+
+			if (numParents == 0)
+			{
+				verticesWithNoParents.add(v);
+			} else
+			{
+				vertex2NumParents.put(v,numParents);
+			}
+		}
+
+		int numOfVertices 			= vertex2Children.size();
+		ArrayList<V> order = new ArrayList<V>(numOfVertices);
+
+		/* Take the first vertex in the queue verticesWithNoParents and to every
+		 * vertex to which vertex is a parent decrease its current number of parents
+		 * value by one.
+		 */
+		while (!verticesWithNoParents.isEmpty())
+		{
+			V top = verticesWithNoParents.poll();
+			order.add(top);
+
+			for (V p : vertex2Children.get(top))
+			{
+				int newNumParents = vertex2NumParents.get(p)-1;
+				vertex2NumParents.put(p,newNumParents);
+
+				if (newNumParents == 0)
+					verticesWithNoParents.offer(p);
+			}
+		}
+
+		return order;
 	}
 }
