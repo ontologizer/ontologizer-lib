@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -519,6 +520,46 @@ public class DirectedGraphTest
 					if (v1 == neighbors[i][0] && v2 == neighbors[i][1]) continue loop;
 				}
 				assertFalse(graph.hasEdge(v1, v2));
+			}
+		}
+	}
+
+	@Test
+	public void testTopologicalOrder()
+	{
+		/*
+		 * Build a graph like this
+		 *
+		 *       0     1
+		 *      / \   /
+		 *     /   \ /
+		 *    2     3
+		 *     \   /
+		 *      \ /
+		 *       4
+		 */
+		DirectedGraph<Integer,Void> graph = new DirectedGraph<Integer,Void>();
+		graph.addVertex(0);
+		graph.addVertex(1);
+		graph.addVertex(2);
+		graph.addVertex(3);
+		graph.addVertex(4);
+
+		graph.addEdge(0, 2);
+		graph.addEdge(0, 3);
+		graph.addEdge(1, 3);
+		graph.addEdge(2, 4);
+		graph.addEdge(3, 4);
+
+		List<Integer> l = Algorithms.topologicalOrder(graph);
+		assertEquals(5, l.size());
+		Set<Integer> visited = new HashSet<Integer>();
+		for (int v : l)
+		{
+			visited.add(v);
+			for (Integer c : graph.getChildNodes(v))
+			{
+				assertFalse("Node " + c + " should not have been appeared in the order before " + v, visited.contains(c));
 			}
 		}
 	}
