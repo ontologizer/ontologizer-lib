@@ -11,7 +11,6 @@ import ontologizer.ontology.Ontology;
 import ontologizer.ontology.RelationMeaning;
 import ontologizer.ontology.TermID;
 import ontologizer.util.VersionInfo;
-import sonumina.math.graph.AbstractGraph.DotAttributesProvider;
 
 public class GODOTWriter
 {

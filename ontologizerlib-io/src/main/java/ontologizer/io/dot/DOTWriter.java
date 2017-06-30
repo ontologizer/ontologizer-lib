@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import sonumina.math.graph.AbstractGraph;
-import sonumina.math.graph.AbstractGraph.DotAttributesProvider;
 
 public class DOTWriter
 {
