@@ -7,7 +7,7 @@ import java.util.Locale;
 
 import sonumina.math.graph.AbstractGraph;
 
-public class DOTWriter
+public class DotWriter
 {
 	/**
 	 * Writes out a graph as a dot file.
@@ -52,7 +52,7 @@ public class DOTWriter
 				return provider.getDotHeader();
 			}
 		};
-		DOTWriter.write(g,os,nodeSet,newProvider);
+		DotWriter.write(g,os,nodeSet,newProvider);
 	}
 
 	/**

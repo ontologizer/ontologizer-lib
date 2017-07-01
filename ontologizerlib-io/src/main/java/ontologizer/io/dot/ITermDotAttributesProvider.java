@@ -7,7 +7,7 @@ import ontologizer.ontology.TermID;
  *
  * @author sba
  */
-public interface IDotAttributesProvider
+public interface ITermDotAttributesProvider
 {
 	/** @return the dot attributes for the given term */
 	public String getDotNodeAttributes(TermID id);

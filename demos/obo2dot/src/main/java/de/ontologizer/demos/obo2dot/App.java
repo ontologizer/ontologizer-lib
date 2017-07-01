@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import ontologizer.io.dot.AbstractDotAttributesProvider;
-import ontologizer.io.dot.GODOTWriter;
+import ontologizer.io.dot.AbstractTermDotAttributesProvider;
+import ontologizer.io.dot.OntologyDotWriter;
 import ontologizer.io.obo.OBOOntologyCreator;
 import ontologizer.io.obo.OBOParserException;
 import ontologizer.ontology.Ontology;
@@ -56,8 +56,8 @@ public class App {
 		Set<TermID> termIDs = new HashSet<TermID>();
 		ontology.forEach(t -> termIDs.add(t.getID()));
 
-		GODOTWriter.writeDOT(ontology, new File(pathDot), ontology.getRootTerm().getID(), termIDs,
-				new AbstractDotAttributesProvider());
+		OntologyDotWriter.writeDOT(ontology, new File(pathDot), ontology.getRootTerm().getID(), termIDs,
+				new AbstractTermDotAttributesProvider());
 		System.err.println("=> done writing DOT file");
 	}
 

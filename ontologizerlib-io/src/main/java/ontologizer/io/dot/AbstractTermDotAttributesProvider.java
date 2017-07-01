@@ -13,7 +13,7 @@ import ontologizer.ontology.TermID;
  *
  * @author Sebastian Bauer
  */
-public class AbstractDotAttributesProvider implements IDotAttributesProvider
+public class AbstractTermDotAttributesProvider implements ITermDotAttributesProvider
 {
 	/** Returns the dot attributes for the given term. */
 	public  String getDotNodeAttributes(TermID id)

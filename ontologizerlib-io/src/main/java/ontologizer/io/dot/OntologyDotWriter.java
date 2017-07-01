@@ -12,9 +12,9 @@ import ontologizer.ontology.RelationMeaning;
 import ontologizer.ontology.TermID;
 import ontologizer.util.VersionInfo;
 
-public class GODOTWriter
+public class OntologyDotWriter
 {
-	private static Logger logger = Logger.getLogger(GODOTWriter.class.getCanonicalName());
+	private static Logger logger = Logger.getLogger(OntologyDotWriter.class.getCanonicalName());
 
 	/**
 	 * Encode the term id string of the given term id.
@@ -60,7 +60,7 @@ public class GODOTWriter
 	 * @param provider
 	 *          should provide for every property an appropiate id.
 	 */
-	public static void writeDOT(Ontology graph, File file, TermID rootTerm, Set<TermID> terms, IDotAttributesProvider provider)
+	public static void writeDOT(Ontology graph, File file, TermID rootTerm, Set<TermID> terms, ITermDotAttributesProvider provider)
 	{
 		writeDOT(graph, file, rootTerm, terms, provider, "nodesep=0.4;", false, false, null);
 	}
@@ -88,7 +88,7 @@ public class GODOTWriter
 	 * @param edgeLabels
 	 * @param ignoreTerms
 	 */
-	public static void writeDOT(final Ontology graph, File file, TermID rootTerm, Set<TermID> terms, final IDotAttributesProvider provider, final String graphAttrs, final boolean reverseDirection, final boolean edgeLabels, Set<TermID> ignoreTerms)
+	public static void writeDOT(final Ontology graph, File file, TermID rootTerm, Set<TermID> terms, final ITermDotAttributesProvider provider, final String graphAttrs, final boolean reverseDirection, final boolean edgeLabels, Set<TermID> ignoreTerms)
 	{
 		/* Collect terms starting from the terms upto the root term and place them into nodeSet */
 		HashSet<TermID> nodeSet = new HashSet<TermID>();
@@ -113,13 +113,13 @@ public class GODOTWriter
 		/* We now have a list of nodes which can be placed into the output */
 		try
 		{
-			DOTWriter.write(graph.getGraph(),new FileOutputStream(file), nodeSet, new DotAttributesProvider<TermID>()
+			DotWriter.write(graph.getGraph(),new FileOutputStream(file), nodeSet, new DotAttributesProvider<TermID>()
 					{
 						/* Note that the default direction is assumed to be the opposite direction */
 						private String direction = reverseDirection?"":"dir=\"back\"";
 
 						@Override
-						public String getDotNodeName(TermID vt) { return GODOTWriter.encodeTermID(vt); }
+						public String getDotNodeName(TermID vt) { return OntologyDotWriter.encodeTermID(vt); }
 
 						@Override
 						public String getDotNodeAttributes(TermID vt) { return provider.getDotNodeAttributes(vt);	}
