@@ -6,7 +6,7 @@ import java.util.HashSet;
 
 import org.junit.Test;
 
-import ontologizer.association.Gene2Associations;
+import ontologizer.association.ItemAssociations;
 import ontologizer.enumeration.TermEnumerator.TermAnnotatedGenes;
 import ontologizer.ontology.TermID;
 import ontologizer.types.ByteString;
@@ -23,7 +23,7 @@ public class GOTermEnumeratorTest
 	{
 		InternalOntology internal = new InternalOntology();
 		TermEnumerator e = new TermEnumerator(internal.graph);
-		for (Gene2Associations g2a : internal.assoc)
+		for (ItemAssociations g2a : internal.assoc)
 			e.push(g2a);
 
 		assertEquals(11, e.getTotalNumberOfAnnotatedTerms());

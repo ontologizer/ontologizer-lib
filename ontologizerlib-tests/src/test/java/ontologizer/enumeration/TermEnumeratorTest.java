@@ -11,7 +11,7 @@ import java.util.List;
 import org.junit.Test;
 
 import ontologizer.association.Association;
-import ontologizer.association.Gene2Associations;
+import ontologizer.association.ItemAssociations;
 import ontologizer.io.obo.OBOOntologyCreator;
 import ontologizer.io.obo.OBOParserException;
 import ontologizer.io.obo.OBOParserTestBase;
@@ -30,14 +30,14 @@ public class TermEnumeratorTest extends OBOParserTestBase
 	 *
 	 * @return the list of associations
 	 */
-	private static List<Gene2Associations> createAssociations()
+	private static List<ItemAssociations> createAssociations()
 	{
 		/* Create item 1 that is annotated to test2  */
-		Gene2Associations item1Associations = new Gene2Associations(b("item1"));
+		ItemAssociations item1Associations = new ItemAssociations(b("item1"));
 		item1Associations.add(new Association(b("item1"), "GO:0000002"));
 
 		/* Create item 2 that is annotated to test3  */
-		Gene2Associations item2Associations = new Gene2Associations(b("item2"));
+		ItemAssociations item2Associations = new ItemAssociations(b("item2"));
 		item2Associations.add(new Association(b("item2"), "GO:0000003"));
 
 		return asList(item1Associations, item2Associations);
@@ -64,7 +64,7 @@ public class TermEnumeratorTest extends OBOParserTestBase
 		/* Here we test different propagation flavour */
 		Ontology ontology = OBOOntologyCreator.create(parseTestComment());
 
-		List<Gene2Associations> associations = createAssociations();
+		List<ItemAssociations> associations = createAssociations();
 
 		/* Push annotations to the enumerator */
 		TermEnumerator te = new TermEnumerator(ontology);

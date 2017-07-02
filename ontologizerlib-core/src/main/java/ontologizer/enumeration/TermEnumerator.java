@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import ontologizer.association.Association;
-import ontologizer.association.Gene2Associations;
+import ontologizer.association.ItemAssociations;
 import ontologizer.ontology.Ontology;
 import ontologizer.ontology.Ontology.ITermIDVisitor;
 import ontologizer.ontology.TermID;
@@ -118,7 +118,7 @@ public class TermEnumerator implements Iterable<TermID>
 	 *
 	 * @param geneAssociations
 	 */
-	public void push(Gene2Associations geneAssociations)
+	public void push(ItemAssociations geneAssociations)
 	{
 		push(geneAssociations,null);
 	}
@@ -131,7 +131,7 @@ public class TermEnumerator implements Iterable<TermID>
 	 * @param evidences consider only annotation entries that correspond to
 	 *  the given evidence codes.
 	 */
-	public void push(Gene2Associations geneAssociations, Set<ByteString> evidences)
+	public void push(ItemAssociations geneAssociations, Set<ByteString> evidences)
 	{
 		ByteString geneName = geneAssociations.name();
 

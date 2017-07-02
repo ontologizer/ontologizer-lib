@@ -14,12 +14,12 @@ import ontologizer.types.ByteString;
  * After AssociationParser was used to parse the gene_association.XXX file, this
  * class is used to store and process the information about Associations.
  */
-public class AssociationContainer implements Iterable<Gene2Associations>, Serializable
+public class AssociationContainer implements Iterable<ItemAssociations>, Serializable
 {
 	private static final long serialVersionUID = 1L;
 
 	/** Associations keys by the unique id */
-	private Gene2Associations [] associations;
+	private ItemAssociations [] associations;
 
 	/** Mapping */
 	private AnnotationContext annotationMapping;
@@ -33,7 +33,7 @@ public class AssociationContainer implements Iterable<Gene2Associations>, Serial
 	public AssociationContainer(List<Association> assocs, AnnotationContext annotationMapping)
 	{
 		this.annotationMapping = annotationMapping;
-		associations = new Gene2Associations[annotationMapping.getSymbols().length];
+		associations = new ItemAssociations[annotationMapping.getSymbols().length];
 		for (Association a : assocs)
 			addAssociation(a);
 	}
@@ -51,17 +51,17 @@ public class AssociationContainer implements Iterable<Gene2Associations>, Serial
 		if (index == Integer.MAX_VALUE)
 			return;
 
-		Gene2Associations g2a = associations[index];
+		ItemAssociations g2a = associations[index];
 		if (g2a == null)
 		{
-			g2a = new Gene2Associations(symbol);
+			g2a = new ItemAssociations(symbol);
 			associations[index] = g2a;
 		}
 		g2a.add(a);
 	}
 
 	/**
-	 * get a Gene2Associations object corresponding to a given gene name. If the
+	 * get a ItemAssociations object corresponding to a given gene name. If the
 	 * name is not initially found as dbObject Symbol, (which is usually a
 	 * database name with meaning to a biologist), try dbObject (which may be an
 	 * accession number or some other term from the association database), and
@@ -71,7 +71,7 @@ public class AssociationContainer implements Iterable<Gene2Associations>, Serial
 	 * @param geneName name of the gene whose associations are interesting
 	 * @return associations for the given gene
 	 */
-	public Gene2Associations get(ByteString geneName)
+	public ItemAssociations get(ByteString geneName)
 	{
 		int index = annotationMapping.mapSymbol(geneName);
 		if (index == Integer.MAX_VALUE)
@@ -141,9 +141,9 @@ public class AssociationContainer implements Iterable<Gene2Associations>, Serial
 		return get(g1) != null;
 	}
 
-	public Iterator<Gene2Associations> iterator()
+	public Iterator<ItemAssociations> iterator()
 	{
-		return new Iterator<Gene2Associations>()
+		return new Iterator<ItemAssociations>()
 		{
 			int current;
 
@@ -156,9 +156,9 @@ public class AssociationContainer implements Iterable<Gene2Associations>, Serial
 			}
 
 			@Override
-			public Gene2Associations next()
+			public ItemAssociations next()
 			{
-				Gene2Associations value = associations[current];
+				ItemAssociations value = associations[current];
 				current++;
 				return value;
 			}
@@ -177,7 +177,7 @@ public class AssociationContainer implements Iterable<Gene2Associations>, Serial
 	public Map<String,Integer> getAllEvidenceCodes()
 	{
 		Map<String,Integer> evidenceCounts = new HashMap<String, Integer>();
-		for (Gene2Associations g2a : associations)
+		for (ItemAssociations g2a : associations)
 		{
 			for (Association a : g2a)
 			{
@@ -195,9 +195,9 @@ public class AssociationContainer implements Iterable<Gene2Associations>, Serial
 
 	/**
 	 * @param i index
-	 * @return the i'th Gene2Association
+	 * @return the i'th ItemAssociations
 	 */
-	public Gene2Associations getItemAssociations(int i)
+	public ItemAssociations getItemAssociations(int i)
 	{
 		return associations[i];
 	}

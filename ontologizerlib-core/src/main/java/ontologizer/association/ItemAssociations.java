@@ -8,8 +8,7 @@ import ontologizer.types.ByteString;
 
 /**
  * <P>
- * Gene2Associations objects store all the gene ontology associations for one
- * gene.
+ * ItemAssociations objects store all the associations for one single item.
  * </P>
  * <P>
  * Note that duplicate entries are possible in the association files. For this
@@ -23,7 +22,7 @@ import ontologizer.types.ByteString;
  * @author Peter Robinson, Sebastian Bauer
  */
 
-public class Gene2Associations implements Iterable<Association>, Serializable
+public class ItemAssociations implements Iterable<Association>, Serializable
 {
 	private static final long serialVersionUID = 1L;
 
@@ -33,7 +32,7 @@ public class Gene2Associations implements Iterable<Association>, Serializable
 	/** List of GO functional annotations */
 	private ArrayList<Association> associations;
 
-	public Gene2Associations(ByteString name)
+	public ItemAssociations(ByteString name)
 	{
 		associations = new ArrayList<Association>();
 		gene = name;
