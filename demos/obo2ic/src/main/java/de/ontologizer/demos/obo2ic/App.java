@@ -1,25 +1,26 @@
 package de.ontologizer.demos.obo2ic;
 
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
+import static java.util.stream.StreamSupport.stream;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 import ontologizer.association.Association;
+import ontologizer.enumeration.TermEnumerator;
 import ontologizer.io.ParserFileInput;
 import ontologizer.io.annotation.AssociationParser;
 import ontologizer.io.obo.OBOOntologyCreator;
 import ontologizer.io.obo.OBOParserException;
 import ontologizer.ontology.Ontology;
 import ontologizer.ontology.TermID;
-import ontologizer.types.ByteString;
 
 /**
  * Demo application <code>obo2ic</code> for OntologizerLib
@@ -84,35 +85,27 @@ public class App {
 		return parser.getAssociations();
 	}
 
+	/**
+	 * @return the ic
+	 */
+	private static double ic(int obs, int max)
+	{
+		return -Math.log(((double) obs) / max);
+	}
+
 	private static SortedMap<TermID, Double> computeInformationContent(Ontology ontology,
 			List<Association> associations) {
-		// First, build mapping from term to database ID
-		HashMap<TermID, HashSet<ByteString>> termToDbId =
-				new HashMap<TermID, HashSet<ByteString>>();
+		TermEnumerator te = TermEnumerator.ontology(ontology).forAll(associations).build();
 
-		for (Association a : associations) {
-			if (!termToDbId.containsKey(a.getTermID())) {
-				termToDbId.put(a.getTermID(), new HashSet<>());
-			}
-			termToDbId.get(a.getTermID()).add(a.getDB_Object());
-		}
+		// Determine total number of items */
+		int totalItems = te.getGenesAsList().size();
 
-		// From this, derive absolute frequencies for annotation of database object ID with term
-		Map<TermID, Integer> termFreqAbs = new HashMap<>();
-		for (TermID t : termToDbId.keySet()) {
-			termFreqAbs.put(t, termToDbId.get(t).size());
-		}
+		// Derive absolute frequencies for annotation of database object ID with term
+		Map<TermID, Integer> termFreqAbs = stream(te.spliterator(), false).map(k -> k).collect(toMap(identity(), k -> te.getAnnotatedGenes(k).totalAnnotatedCount()));
 
-		// Get total number of genes with annotation
-		final int numDbObjects = termFreqAbs.size();
+		// Compute information content
+		return termFreqAbs.entrySet().stream().collect(toMap(Map.Entry::getKey, k -> ic(k.getValue(), totalItems), (v1, v2) -> v1, TreeMap::new));
 
-		// From this, we can easily compute the information content
-		TreeMap<TermID, Double> termInformationContent = new TreeMap<TermID, Double>();
-		for (Entry<TermID, Integer> e : termFreqAbs.entrySet()) {
-			termInformationContent.put(e.getKey(),
-					-Math.log(((double) e.getValue()) / numDbObjects));
-		}
-		return termInformationContent;
 	}
 
 	private static void writeInformationContent(String pathTxt,
