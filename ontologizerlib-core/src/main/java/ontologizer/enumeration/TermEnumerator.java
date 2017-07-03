@@ -5,8 +5,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -407,6 +409,8 @@ public class TermEnumerator implements Iterable<TermID>
 	{
 		Optional forAll(AssociationContainer container);
 
+		Optional forAll(List<Association> associations);
+
 		TermEnumerator build();
 	}
 
@@ -419,6 +423,7 @@ public class TermEnumerator implements Iterable<TermID>
 	{
 		private Ontology ontology;
 		private AssociationContainer assocs;
+		private List<Association> associationList;
 
 		@Override
 		public Optional forAll(AssociationContainer assocs)
@@ -435,6 +440,13 @@ public class TermEnumerator implements Iterable<TermID>
 		}
 
 		@Override
+		public Optional forAll(List<Association> associations)
+		{
+			associationList = associations;
+			return this;
+		}
+
+		@Override
 		public TermEnumerator build()
 		{
 			TermEnumerator te = new TermEnumerator(ontology);
@@ -443,11 +455,36 @@ public class TermEnumerator implements Iterable<TermID>
 				for (ItemAssociations itemAssociations : assocs)
 					te.push(itemAssociations);
 			}
-
+			if (associationList != null)
+			{
+				/* TODO: GAFLineScanner does a similar thing (and more). Extract this from there
+				 * and make it reusable.
+				 */
+				Map<ByteString, ItemAssociations> map = new LinkedHashMap<ByteString, ItemAssociations>();
+				for (Association a : associationList)
+				{
+					ByteString name = a.getObjectSymbol();
+					ItemAssociations itemAssociations = map.get(name);
+					if (itemAssociations == null)
+					{
+						itemAssociations = new ItemAssociations(name);
+						map.put(name, itemAssociations);
+					}
+					itemAssociations.add(a);
+				}
+				for (ItemAssociations itemAssociations : map.values())
+					te.push(itemAssociations);
+			}
 			return te;
 		}
 	}
 
+	/**
+	 * Entry method for a construct that builds a TermEnumerator.
+	 *
+	 * @param ontology the ontology for which the TermEnumerator shall be constructed.
+	 * @return an object to put optional parameters.
+	 */
 	public static Optional ontology(Ontology ontology)
 	{
 		TermEnumeratorBuilder builder = new TermEnumeratorBuilder();
