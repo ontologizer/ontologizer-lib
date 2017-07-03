@@ -6,3 +6,5 @@ jdk:
 
 script:
 - mvn package -B -Dbenchmark
+- mvn install -DskipTests
+- make -C demos
