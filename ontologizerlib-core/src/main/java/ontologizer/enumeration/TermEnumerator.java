@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import ontologizer.association.Association;
+import ontologizer.association.AssociationContainer;
 import ontologizer.association.ItemAssociations;
 import ontologizer.ontology.Ontology;
 import ontologizer.ontology.Ontology.ITermIDVisitor;
@@ -400,5 +401,56 @@ public class TermEnumerator implements Iterable<TermID>
 		}
 		for (TermID tid : toBeRemoved)
 			map.remove(tid);
+	}
+
+	public static interface Optional
+	{
+		Optional forAll(AssociationContainer container);
+
+		TermEnumerator build();
+	}
+
+	public static interface RequiresOntology
+	{
+		Optional ontology(Ontology ontology);
+	}
+
+	public static class TermEnumeratorBuilder implements RequiresOntology, Optional
+	{
+		private Ontology ontology;
+		private AssociationContainer assocs;
+
+		@Override
+		public Optional forAll(AssociationContainer assocs)
+		{
+			this.assocs = assocs;
+			return this;
+		}
+
+		@Override
+		public Optional ontology(Ontology ontology)
+		{
+			this.ontology = ontology;
+			return this;
+		}
+
+		@Override
+		public TermEnumerator build()
+		{
+			TermEnumerator te = new TermEnumerator(ontology);
+			if (assocs != null)
+			{
+				for (ItemAssociations itemAssociations : assocs)
+					te.push(itemAssociations);
+			}
+
+			return te;
+		}
+	}
+
+	public static Optional ontology(Ontology ontology)
+	{
+		TermEnumeratorBuilder builder = new TermEnumeratorBuilder();
+		return builder.ontology(ontology);
 	}
 }
