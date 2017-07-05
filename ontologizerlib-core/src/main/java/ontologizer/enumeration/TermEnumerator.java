@@ -32,29 +32,10 @@ import sonumina.math.graph.INeighbourGrabber;
  */
 public class TermEnumerator implements Iterable<TermID>
 {
-	public static class TermAnnotatedGenes
-	{
-		/** List of directly annotated genes TODO: Make private */
-		public List<ByteString> directAnnotated = new ArrayList<ByteString>();
-
-		/** List of genes annotated at whole TODO: Make private */
-		public List<ByteString> totalAnnotated = new ArrayList<ByteString>();
-
-		public int directAnnotatedCount()
-		{
-			return directAnnotated.size();
-		}
-
-		public int totalAnnotatedCount()
-		{
-			return totalAnnotated.size();
-		}
-	}
-
 	/** The GO graph */
 	private Ontology graph;
 
-	private HashMap<TermID,TermAnnotatedGenes> map;
+	private HashMap<TermID,TermAnnotations> map;
 
 	/** The grabber that is used to propagate annotations */
 	private INeighbourGrabber<TermID> grabber;
@@ -83,7 +64,7 @@ public class TermEnumerator implements Iterable<TermID>
 	{
 		this.graph = ont;
 
-		map = new HashMap<TermID,TermAnnotatedGenes>();
+		map = new HashMap<TermID,TermAnnotations>();
 
 		/* Construct different grabber depending whether the propagation
 		 * property shall be respected or not.
@@ -186,12 +167,12 @@ public class TermEnumerator implements Iterable<TermID>
 					continue;
 			}
 
-			TermAnnotatedGenes termGenes = map.get(termID);
+			TermAnnotations termGenes = map.get(termID);
 
 			/* Create an entry if it doesn't exist */
 			if (termGenes == null)
 			{
-				termGenes = new TermAnnotatedGenes();
+				termGenes = new TermAnnotations();
 				map.put(termID,termGenes);
 			}
 
@@ -223,11 +204,11 @@ public class TermEnumerator implements Iterable<TermID>
 			{
 				if (graph.isRelevantTermID(tid))
 				{
-					TermAnnotatedGenes termGenes = map.get(tid);
+					TermAnnotations termGenes = map.get(tid);
 
 					if (termGenes == null)
 					{
-						termGenes = new TermAnnotatedGenes();
+						termGenes = new TermAnnotations();
 						map.put(tid,termGenes);
 					}
 					termGenes.totalAnnotated.add(geneName);
@@ -250,12 +231,12 @@ public class TermEnumerator implements Iterable<TermID>
 	 * @param goTermID
 	 * @return the annotated genes
 	 */
-	public TermAnnotatedGenes getAnnotatedGenes(TermID goTermID)
+	public TermAnnotations getAnnotatedGenes(TermID goTermID)
 	{
 		if (map.containsKey(goTermID))
 			return map.get(goTermID);
 		else
-			return new TermAnnotatedGenes();
+			return new TermAnnotations();
 	}
 
 
@@ -286,7 +267,7 @@ public class TermEnumerator implements Iterable<TermID>
 	{
 		ArrayList<GOTermOftenAnnotatedCount> list = new ArrayList<GOTermOftenAnnotatedCount>();
 
-		TermAnnotatedGenes goTermIDAnnotated = map.get(goTermID);
+		TermAnnotations goTermIDAnnotated = map.get(goTermID);
 		if (goTermIDAnnotated == null) return null;
 
 		/* For every term genes are annotated to */
@@ -300,7 +281,7 @@ public class TermEnumerator implements Iterable<TermID>
 
 			/* Find out the number of genes which are annotated to both terms */
 			int count = 0;
-			TermAnnotatedGenes curTermAnnotated = map.get(curTerm);
+			TermAnnotations curTermAnnotated = map.get(curTerm);
 			for (ByteString gene : curTermAnnotated.totalAnnotated)
 			{
 				if (goTermIDAnnotated.totalAnnotated.contains(gene))
@@ -385,7 +366,7 @@ public class TermEnumerator implements Iterable<TermID>
 		 * @param tag
 		 * @return true if the term shall be removed
 		 */
-		public boolean remove(TermID tid, TermAnnotatedGenes tag);
+		public boolean remove(TermID tid, TermAnnotations tag);
 	}
 
 	/**
@@ -396,7 +377,7 @@ public class TermEnumerator implements Iterable<TermID>
 	public void removeTerms(IRemover remove)
 	{
 		ArrayList<TermID> toBeRemoved = new ArrayList<TermID>();
-		for (Entry<TermID, TermAnnotatedGenes> entry : map.entrySet())
+		for (Entry<TermID, TermAnnotations> entry : map.entrySet())
 		{
 			if (remove.remove(entry.getKey(),entry.getValue()))
 					toBeRemoved.add(entry.getKey());

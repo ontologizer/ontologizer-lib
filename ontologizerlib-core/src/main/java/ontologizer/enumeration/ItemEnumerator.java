@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 
-import ontologizer.enumeration.TermEnumerator.TermAnnotatedGenes;
 import ontologizer.ontology.TermID;
 import ontologizer.types.ByteString;
 
@@ -55,7 +54,7 @@ public class ItemEnumerator implements Iterable<ByteString>
 
 		for (TermID tid : termEnumerator)
 		{
-			TermAnnotatedGenes genes = termEnumerator.getAnnotatedGenes(tid);
+			TermAnnotations genes = termEnumerator.getAnnotatedGenes(tid);
 
 			for (ByteString g : genes.totalAnnotated)
 			{

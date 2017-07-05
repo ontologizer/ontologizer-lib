@@ -7,13 +7,12 @@ import java.util.HashSet;
 import org.junit.Test;
 
 import ontologizer.association.ItemAssociations;
-import ontologizer.enumeration.TermEnumerator.TermAnnotatedGenes;
 import ontologizer.ontology.TermID;
 import ontologizer.types.ByteString;
 
 public class GOTermEnumeratorTest
 {
-	private static TermAnnotatedGenes annotatedGenes(TermEnumerator e, String term)
+	private static TermAnnotations annotatedGenes(TermEnumerator e, String term)
 	{
 		return e.getAnnotatedGenes(new TermID(term));
 	}
@@ -29,7 +28,7 @@ public class GOTermEnumeratorTest
 		assertEquals(11, e.getTotalNumberOfAnnotatedTerms());
 		assertEquals(500, e.getGenes().size());
 
-		TermAnnotatedGenes ag = annotatedGenes(e, "GO:0000001");
+		TermAnnotations ag = annotatedGenes(e, "GO:0000001");
 		assertEquals(internal.assoc.getAllAnnotatedGenes(), new HashSet<ByteString>(ag.totalAnnotated));
 	}
 }
