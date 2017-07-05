@@ -101,7 +101,7 @@ public class App {
 		int totalItems = te.getGenesAsList().size();
 
 		// Derive absolute frequencies for annotation of database object ID with term
-		Map<TermID, Integer> termFreqAbs = stream(te.spliterator(), false).map(k -> k).collect(toMap(identity(), k -> te.getAnnotatedGenes(k).totalAnnotatedCount()));
+		Map<TermID, Integer> termFreqAbs = stream(te.spliterator(), false).collect(toMap(identity(), k -> te.getAnnotatedGenes(k).totalAnnotatedCount()));
 
 		// Compute information content
 		return termFreqAbs.entrySet().stream().collect(toMap(Map.Entry::getKey, k -> ic(k.getValue(), totalItems), (v1, v2) -> v1, TreeMap::new));
