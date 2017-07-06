@@ -3,10 +3,10 @@ package ontologizer.io.annotation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import ontologizer.association.AnnotationContext;
 import ontologizer.association.Association;
 import ontologizer.io.IParserInput;
@@ -16,7 +16,6 @@ import ontologizer.ontology.Term;
 import ontologizer.ontology.TermID;
 import ontologizer.ontology.TermMap;
 import ontologizer.types.ByteString;
-import sonumina.collections.ObjectIntHashMap;
 
 /**
  * A GAF Line scanner.
@@ -53,8 +52,6 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 	public int evidenceMismatch = 0;
 	public int kept = 0;
 	public int obsolete = 0;
-	private int symbolWarnings = 0;
-	private int dbObjectWarnings = 0;
 
 	/** Mapping from gene (or gene product) names to Association objects */
 	private ArrayList<Association> associations = new ArrayList<Association>();
@@ -67,22 +64,11 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 
 	/**********************************************************************/
 
-	/** Unique list of items seen so far */
-	private List<ByteString> items = new ArrayList<ByteString>();
+	private AnnotationMapBuilder mapBuilder;
 
-	/** And the corresponding object ids */
-	private List<ByteString> objectIds = new ArrayList<ByteString>();
+	private AnnotationMapBuilder.WarningCallback warningCallback;
 
-	/** Maps object symbols to item indices within the items list */
-	private ObjectIntHashMap<ByteString> objectSymbolMap = new ObjectIntHashMap<ByteString>();
-
-	/** Maps object ids to item indices within the items list */
-	private ObjectIntHashMap<ByteString> objectIdMap = new ObjectIntHashMap<ByteString>();
-
-	/** Maps synonyms to item indices within the items list */
-	private ObjectIntHashMap<ByteString> synonymMap = new ObjectIntHashMap<ByteString>();
-
-	public GAFByteLineScanner(IParserInput input, byte [] head, Set<ByteString> names, TermMap terms, Set<ByteString> evidences, IAssociationParserProgress progress)
+	public GAFByteLineScanner(IParserInput input, byte [] head, Set<ByteString> names, TermMap terms, Set<ByteString> evidences, final IAssociationParserProgress progress)
 	{
 		super(input.inputStream());
 
@@ -93,6 +79,19 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 		this.terms = terms;
 		this.evidences = evidences;
 		this.progress = progress;
+
+		if (progress != null)
+		{
+			warningCallback = new AnnotationMapBuilder.WarningCallback()
+			{
+				@Override
+				public void warning(String warning)
+				{
+					progress.warning(warning);
+				}
+			};
+		}
+		this.mapBuilder = new AnnotationMapBuilder(warningCallback);
 	}
 
 	@Override
@@ -235,57 +234,8 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 		/* Add the Association to ArrayList */
 		associations.add(assoc);
 
-		/* And throw them in item buckets */
-		ByteString objectSymbol = assoc.getObjectSymbol();
+		mapBuilder.add(assoc, synonyms, lineno);
 
-		/* New code */
-		int potentialObjectIndex = items.size();
-		int objectIndex = objectSymbolMap.getIfAbsentPut(objectSymbol, potentialObjectIndex);
-		if (objectIndex == potentialObjectIndex)
-		{
-			/* Object symbol was not seen before */
-			items.add(objectSymbol);
-			objectIds.add(assoc.getDB_Object());
-		} else
-		{
-			/* Object symbol was seen before */
-			if (!assoc.getDB_Object().equals(objectIds.get(objectIndex)))
-			{
-				/* Record this as a synonym now */
-				synonymMap.put(assoc.getDB_Object(), objectIndex);
-
-				/* Warn about that the same symbol is used with at least two object ids */
-				dbObjectWarnings++;
-				if (dbObjectWarnings < 1000)
-				{
-					String warning = "Line " + lineno + ": Expected that symbol \"" + assoc.getObjectSymbol() + "\" maps to \"" + objectIds.get(objectIndex) + "\" but it maps to \"" + assoc.getDB_Object() + "\"";
-					if (progress != null)
-						progress.warning(warning);
-					logger.warning(warning);
-				}
-			}
-		}
-
-		/* Get how the object id is mapped to our id space */
-		int objectIdIndex = objectIdMap.getIfAbsentPut(assoc.getDB_Object(), objectIndex);
-		if (objectIdIndex != objectIndex)
-		{
-			/* The same object id is is used for two object symbols, warn about it */
-			symbolWarnings++;
-			if (symbolWarnings < 1000)
-			{
-				String warning = "Line " + lineno + ": Expected that dbObject \"" + assoc.getDB_Object() + "\" maps to symbol \"" + items.get(objectIdIndex) + "\" but it maps to \"" + assoc.getObjectSymbol() + "\"";
-				if (progress != null)
-					progress.warning(warning);
-				logger.warning(warning);
-			}
-		}
-
-		if (synonyms != null)
-		{
-			for (ByteString synonym : synonyms)
-				synonymMap.put(synonym, objectIndex);
-		}
 		return true;
 	}
 
@@ -307,7 +257,7 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 	 */
 	public AnnotationContext getAnnotationContext()
 	{
-		return new AnnotationContext(items, objectIds, objectSymbolMap, objectIdMap, synonymMap);
+		return mapBuilder.build();
 	}
 };
 
