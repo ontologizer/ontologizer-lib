@@ -1,11 +1,13 @@
 package ontologizer.ontology;
 
 import static ontologizer.types.ByteString.b;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,31 +42,30 @@ public class TermContainerTest
 	@Test
 	public void testBasicStructure()
 	{
+		assertEquals(4, container.termCount());
+		assertEquals("noformat", container.getFormatVersion().toString());
+		assertEquals("nodate", container.getDate().toString());
 
-		Assert.assertTrue(container.termCount() == 4);
-		Assert.assertTrue(container.getFormatVersion().equals("noformat"));
-		Assert.assertTrue(container.getDate().equals("nodate"));
+		assertEquals("root", container.getName("GO:0000000"));
+		assertEquals("root", container.getName(root.getID()));
+		assertEquals("biological process", container.getName("GO:0008150"));
+		assertEquals("biological process", container.getName(bioproc.getID()));
+		assertEquals("cellular component", container.getName("GO:0005575"));
+		assertEquals("cellular component", container.getName(cellcomp.getID()));
+		assertEquals("molecular function", container.getName("GO:0003674"));
+		assertEquals("molecular function", container.getName(molfunc.getID()));
 
-		Assert.assertTrue(container.getName("GO:0000000").equals("root"));
-		Assert.assertTrue(container.getName(root.getID()).equals("root"));
-		Assert.assertTrue(container.getName("GO:0008150").equals("biological process"));
-		Assert.assertTrue(container.getName(bioproc.getID()).equals("biological process"));
-		Assert.assertTrue(container.getName("GO:0005575").equals("cellular component"));
-		Assert.assertTrue(container.getName(cellcomp.getID()).equals("cellular component"));
-		Assert.assertTrue(container.getName("GO:0003674").equals("molecular function"));
-		Assert.assertTrue(container.getName(molfunc.getID()).equals("molecular function"));
+		assertTrue(container.get("GO:0000000").equals(root));
+		assertTrue(container.get(root.getID()).equals(root));
+		assertTrue(container.get("GO:0008150").equals(bioproc));
+		assertTrue(container.get(bioproc.getID()).equals(bioproc));
+		assertTrue(container.get("GO:0005575").equals(cellcomp));
+		assertTrue(container.get(cellcomp.getID()).equals(cellcomp));
+		assertTrue(container.get("GO:0003674").equals(molfunc));
+		assertTrue(container.get(molfunc.getID()).equals(molfunc));
 
-		Assert.assertTrue(container.get("GO:0000000").equals(root));
-		Assert.assertTrue(container.get(root.getID()).equals(root));
-		Assert.assertTrue(container.get("GO:0008150").equals(bioproc));
-		Assert.assertTrue(container.get(bioproc.getID()).equals(bioproc));
-		Assert.assertTrue(container.get("GO:0005575").equals(cellcomp));
-		Assert.assertTrue(container.get(cellcomp.getID()).equals(cellcomp));
-		Assert.assertTrue(container.get("GO:0003674").equals(molfunc));
-		Assert.assertTrue(container.get(molfunc.getID()).equals(molfunc));
-
-		Assert.assertTrue(container.get("GO:0000815") == null);
+		assertNull(container.get("GO:0000815"));
 		Term anotherTerm = new Term("GO:0000815", "dummy", (ParentTermID)null);
-		Assert.assertTrue(container.get(anotherTerm.getID()) == null);
+		assertTrue(container.get(anotherTerm.getID()) == null);
 	}
 }
