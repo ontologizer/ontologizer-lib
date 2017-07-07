@@ -468,7 +468,6 @@ public class TermEnumerator implements Iterable<TermID>
 	 */
 	public static Optional ontology(Ontology ontology)
 	{
-		TermEnumeratorBuilder builder = new TermEnumeratorBuilder();
-		return builder.ontology(ontology);
+		return new TermEnumeratorBuilder().ontology(ontology);
 	}
 }
