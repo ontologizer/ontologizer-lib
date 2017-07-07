@@ -10,7 +10,7 @@ import ontologizer.association.ItemAssociations;
 import ontologizer.ontology.TermID;
 import ontologizer.types.ByteString;
 
-public class GOTermEnumeratorTest
+public class TermEnumeratorTest
 {
 	private static TermAnnotations annotatedGenes(TermEnumerator e, String term)
 	{
