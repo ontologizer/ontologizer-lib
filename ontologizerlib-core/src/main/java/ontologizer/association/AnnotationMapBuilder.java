@@ -1,10 +1,8 @@
-package ontologizer.io.annotation;
+package ontologizer.association;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ontologizer.association.AnnotationContext;
-import ontologizer.association.Association;
 import ontologizer.types.ByteString;
 import sonumina.collections.ObjectIntHashMap;
 

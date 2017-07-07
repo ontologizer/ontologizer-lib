@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ontologizer.association.AnnotationContext;
+import ontologizer.association.AnnotationMapBuilder;
 import ontologizer.association.Association;
 import ontologizer.io.IParserInput;
 import ontologizer.io.linescanner.AbstractByteLineScanner;
