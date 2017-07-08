@@ -61,7 +61,7 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 	private PrefixPool prefixPool = new PrefixPool();
 
 	private HashMap<TermID, Term> altTermID2Term = null;
-	private HashSet<TermID> usedGoTerms = new HashSet<TermID>();
+	private HashSet<TermID> usedTermIDs = new HashSet<TermID>();
 
 	/**********************************************************************/
 
@@ -190,7 +190,7 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 			}
 		}
 
-		usedGoTerms.add(currentTermID);
+		usedTermIDs.add(currentTermID);
 
 		ByteString[] synonyms;
 		/* populate synonym string field */
@@ -245,7 +245,7 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 	 */
 	public int getNumberOfUsedTerms()
 	{
-		return usedGoTerms.size();
+		return usedTermIDs.size();
 	}
 
 	public ArrayList<Association> getAssociations()
