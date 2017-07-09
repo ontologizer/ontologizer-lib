@@ -55,7 +55,11 @@ import ontologizer.types.ByteString;
 
 public class Association implements Serializable
 {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
+
+	private static final ByteString [] EMPTY_BYTESTRING_ARRAY = new ByteString[]{};
+	private static final byte PIPE = (byte)'|';
+
 
 	/** A unique identifier in the database such as an accession number */
 	private ByteString DB_Object;
@@ -77,8 +81,8 @@ public class Association implements Serializable
 
 	/* TODO: Add "contributes_to" or "colocalizes_with" qualifier */
 
-	/** A synonym for the identifier */
-	private ByteString synonym;
+	/** Synonyms for the identifier */
+	private ByteString [] synonyms;
 
 	/** Used to hold the tab-separated fields of each line during parsing */
 	private final static String DELIM = "\t";
@@ -106,7 +110,7 @@ public class Association implements Serializable
 	/** Index of aspect field */
 	private final static int ASPECTFIELD = 8;
 
-	/** Index of synonym field */
+	/** Index of synonyms field */
 	private final static int SYNONYMFIELD = 10;
 
 	/** Index fo dbObjectType field */
@@ -115,8 +119,6 @@ public class Association implements Serializable
 
 	/** Use this pattern to split tab-separated fields on a line */
 	private static final Pattern pattern = Pattern.compile(DELIM);
-
-	private static final ByteString emptyString = EMPTY;
 
 	private static final ByteString notString = b("NOT");
 
@@ -140,9 +142,7 @@ public class Association implements Serializable
 	 */
 	public Association(ByteString db_object_symbol, int goIntID)
 	{
-		DB_Object = synonym = ByteString.EMPTY;
-		DB_Object_Symbol = db_object_symbol;
-		termID = new TermID(goIntID);
+		this(db_object_symbol, new TermID(goIntID));
 	}
 
 
@@ -155,7 +155,8 @@ public class Association implements Serializable
 	 */
 	public Association(ByteString db_object_symbol, TermID termID)
 	{
-		DB_Object = synonym = EMPTY;
+		DB_Object = EMPTY;
+		synonyms = EMPTY_BYTESTRING_ARRAY;
 		DB_Object_Symbol = db_object_symbol;
 		this.termID = termID;
 	}
@@ -169,9 +170,7 @@ public class Association implements Serializable
 	 */
 	public Association(ByteString db_object_symbol, String term)
 	{
-		DB_Object = synonym = EMPTY;
-		DB_Object_Symbol = db_object_symbol;
-		termID = new TermID(term);
+		this(db_object_symbol, new TermID(term));
 	}
 
 	private Association() {};
@@ -195,11 +194,11 @@ public class Association implements Serializable
 	}
 
 	/**
-	 * @return the association's synonym.
+	 * @return the association's synonyms.
 	 */
-	public ByteString getSynonym()
+	public ByteString [] getSynonyms()
 	{
-		return synonym;
+		return synonyms;
 	}
 
 	/**
@@ -254,7 +253,7 @@ public class Association implements Serializable
 	 * instance, in 30 entries of one such file that will go nameless :-) ).
 	 *
 	 * We are interested in 2) DB_Object, 3) DB_Object_Symbol, NOT, GOid,
-	 * Aspect, synonym.
+	 * Aspect, synonyms.
 	 *
 	 * @param a the object to be initialized
 	 * @param line a line from a gene_association file
@@ -263,7 +262,8 @@ public class Association implements Serializable
 	 */
 	private static void initFromLine(Association a, String line, PrefixPool prefixPool)
 	{
-		a.DB_Object = a.DB_Object_Symbol = a.synonym = emptyString;
+		a.DB_Object = a.DB_Object_Symbol = EMPTY;
+		a.synonyms = EMPTY_BYTESTRING_ARRAY;
 		a.termID = null;
 
 		/* Split the tab-separated line: */
@@ -292,7 +292,11 @@ public class Association implements Serializable
 		fields[GOFIELD] = fields[GOFIELD].trim();
 		a.termID = new TermID(fields[GOFIELD],prefixPool);
 
-		a.synonym = new ByteString(fields[SYNONYMFIELD].trim());
+		ByteString synonymField = new ByteString(fields[SYNONYMFIELD].trim());
+		if (synonymField.length() > 0)
+		{
+			a.synonyms = synonymField.split(PIPE);
+		}
 	}
 
 	/**
@@ -355,7 +359,8 @@ public class Association implements Serializable
 	public static Association createFromGAFLine(byte[] byteBuf, int offset, int len, PrefixPool prefixPool)
 	{
 		Association a = new Association();
-		a.DB_Object = a.DB_Object_Symbol = a.synonym = emptyString;
+		a.DB_Object = a.DB_Object_Symbol = EMPTY;
+		a.synonyms = EMPTY_BYTESTRING_ARRAY;
 
 		int fieldOffset = offset;
 		int p = offset;
@@ -373,9 +378,8 @@ public class Association implements Serializable
 					case	EVIDENCEFIELD:	a.evidence = new ByteString(byteBuf,fieldOffset,p); break;
 					case	ASPECTFIELD:	a.aspect = new ByteString(byteBuf,fieldOffset,p); break;
 					case	QUALIFIERFIELD: a.notQualifier = new ByteString(byteBuf,fieldOffset,p).indexOf(notString) != -1; break;
-					case	SYNONYMFIELD:	a.synonym = new ByteString(byteBuf,fieldOffset,p); break;
+					case	SYNONYMFIELD:	if (fieldOffset + 1 < p) a.synonyms = new ByteString(byteBuf,fieldOffset,p).split(PIPE); break;
 					case	GOFIELD:		a.termID = new TermID(new ByteString(byteBuf,fieldOffset,p),prefixPool); break;
-
 				}
 
 				fieldOffset = p + 1;

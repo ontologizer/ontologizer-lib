@@ -32,7 +32,8 @@ public class AssociationTest
 		assertEquals("S000004660", a.getDB_Object().toString());
 		assertEquals(new TermID("GO:0015886"),a.getTermID());
 		assertEquals("IPI",a.getEvidence().toString());
-		assertEquals("YMR056C", a.getSynonym().toString());
+		assertEquals(1, a.getSynonyms().length);
+		assertEquals("YMR056C", a.getSynonyms()[0].toString());
 		assertEquals("AAC1", a.getObjectSymbol().toString());
 	}
 
@@ -44,7 +45,8 @@ public class AssociationTest
 		assertEquals("S000004660", a.getDB_Object().toString());
 		assertEquals(new TermID("GO:0015886"),a.getTermID());
 		assertEquals("IPI",a.getEvidence().toString());
-		assertEquals("YMR056C", a.getSynonym().toString());
+		assertEquals(1, a.getSynonyms().length);
+		assertEquals("YMR056C", a.getSynonyms()[0].toString());
 		assertEquals("AAC1", a.getObjectSymbol().toString());
 	}
 

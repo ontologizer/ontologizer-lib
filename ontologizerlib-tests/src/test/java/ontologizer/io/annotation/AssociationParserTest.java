@@ -44,7 +44,7 @@ public class AssociationParserTest extends TestBase
 	{
 		int nAnnotatedGenes = 6359;
 		int nAssociations = 87599;
-		int nSynonyms = 9250;
+		int nSynonyms = 9251;
 		int nDBObjects = 6359;
 
 		String[] someGenes = {"SRL1", "DDR2", "UFO1"};
