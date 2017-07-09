@@ -1,7 +1,6 @@
 package ontologizer.io.annotation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
@@ -16,6 +15,7 @@ import ontologizer.ontology.PrefixPool;
 import ontologizer.ontology.Term;
 import ontologizer.ontology.TermID;
 import ontologizer.ontology.TermMap;
+import ontologizer.ontology.TermPropertyMap;
 import ontologizer.types.ByteString;
 
 /**
@@ -60,7 +60,8 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 	/** Our prefix pool */
 	private PrefixPool prefixPool = new PrefixPool();
 
-	private HashMap<TermID, Term> altTermID2Term = null;
+	private TermPropertyMap<TermID> altTermIDMap = null;
+
 	private HashSet<TermID> usedTermIDs = new HashSet<TermID>();
 
 	/**********************************************************************/
@@ -147,21 +148,19 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 			Term currentTerm = terms.get(currentTermID);
 			if (currentTerm == null)
 			{
-				if (altTermID2Term == null)
-				{
-					/* Create the alternative ID to Term map */
-					altTermID2Term = new HashMap<TermID, Term>();
+				TermID altID;
 
-					for (Term t : terms)
-						for (TermID altID : t.getAlternatives())
-							altTermID2Term.put(altID, t);
+				if (altTermIDMap == null)
+				{
+					altTermIDMap = new TermPropertyMap<TermID>(terms, TermPropertyMap.term2AltIdMap);
 				}
 
 				/* Try to find the term among the alternative terms before giving up. */
-				currentTerm = altTermID2Term.get(currentTermID);
-				if (currentTerm == null)
+				altID = altTermIDMap.get(currentTermID);
+				if (altID != null)
+					currentTerm = terms.get(altID);
+				if (altID == null || currentTerm == null)
 				{
-					logger.log(Level.WARNING, "Skipping association of the item \"{}\" t {} because the term was not found! "
 							+ "Are the OBO file and the association file both up-to-date?",
 							new Object[] { assoc.getObjectSymbol(), currentTermID });
 					skipped++;
@@ -169,7 +168,7 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 				} else
 				{
 					/* Okay, found, so set the new attributes */
-					currentTermID = currentTerm.getID();
+					currentTermID = altID;
 					assoc.setTermID(currentTermID);
 				}
 			} else
