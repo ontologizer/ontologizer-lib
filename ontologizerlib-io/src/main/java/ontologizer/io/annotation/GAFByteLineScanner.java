@@ -161,6 +161,7 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 					currentTerm = terms.get(altID);
 				if (altID == null || currentTerm == null)
 				{
+					logger.log(Level.WARNING, "Skipping association of the item \"{}\" to {} because the term was not found! "
 							+ "Are the OBO file and the association file both up-to-date?",
 							new Object[] { assoc.getObjectSymbol(), currentTermID });
 					skipped++;
@@ -180,7 +181,7 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 
 			if (currentTerm.isObsolete())
 			{
-				logger.log(Level.WARNING, "Skipping association of the item \"{}\" t {} because the term was not found! "
+				logger.log(Level.WARNING, "Skipping association of the item \"{}\" to {} because the term is obsolete! "
 						+ "Are the OBO file and the association file both up-to-date?",
 						new Object[] { assoc.getObjectSymbol(), currentTermID });
 				skipped++;
