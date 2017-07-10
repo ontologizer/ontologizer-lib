@@ -143,47 +143,9 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 
 		if (terms != null)
 		{
-			Term currentTerm = terms.get(currentTermID);
-			if (currentTerm == null)
+			currentTermID = resolveAssociation(assoc);
+			if (currentTermID == null)
 			{
-				TermID altID;
-
-				if (altTermIDMap == null)
-				{
-					altTermIDMap = new TermPropertyMap<TermID>(terms, TermPropertyMap.term2AltIdMap);
-				}
-
-				/* Try to find the term among the alternative terms before giving up. */
-				altID = altTermIDMap.get(currentTermID);
-				if (altID != null)
-					currentTerm = terms.get(altID);
-				if (altID == null || currentTerm == null)
-				{
-					logger.log(Level.WARNING, "Skipping association of the item \"{}\" to {} because the term was not found! "
-							+ "Are the OBO file and the association file both up-to-date?",
-							new Object[] { assoc.getObjectSymbol(), currentTermID });
-					skipped++;
-					return true;
-				} else
-				{
-					/* Okay, found, so set the new attributes */
-					currentTermID = altID;
-					assoc.setTermID(currentTermID);
-				}
-			} else
-			{
-				/* Reset the term id so a unique id is used */
-				currentTermID = currentTerm.getID();
-				assoc.setTermID(currentTermID);
-			}
-
-			if (currentTerm.isObsolete())
-			{
-				logger.log(Level.WARNING, "Skipping association of the item \"{}\" to {} because the term is obsolete! "
-						+ "Are the OBO file and the association file both up-to-date?",
-						new Object[] { assoc.getObjectSymbol(), currentTermID });
-				skipped++;
-				obsolete++;
 				return true;
 			}
 		}
@@ -229,6 +191,63 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 		mapBuilder.add(assoc, synonyms, lineno);
 
 		return true;
+	}
+
+	/**
+	 * Resolve the given association, i.e., try to find an alternative if the target doesn't
+	 * map to a primary term id.
+	 *
+	 * @param assoc the association to be resolved.
+	 * @return the term id to which the target of the association was resolved.
+	 */
+	private TermID resolveAssociation(Association assoc)
+	{
+		TermID currentTermID = assoc.getTermID();
+
+		Term currentTerm = terms.get(currentTermID);
+		if (currentTerm == null)
+		{
+			TermID altID;
+
+			if (altTermIDMap == null)
+			{
+				altTermIDMap = new TermPropertyMap<TermID>(terms, TermPropertyMap.term2AltIdMap);
+			}
+
+			/* Try to find the term among the alternative terms before giving up. */
+			altID = altTermIDMap.get(currentTermID);
+			if (altID != null)
+				currentTerm = terms.get(altID);
+			if (altID == null || currentTerm == null)
+			{
+				logger.log(Level.WARNING, "Skipping association of the item \"{}\" to {} because the term was not found! "
+						+ "Are the OBO file and the association file both up-to-date?",
+						new Object[] { assoc.getObjectSymbol(), currentTermID });
+				skipped++;
+				return null;
+			} else
+			{
+				/* Okay, found, so set the new attributes */
+				currentTermID = altID;
+				assoc.setTermID(currentTermID);
+			}
+		} else
+		{
+			/* Reset the term id so a unique id is used */
+			currentTermID = currentTerm.getID();
+			assoc.setTermID(currentTermID);
+		}
+
+		if (currentTerm.isObsolete())
+		{
+			logger.log(Level.WARNING, "Skipping association of the item \"{}\" to {} because the term is obsolete! "
+					+ "Are the OBO file and the association file both up-to-date?",
+					new Object[] { assoc.getObjectSymbol(), currentTermID });
+			skipped++;
+			obsolete++;
+			return null;
+		}
+		return currentTermID;
 	}
 
 	/**
