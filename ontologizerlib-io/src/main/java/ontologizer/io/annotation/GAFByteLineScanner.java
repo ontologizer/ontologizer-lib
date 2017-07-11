@@ -3,8 +3,6 @@ package ontologizer.io.annotation;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import ontologizer.association.AnnotationContext;
 import ontologizer.association.AnnotationMapBuilder;
@@ -12,10 +10,8 @@ import ontologizer.association.Association;
 import ontologizer.io.IParserInput;
 import ontologizer.io.linescanner.AbstractByteLineScanner;
 import ontologizer.ontology.PrefixPool;
-import ontologizer.ontology.Term;
 import ontologizer.ontology.TermID;
 import ontologizer.ontology.TermMap;
-import ontologizer.ontology.TermPropertyMap;
 import ontologizer.types.ByteString;
 
 /**
@@ -25,16 +21,11 @@ import ontologizer.types.ByteString;
  */
 class GAFByteLineScanner extends AbstractByteLineScanner
 {
-	private static Logger logger = Logger.getLogger(GAFByteLineScanner.class.getName());
-
 	/** The wrapped input */
 	private IParserInput input;
 
 	/** Contains all items whose associations should gathered or null if all should be gathered */
 	private Set<ByteString> names;
-
-	/** All known terms */
-	private TermMap terms;
 
 	/** Set of evidences that shall be considered or null if all should be considered */
 	private Set<ByteString> evidences;
@@ -58,8 +49,6 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 	/** Our prefix pool */
 	private PrefixPool prefixPool = new PrefixPool();
 
-	private TermPropertyMap<TermID> altTermIDMap = null;
-
 	private HashSet<TermID> usedTermIDs = new HashSet<TermID>();
 
 	/**********************************************************************/
@@ -68,15 +57,21 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 
 	private AnnotationMapBuilder.WarningCallback warningCallback;
 
+	private AssociationResolver resolver;
+
 	public GAFByteLineScanner(IParserInput input, byte [] head, Set<ByteString> names, TermMap terms, Set<ByteString> evidences, final IAssociationParserProgress progress)
 	{
 		super(input.inputStream());
 
 		push(head);
 
+		if (terms != null)
+		{
+			resolver = new AssociationResolver(terms);
+		}
+
 		this.input = input;
 		this.names = names;
-		this.terms = terms;
 		this.evidences = evidences;
 		this.progress = progress;
 
@@ -141,9 +136,9 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 			}
 		}
 
-		if (terms != null)
+		if (resolver != null)
 		{
-			currentTermID = resolveAssociation(assoc);
+			currentTermID = resolver.resolveAssociation(assoc);
 			if (currentTermID == null)
 			{
 				return true;
@@ -191,63 +186,6 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 		mapBuilder.add(assoc, synonyms, lineno);
 
 		return true;
-	}
-
-	/**
-	 * Resolve the given association, i.e., try to find an alternative if the target doesn't
-	 * map to a primary term id.
-	 *
-	 * @param assoc the association to be resolved.
-	 * @return the term id to which the target of the association was resolved.
-	 */
-	private TermID resolveAssociation(Association assoc)
-	{
-		TermID currentTermID = assoc.getTermID();
-
-		Term currentTerm = terms.get(currentTermID);
-		if (currentTerm == null)
-		{
-			TermID altID;
-
-			if (altTermIDMap == null)
-			{
-				altTermIDMap = new TermPropertyMap<TermID>(terms, TermPropertyMap.term2AltIdMap);
-			}
-
-			/* Try to find the term among the alternative terms before giving up. */
-			altID = altTermIDMap.get(currentTermID);
-			if (altID != null)
-				currentTerm = terms.get(altID);
-			if (altID == null || currentTerm == null)
-			{
-				logger.log(Level.WARNING, "Skipping association of the item \"{}\" to {} because the term was not found! "
-						+ "Are the OBO file and the association file both up-to-date?",
-						new Object[] { assoc.getObjectSymbol(), currentTermID });
-				skipped++;
-				return null;
-			} else
-			{
-				/* Okay, found, so set the new attributes */
-				currentTermID = altID;
-				assoc.setTermID(currentTermID);
-			}
-		} else
-		{
-			/* Reset the term id so a unique id is used */
-			currentTermID = currentTerm.getID();
-			assoc.setTermID(currentTermID);
-		}
-
-		if (currentTerm.isObsolete())
-		{
-			logger.log(Level.WARNING, "Skipping association of the item \"{}\" to {} because the term is obsolete! "
-					+ "Are the OBO file and the association file both up-to-date?",
-					new Object[] { assoc.getObjectSymbol(), currentTermID });
-			skipped++;
-			obsolete++;
-			return null;
-		}
-		return currentTermID;
 	}
 
 	/**
