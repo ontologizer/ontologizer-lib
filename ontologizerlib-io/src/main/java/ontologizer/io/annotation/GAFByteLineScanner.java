@@ -27,9 +27,6 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 	/** Contains all items whose associations should gathered or null if all should be gathered */
 	private Set<ByteString> names;
 
-	/** Set of evidences that shall be considered or null if all should be considered */
-	private Set<ByteString> evidences;
-
 	/** Monitor progress */
 	private IAssociationParserProgress progress;
 
@@ -67,12 +64,11 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 
 		if (terms != null)
 		{
-			resolver = new AssociationResolver(terms);
+			resolver = new AssociationResolver(terms, evidences);
 		}
 
 		this.input = input;
 		this.names = names;
-		this.evidences = evidences;
 		this.progress = progress;
 
 		if (progress != null)
@@ -120,20 +116,6 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 			skipped++;
 			nots++;
 			return true;
-		}
-
-		if (evidences != null)
-		{
-			/*
-			 * Skip if evidence of the annotation was not supplied as
-			 * argument
-			 */
-			if (!evidences.contains(assoc.getEvidence()))
-			{
-				skipped++;
-				evidenceMismatch++;
-				return true;
-			}
 		}
 
 		if (resolver != null)
