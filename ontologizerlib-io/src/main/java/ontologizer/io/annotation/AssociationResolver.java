@@ -1,5 +1,6 @@
 package ontologizer.io.annotation;
 
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -8,6 +9,7 @@ import ontologizer.ontology.Term;
 import ontologizer.ontology.TermID;
 import ontologizer.ontology.TermMap;
 import ontologizer.ontology.TermPropertyMap;
+import ontologizer.types.ByteString;
 
 /**
  * Resolve associations.
@@ -20,15 +22,25 @@ public class AssociationResolver
 
 	private int unknown;
 	private int obsolete;
+	private int evidenceMismatch;
 
 	/** All known terms */
 	private TermMap terms;
 
+	/** The evidences that shall be considered, null means to take them all */
+	private Set<ByteString> evidences;
+
 	private TermPropertyMap<TermID> altTermIDMap = null;
+
+	public AssociationResolver(TermMap terms, Set<ByteString> evidences)
+	{
+		this.terms = terms;
+		this.evidences = evidences;
+	}
 
 	public AssociationResolver(TermMap terms)
 	{
-		this.terms = terms;
+		this(terms, null);
 	}
 
 	/**
@@ -84,6 +96,20 @@ public class AssociationResolver
 			obsolete++;
 			return null;
 		}
+
+		if (evidences != null)
+		{
+			/*
+			 * Skip if evidence of the annotation was not supplied as
+			 * argument
+			 */
+			if (!evidences.contains(assoc.getEvidence()))
+			{
+				evidenceMismatch++;
+				return null;
+			}
+		}
+
 		return currentTermID;
 	}
 
@@ -101,5 +127,14 @@ public class AssociationResolver
 	public int getObsolete()
 	{
 		return obsolete;
+	}
+
+	/**
+	 * @return number of rejected annotations due to their evidences not matching
+	 *  the requested ones.
+	 */
+	public int getEvidenceMismatch()
+	{
+		return evidenceMismatch;
 	}
 }
