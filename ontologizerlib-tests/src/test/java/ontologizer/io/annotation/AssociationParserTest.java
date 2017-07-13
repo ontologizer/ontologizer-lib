@@ -27,6 +27,8 @@ import ontologizer.io.ParserFileInput;
 import ontologizer.io.obo.OBOParser;
 import ontologizer.io.obo.OBOParserException;
 import ontologizer.ontology.TermContainer;
+import ontologizer.ontology.TermID;
+import ontologizer.ontology.TermPropertyMap;
 import ontologizer.types.ByteString;
 
 public class AssociationParserTest extends TestBase
@@ -233,6 +235,41 @@ public class AssociationParserTest extends TestBase
 
 		assertEquals(2, assoc.getAllAnnotatedGenes().size());
 		assertEquals(1, warningCapture.warnings.size());
+	}
+
+	/// DB\tDBOBJID1\tSYMBOL1\t\tGO:0000104\tPMID:00000\tEVIDENCE\t\tC\t\tgene\ttaxon:4932\t20121212\tSBA
+	/// DB\tDBOBJID2\tSYMBOL2\t\tGO:0019739\tPMID:00000\tEVIDENCE\t\tC\t\tgene\ttaxon:4932\t20121212\tSBA
+	@Test
+	public void testAltId() throws IOException, OBOParserException
+	{
+		/* Here we test if the annotaions are properly resolved.
+		 * In particular, GO:0019739 is an alternative id for GO:0000104
+		 * so both annotations should refer the same term.
+		 */
+
+		String gafFile = getTestCommentAsPath(".gaf", TestSourceUtils.DECODE_TABS);
+
+		OBOParser oboParser = new OBOParser(new ParserFileInput(OBO_FILE));
+		oboParser.doParse();
+
+		TermContainer tc = new TermContainer(oboParser.getTermMap(), EMPTY, EMPTY);
+		TermPropertyMap<TermID> altIdMap = new TermPropertyMap<TermID>(tc, TermPropertyMap.term2AltIdMap);
+
+		/* The precondition: check if the ids really refer to the same term */
+		assertEquals(new TermID("GO:0000104"), altIdMap.get(new TermID("GO:0019739")));
+
+		/* Now parse associations, we expect that both refer to the same term */
+		AssociationParser ap = new AssociationParser(new ParserFileInput(gafFile), tc);
+		assertEquals(2, ap.getAssociations().size());
+
+		Association a0 = ap.getAssociations().get(0);
+		Association a1 = ap.getAssociations().get(1);
+
+		assertEquals("DBOBJID1", a0.getDB_Object().toString());
+		assertEquals("DBOBJID2", a1.getDB_Object().toString());
+
+		assertEquals(new TermID("GO:0000104"), a0.getTermID());
+		assertEquals(new TermID("GO:0000104"), a1.getTermID());
 	}
 
 	///
