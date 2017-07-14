@@ -4,11 +4,9 @@ import static ontologizer.types.ByteString.EMPTY;
 import static ontologizer.types.ByteString.b;
 import static org.junit.Assert.assertEquals;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -153,18 +151,13 @@ public class AssociationParserTest extends TestBase
 	@Test
 	public void testAmbiguousGAFCaseA() throws IOException, OBOParserException
 	{
-		File tmp = tmpFolder.newFile("testAmbiguousGAFCaseA.gaf");
-		BufferedWriter bw = new BufferedWriter(new FileWriter(tmp));
-		bw.write("DB\tDBOBJID1\tSYMBOL\t\tGO:0005763\tPMID:00000\tEVIDENCE\t\tC\tSYNONYM1|SYNONYM2\tgene\ttaxon:4932\t20121212\tSBA\n");
-		bw.write("DB\tDBOBJID2\tSYMBOL\t\tGO:0005760\tPMID:00000\tEVIDENCE\t\tC\t\tgene\ttaxon:4932\t20121212\tSBA\n");
-		bw.flush();
-		bw.close();
+		String gafFile = getTestCommentAsPath(".gaf", TestSourceUtils.DECODE_TABS);
 
 		OBOParser oboParser = new OBOParser(new ParserFileInput(OBO_FILE));
 		oboParser.doParse();
 
 		WarningCapture warningCapture = new WarningCapture();
-		AssociationParser ap = new AssociationParser(new ParserFileInput(tmp.getAbsolutePath()), new TermContainer(oboParser.getTermMap(), EMPTY, EMPTY), null, warningCapture);
+		AssociationParser ap = new AssociationParser(new ParserFileInput(gafFile), new TermContainer(oboParser.getTermMap(), EMPTY, EMPTY), null, warningCapture);
 		AssociationContainer assoc = new AssociationContainer(ap.getAssociations(), ap.getAnnotationMapping());
 
 		/* We expect only one annotated object as DBOBJID1 is the same as DBOBJID2 due to the same symbol */
