@@ -235,7 +235,7 @@ public class AssociationParserTest extends TestBase
 	@Test
 	public void testAltId() throws IOException, OBOParserException
 	{
-		/* Here we test if the annotaions are properly resolved.
+		/* Here we test if the annotations are properly resolved.
 		 * In particular, GO:0019739 is an alternative id for GO:0000104
 		 * so both annotations should refer the same term.
 		 */
