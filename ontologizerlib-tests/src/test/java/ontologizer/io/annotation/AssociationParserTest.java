@@ -262,6 +262,54 @@ public class AssociationParserTest extends TestBase
 		assertEquals(new TermID("GO:0000104"), a1.getTermID());
 	}
 
+	/// DB\tDBOBJID1\tSYMBOL1\t\tGO:0000104\tPMID:00000\tEVIDENCE\t\tC\t\tgene\ttaxon:4932\t20121212\tSBA
+	/// DB\tDBOBJID2\tSYMBOL2\t\tGO:0019739\tPMID:00000\tEVIDENCE\t\tC\t\tgene\ttaxon:4932\t20121212\tSBA
+	@Test
+	public void testAltIdLaterResolving() throws IOException, OBOParserException
+	{
+		/* Here we test if the annotations are properly resolved after
+		 * all of them have read in.
+		 *
+		 * In particular, GO:0019739 is an alternative id for GO:0000104
+		 * so both annotations should refer the same term.
+		 *
+		 * In this test, the resolving will happen explicitly after the
+		 * annotations have been loaded.
+		 */
+
+		String gafFile = getTestCommentAsPath(".gaf", TestSourceUtils.DECODE_TABS);
+
+		TermContainer tc = createTermContainer();
+		TermPropertyMap<TermID> altIdMap = new TermPropertyMap<TermID>(tc, TermPropertyMap.term2AltIdMap);
+
+		/* The precondition: check if the ids really refer to the same term */
+		assertEquals(new TermID("GO:0000104"), altIdMap.get(new TermID("GO:0019739")));
+
+		/* Now parse associations, we expect that both refer to the same term */
+		AssociationParser ap = new AssociationParser(new ParserFileInput(gafFile));
+		assertEquals(2, ap.getAssociations().size());
+
+		Association a0 = ap.getAssociations().get(0);
+		Association a1 = ap.getAssociations().get(1);
+
+		assertEquals("DBOBJID1", a0.getDB_Object().toString());
+		assertEquals("DBOBJID2", a1.getDB_Object().toString());
+
+		assertEquals(new TermID("GO:0000104"), a0.getTermID());
+		assertEquals(new TermID("GO:0019739"), a1.getTermID());
+
+		/* Now resolve the annotations */
+		AssociationResolver resolver = new AssociationResolver(tc);
+		List<Association> associations = resolver.resolveAndModify(ap.getAssociations());
+
+		a0 = associations.get(0);
+		a1 = associations.get(1);
+
+		assertEquals(new TermID("GO:0000104"), a0.getTermID());
+		assertEquals(new TermID("GO:0000104"), a1.getTermID());
+	}
+
+
 	/**
 	 * Create a term container for the test obo file.
 	 *

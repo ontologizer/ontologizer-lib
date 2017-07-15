@@ -1,5 +1,7 @@
 package ontologizer.io.annotation;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -136,5 +138,31 @@ public class AssociationResolver
 	public int getEvidenceMismatch()
 	{
 		return evidenceMismatch;
+	}
+
+	/**
+	 * Resolve all annotations of a given list using the given resolver and
+	 * apply the resolving.
+	 *
+	 * This is a in-place operation. The associations will be mutated by
+	 * this method.
+	 *
+	 * @param associations the association to be resolved
+	 * @return a list of possible
+	 */
+	public List<Association> resolveAndModify(List<Association> associations)
+	{
+		List<Association> modifiedAssociations = new ArrayList<Association>(associations.size());
+		for (Association a : associations)
+		{
+			TermID tid = resolveAssociation(a);
+			if (tid == null)
+			{
+				continue;
+			}
+			a.setTermID(tid);
+			modifiedAssociations.add(a);
+		}
+		return modifiedAssociations;
 	}
 }
