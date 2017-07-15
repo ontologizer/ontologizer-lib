@@ -242,10 +242,7 @@ public class AssociationParserTest extends TestBase
 
 		String gafFile = getTestCommentAsPath(".gaf", TestSourceUtils.DECODE_TABS);
 
-		OBOParser oboParser = new OBOParser(new ParserFileInput(OBO_FILE));
-		oboParser.doParse();
-
-		TermContainer tc = new TermContainer(oboParser.getTermMap(), EMPTY, EMPTY);
+		TermContainer tc = createTermContainer();
 		TermPropertyMap<TermID> altIdMap = new TermPropertyMap<TermID>(tc, TermPropertyMap.term2AltIdMap);
 
 		/* The precondition: check if the ids really refer to the same term */
@@ -263,6 +260,22 @@ public class AssociationParserTest extends TestBase
 
 		assertEquals(new TermID("GO:0000104"), a0.getTermID());
 		assertEquals(new TermID("GO:0000104"), a1.getTermID());
+	}
+
+	/**
+	 * Create a term container for the test obo file.
+	 *
+	 * @return the term container
+	 * @throws IOException
+	 * @throws OBOParserException
+	 */
+	private TermContainer createTermContainer() throws IOException, OBOParserException
+	{
+		OBOParser oboParser = new OBOParser(new ParserFileInput(OBO_FILE));
+		oboParser.doParse();
+
+		TermContainer tc = new TermContainer(oboParser.getTermMap(), EMPTY, EMPTY);
+		return tc;
 	}
 
 	///
