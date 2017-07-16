@@ -21,6 +21,7 @@ import ontologizer.TestBase;
 import ontologizer.TestSourceUtils;
 import ontologizer.association.Association;
 import ontologizer.association.AssociationContainer;
+import ontologizer.association.AssociationResolver;
 import ontologizer.io.ParserFileInput;
 import ontologizer.io.obo.OBOParser;
 import ontologizer.io.obo.OBOParserException;

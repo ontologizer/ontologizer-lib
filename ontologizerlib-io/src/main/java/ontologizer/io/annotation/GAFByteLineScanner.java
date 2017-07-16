@@ -7,6 +7,7 @@ import java.util.Set;
 import ontologizer.association.AnnotationContext;
 import ontologizer.association.AnnotationMapBuilder;
 import ontologizer.association.Association;
+import ontologizer.association.AssociationResolver;
 import ontologizer.io.IParserInput;
 import ontologizer.io.linescanner.AbstractByteLineScanner;
 import ontologizer.ontology.PrefixPool;
