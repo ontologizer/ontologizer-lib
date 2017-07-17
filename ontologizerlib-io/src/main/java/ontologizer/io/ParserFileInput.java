@@ -7,9 +7,7 @@ import java.nio.channels.FileChannel;
 import java.util.zip.GZIPInputStream;
 
 /**
- * An OBOParserInput for a local file.
- *
- * TODO: rename as it is not restricted to OBO
+ * An IParserInput for a local file.
  *
  * @author Sebastian Bauer
  */
