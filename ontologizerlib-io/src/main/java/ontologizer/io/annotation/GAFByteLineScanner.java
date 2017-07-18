@@ -37,9 +37,7 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 	public int bad = 0;
 	public int skipped = 0;
 	public int nots = 0;
-	public int evidenceMismatch = 0;
 	public int kept = 0;
-	public int obsolete = 0;
 
 	/** Mapping from gene (or gene product) names to Association objects */
 	private ArrayList<Association> associations = new ArrayList<Association>();
@@ -190,6 +188,31 @@ class GAFByteLineScanner extends AbstractByteLineScanner
 	public AnnotationContext getAnnotationContext()
 	{
 		return mapBuilder.build();
+	}
+
+	/**
+	 * @return total number of entries that didn't match the specified
+	 *  evidences.
+	 */
+	public int getEvidenceMismatchCount()
+	{
+		if (resolver != null)
+		{
+			return resolver.getEvidenceMismatch();
+		}
+		return 0;
+	}
+
+	/**
+	 * @return total number of entries that referred to obsolete terms.
+	 */
+	public int getObsoleteCount()
+	{
+		if (resolver != null)
+		{
+			return resolver.getObsolete();
+		}
+		return 0;
 	}
 };
 

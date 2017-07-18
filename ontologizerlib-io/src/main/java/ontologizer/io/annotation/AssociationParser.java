@@ -357,8 +357,8 @@ public class AssociationParser
 		logger.log(Level.INFO, "A further " + ls.skipped
 				+ " associations were skipped due to various reasons whereas "
 				+ ls.nots + " of those where explicitly qualified with NOT, " +
-				+ ls.obsolete + " referred to obsolete terms and "
-				+ ls.evidenceMismatch + " didn't"
+				+ ls.getObsoleteCount() + " referred to obsolete terms and "
+				+ ls.getEvidenceMismatchCount() + " didn't"
 				+ " match the requested evidence codes");
 		logger.log(Level.INFO, "A total of " + ls.getNumberOfUsedTerms()
 				+ " terms are directly associated to " + ls.getAnnotationContext().getSymbols().length
