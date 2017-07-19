@@ -895,6 +895,20 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 	 */
 	public DirectedGraph<V,ED>subGraph(Set<V> verticesToBeIncluded)
 	{
+		return subGraph(verticesToBeIncluded, null);
+	}
+
+	/**
+	 * Returns a subgraph of the graph that includes all given vertices. Edges are included
+	 * only, if it is spanned between two vertices in the given set.
+	 *
+	 * @param verticesToBeIncluded
+	 * @param filter a filter that allows to specifiy which kind of edges shall be copied to
+	 *  the new graph.
+	 * @return the subgraph
+	 */
+	public DirectedGraph<V,ED>subGraph(Set<V> verticesToBeIncluded, IEdgeFilter<ED> filter)
+	{
 		DirectedGraph<V,ED> graph = new DirectedGraph<V,ED>();
 
 		/* Add vertices that should be contained in the subgraph */
@@ -908,6 +922,13 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 			while (edges.hasNext())
 			{
 				Edge<V,ED> e = edges.next();
+				if (filter != null)
+				{
+					if (filter.leaveOut(e.getData()))
+					{
+						continue;
+					}
+				}
 				if (verticesToBeIncluded.contains(e.getSource()))
 					graph.addEdge(e);
 			}
