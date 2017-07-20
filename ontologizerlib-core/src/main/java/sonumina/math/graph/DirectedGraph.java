@@ -893,7 +893,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 	 * @param verticesToBeIncluded
 	 * @return the subgraph
 	 */
-	public DirectedGraph<V,ED>subGraph(Set<V> verticesToBeIncluded)
+	public DirectedGraph<V,ED> subGraph(Set<V> verticesToBeIncluded)
 	{
 		return subGraph(verticesToBeIncluded, null);
 	}
@@ -907,7 +907,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 	 *  the new graph.
 	 * @return the subgraph
 	 */
-	public DirectedGraph<V,ED>subGraph(Set<V> verticesToBeIncluded, IEdgeFilter<ED> filter)
+	public DirectedGraph<V,ED> subGraph(Set<V> verticesToBeIncluded, IEdgeFilter<ED> filter)
 	{
 		DirectedGraph<V,ED> graph = new DirectedGraph<V,ED>();
 
