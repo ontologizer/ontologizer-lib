@@ -563,4 +563,62 @@ public class DirectedGraphTest
 			}
 		}
 	}
+
+	@Test
+	public void testSubgraphWithEdgeFilter()
+	{
+		/*
+		 * Build a graph like this
+		 *
+		 *       0
+		 *      / \
+		 *     /   \
+		 *    1     4
+		 *   / \   / \
+		 *  2   3 5   6
+		 * Edges are labeled with 'a' expect for (0,4), which is labeled 'b'.
+		 *
+		 * The subgraph should not contain node 6 and the edge that is labeled 'b'.
+		 */
+
+		final DirectedGraph<Integer,Character> graph = new DirectedGraph<Integer,Character>();
+
+		graph.addVertex(0);
+		graph.addVertex(1);
+		graph.addVertex(2);
+		graph.addVertex(3);
+		graph.addVertex(4);
+		graph.addVertex(5);
+		graph.addVertex(6);
+
+		graph.addEdge(0, 1, 'a');
+		graph.addEdge(1, 2, 'a');
+		graph.addEdge(1, 3, 'a');
+		graph.addEdge(0, 4, 'b');
+		graph.addEdge(4, 5, 'a');
+		graph.addEdge(4, 6, 'a');
+
+		Set<Integer> vertices = new HashSet<>();
+		vertices.add(0);
+		vertices.add(1);
+		vertices.add(2);
+		vertices.add(3);
+		vertices.add(4);
+		vertices.add(5);
+
+		DirectedGraph<Integer,Character> subgraph = graph.subGraph(vertices, new IEdgeFilter<Character>()
+		{
+			@Override
+			public boolean leaveOut(Character data)
+			{
+				return data == 'b';
+			}
+		});
+		assertEquals(6, subgraph.getNumberOfVertices());
+		assertEquals(4, subgraph.getNumberEdges());
+		assertTrue(subgraph.hasEdge(0, 1));
+		assertTrue(subgraph.hasEdge(1, 2));
+		assertTrue(subgraph.hasEdge(1, 3));
+		assertTrue(subgraph.hasEdge(4, 5));
+	}
 }
