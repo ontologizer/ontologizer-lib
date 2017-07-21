@@ -576,7 +576,7 @@ public class DirectedGraphTest
 		 *    1     4
 		 *   / \   / \
 		 *  2   3 5   6
-		 * Edges are labeled with 'a' expect for (0,4), which is labeled 'b'.
+		 * Edges are labeled with 'a' except for (0,4), which is labeled 'b'.
 		 *
 		 * The subgraph should not contain node 6 and the edge that is labeled 'b'.
 		 */
