@@ -1084,13 +1084,18 @@ public class Ontology implements Iterable<Term>, IDirectedGraph<TermID>, Seriali
 		return rootTerm.getID();
 	}
 
+	public boolean isRelevantTerm(Term term)
+	{
+		return isRelevantTerm(term,  relevantSubset, relevantSubontology);
+	}
+
 	/**
 	 * Returns whether the given term is relevant (i.e., is contained in a relevant sub ontology and subset).
 	 *
 	 * @param term the term to check
 	 * @return whether term is relevant.
 	 */
-	public boolean isRelevantTerm(Term term)
+	public boolean isRelevantTerm(Term term, Subset relevantSubset, Term relevantSubontology)
 	{
 		if (relevantSubset != null)
 		{
