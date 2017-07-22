@@ -1194,9 +1194,22 @@ public class Ontology implements Iterable<Term>, IDirectedGraph<TermID>, Seriali
 	 */
 	public Ontology getOntlogyOfRelevantTerms()
 	{
+		return getOntlogyOfRelevantTerms(relevantSubset, relevantSubontology);
+	}
+
+	/**
+	 * @return the graph of relevant terms.
+	 */
+	public Ontology getOntlogyOfRelevantTerms(Subset relevantSubset, Term relevantSubontology)
+	{
 		HashSet<TermID> terms = new HashSet<TermID>();
 		for (Term t : this)
-			if (isRelevantTerm(t)) terms.add(t.getID());
+		{
+			if (isRelevantTerm(t, relevantSubset, relevantSubontology))
+			{
+				terms.add(t.getID());
+			}
+		}
 
 		DirectedGraph<TermID,RelationType> trans = graph.pathMaintainingSubGraph(terms);
 
