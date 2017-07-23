@@ -251,7 +251,7 @@ public class Ontology implements Iterable<Term>, IDirectedGraph<TermID>, Seriali
 	 */
 	public boolean isArtificialRootTerm(TermID id)
 	{
-		return isRootTerm(id) && level1terms.contains(id);
+		return isRootTerm(id) && !level1terms.contains(id);
 	}
 
 	/**
