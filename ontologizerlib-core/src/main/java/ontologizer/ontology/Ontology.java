@@ -251,7 +251,7 @@ public class Ontology implements Iterable<Term>, IDirectedGraph<TermID>, Seriali
 	 */
 	public boolean isArtificialRootTerm(TermID id)
 	{
-		return isRootTerm(id) && getLevel1Terms().contains(id);
+		return isRootTerm(id) && level1terms.contains(id);
 	}
 
 	/**
@@ -549,7 +549,7 @@ public class Ontology implements Iterable<Term>, IDirectedGraph<TermID>, Seriali
 				while (inIter.hasNext())
 				{
 					Edge<TermID,RelationType> edge = inIter.next();
-					if (relationsToFollow.contains(edge.getDest()))
+					if (relationsToFollow.contains(edge.getData().meaning()))
 						termsToConsider.add(edge.getSource());
 				}
 				return termsToConsider.iterator();
