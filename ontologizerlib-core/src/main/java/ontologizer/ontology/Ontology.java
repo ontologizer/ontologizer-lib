@@ -1194,13 +1194,13 @@ public class Ontology implements Iterable<Term>, IDirectedGraph<TermID>, Seriali
 	 */
 	public Ontology getOntlogyOfRelevantTerms()
 	{
-		return getOntlogyOfRelevantTerms(relevantSubset, relevantSubontology);
+		return getOntologyOfRelevantTerms(relevantSubset, relevantSubontology);
 	}
 
 	/**
 	 * @return the graph of relevant terms.
 	 */
-	public Ontology getOntlogyOfRelevantTerms(Subset relevantSubset, Term relevantSubontology)
+	public Ontology getOntologyOfRelevantTerms(Subset relevantSubset, Term relevantSubontology)
 	{
 		HashSet<TermID> terms = new HashSet<TermID>();
 		for (Term t : this)
