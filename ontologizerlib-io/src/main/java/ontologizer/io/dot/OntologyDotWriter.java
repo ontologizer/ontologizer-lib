@@ -107,7 +107,7 @@ public class OntologyDotWriter
 		if (ignoreTerms != null)
 		{
 			for (TermID it : ignoreTerms)
-				nodeSet.remove(graph.getTerm(it));
+				nodeSet.remove(graph.getTerm(it).getID());
 		}
 
 		/* We now have a list of nodes which can be placed into the output */
