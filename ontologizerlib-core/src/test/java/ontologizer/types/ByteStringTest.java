@@ -89,4 +89,12 @@ public class ByteStringTest
 		Assert.assertEquals("", split[1].toString());
 		Assert.assertEquals("str3", split[2].toString());
 }
+
+	@Test
+	public void testReplace()
+	{
+		ByteString oldStr = new ByteString("positively_regulates");
+		ByteString newStr = oldStr.replace('_', ' ');
+		Assert.assertEquals("positively regulates", newStr.toString());
+	}
 }

@@ -351,6 +351,25 @@ public final class ByteString implements Serializable
 		return this.toString().compareTo(name.toString());
 	}
 
+	/**
+	 * Replace any occurrence of oldChar with newChar and return the result.
+	 *
+	 * @param oldChar the character to be replaced.
+	 * @param newChar the character that replaces the oldChar.
+	 * @return the result.
+	 */
+	public ByteString replace(int oldChar, int newChar)
+	{
+		ByteString newStr = new ByteString(this.bytes);
+		for (int i=0; i<bytes.length; i++)
+		{
+			if (newStr.bytes[i] == oldChar)
+			{
+				newStr.bytes[i] =(byte)newChar;
+			}
+		}
+		return newStr;
+	}
 
 	/**
 	 * Return a ByteString representation from the given str.
