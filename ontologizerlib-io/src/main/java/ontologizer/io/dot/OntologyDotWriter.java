@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import ontologizer.ontology.Ontology;
 import ontologizer.ontology.RelationMeaning;
+import ontologizer.ontology.RelationType;
 import ontologizer.ontology.TermID;
 import ontologizer.util.VersionInfo;
 
@@ -137,20 +138,12 @@ public class OntologyDotWriter
 							String relationName;
 							String label;
 
-							RelationMeaning rel = graph.getDirectRelation(src, dest).meaning();
+							RelationType relType = graph.getDirectRelation(src, dest);
+							RelationMeaning relMeaning = relType.meaning();
 
-							/* TODO: Use fancy name from RelationType */
-							switch (rel)
-							{
-								case	IS_A: relationName = "is a"; break;
-								case	PART_OF_A: relationName = "is part of"; break;
-								case	REGULATES: relationName = "regulates"; break;
-								case	POSITIVELY_REGULATES: relationName = "positively regulates"; break;
-								case	NEGATIVELY_REGULATES: relationName = "negatively regulates"; break;
-								default: relationName = "";
-							}
+							relationName = relType.fancyName().toString();
 
-							switch (rel)
+							switch (relMeaning)
 							{
 								case	IS_A: color = "black"; break;
 								case	PART_OF_A: color = "blue"; break;
