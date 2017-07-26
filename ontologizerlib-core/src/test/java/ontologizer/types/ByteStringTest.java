@@ -88,7 +88,7 @@ public class ByteStringTest
 		Assert.assertEquals("str1", split[0].toString());
 		Assert.assertEquals("", split[1].toString());
 		Assert.assertEquals("str3", split[2].toString());
-}
+	}
 
 	@Test
 	public void testReplace()
