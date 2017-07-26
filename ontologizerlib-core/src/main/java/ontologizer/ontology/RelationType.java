@@ -19,6 +19,7 @@ public final class RelationType implements Serializable
 	public static final RelationType UNKNOWN = new RelationType(b("unknown"), RelationMeaning.UNKOWN);
 
 	private final ByteString name;
+	private final ByteString fancyName;
 	private final RelationMeaning meaning;
 
 	/** The type of relation propagates along its destination/object */
@@ -34,6 +35,7 @@ public final class RelationType implements Serializable
 	public RelationType(ByteString name, RelationMeaning meaning)
 	{
 		this.name = name;
+		this.fancyName = name.replace('_',' ');
 		this.meaning = meaning;
 		switch (meaning)
 		{
@@ -59,6 +61,14 @@ public final class RelationType implements Serializable
 	public ByteString name()
 	{
 		return name;
+	}
+
+	/**
+	 * @return the fancy, i.e., user-showable name of the relation.
+	 */
+	public ByteString fancyName()
+	{
+		return fancyName;
 	}
 
 	/**
