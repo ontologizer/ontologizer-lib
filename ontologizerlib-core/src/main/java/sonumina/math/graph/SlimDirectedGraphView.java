@@ -16,11 +16,11 @@ import sonumina.collections.Map;
  *
  * @author Sebastian Bauer, Sebastian Koehler
  */
-public final class SlimDirectedGraphView<VertexType> implements Serializable
+public final class SlimDirectedGraphView<V> implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 
-	private IntMapper<VertexType> mapper;
+	private IntMapper<V> mapper;
 
 	/** Contains all the ancestors of the terms (and the terms itself).
 	 * Note that the array of ancestors is sorted. */
@@ -57,7 +57,7 @@ public final class SlimDirectedGraphView<VertexType> implements Serializable
 	 * @param index
 	 * @return the vertex
 	 */
-	public VertexType getVertex(int index)
+	public V getVertex(int index)
 	{
 		return mapper.get(index);
 	}
@@ -68,7 +68,7 @@ public final class SlimDirectedGraphView<VertexType> implements Serializable
 	 * @param v
 	 * @return the index
 	 */
-	public int getVertexIndex(VertexType v)
+	public int getVertexIndex(V v)
 	{
 		return mapper.getIndex(v);
 	}
@@ -80,13 +80,13 @@ public final class SlimDirectedGraphView<VertexType> implements Serializable
 	 * @param vertices
 	 * @return the array of indices
 	 */
-	public int [] getVertexIndices(Collection<VertexType> vertices)
+	public int [] getVertexIndices(Collection<V> vertices)
 	{
 		int i;
 		int [] vertexArray = new int[vertices.size()];
 
 		i = 0;
-		for (VertexType v : vertices)
+		for (V v : vertices)
 			vertexArray[i++] = mapper.getIndex(v);
 
 		return vertexArray;
@@ -133,7 +133,7 @@ public final class SlimDirectedGraphView<VertexType> implements Serializable
 	 * @return true if the node i is an ancestor
 	 * of the node j, otherwise false.
 	 */
-	public boolean isAncestor(VertexType i, VertexType j){
+	public boolean isAncestor(V i, V j){
 
 		/* Check that both nodes are present in graph */
 		if ( (! isVertexInGraph(i)) || (! isVertexInGraph(j)))
@@ -153,7 +153,7 @@ public final class SlimDirectedGraphView<VertexType> implements Serializable
 	 * @return true if the node i is a descendant
 	 * of the node j, otherwise false.
 	 */
-	public boolean isDescendant(VertexType i, VertexType j){
+	public boolean isDescendant(V i, V j){
 
 		/* Check that both nodes are present in graph */
 		if ( (! isVertexInGraph(i)) || (! isVertexInGraph(j)))
@@ -171,7 +171,7 @@ public final class SlimDirectedGraphView<VertexType> implements Serializable
 	 * @return null if the given vertex was not found in the graph, otherwise an ArrayList of vertices
 	 * that are descendants of the given vertex.
 	 */
-	public ArrayList<VertexType> getDescendants(VertexType t){
+	public ArrayList<V> getDescendants(V t){
 
 		/* check that this vertex is found in the graph */
 		if ( ! isVertexInGraph(t)){
@@ -184,11 +184,11 @@ public final class SlimDirectedGraphView<VertexType> implements Serializable
 		int[] descendantIndices					= vertexDescendants[indexOfTerm];
 
 		/* init the return list of vertex-objects */
-		ArrayList<VertexType> descendantObjects = new ArrayList<VertexType>(descendantIndices.length);
+		ArrayList<V> descendantObjects = new ArrayList<V>(descendantIndices.length);
 
 		/* convert each descendant-index to an vertex object */
 		for (int descendantIdx : descendantIndices){
-			VertexType descendantVertex = getVertex(descendantIdx);
+			V descendantVertex = getVertex(descendantIdx);
 			descendantObjects.add(descendantVertex);
 		}
 		return descendantObjects;
@@ -201,7 +201,7 @@ public final class SlimDirectedGraphView<VertexType> implements Serializable
 	 * @return null if the given vertex was not found in the graph, otherwise an ArrayList of vertices
 	 * that are ancestors of the given vertex.
 	 */
-	public ArrayList<VertexType> getAncestors(VertexType t){
+	public ArrayList<V> getAncestors(V t){
 
 		/* get the index of the vertex */
 		int indexOfTerm 							= getVertexIndex(t);
@@ -209,11 +209,11 @@ public final class SlimDirectedGraphView<VertexType> implements Serializable
 		int[] ancestorIndices					= vertexAncestors[indexOfTerm];
 
 		/* init the return list of vertex-objects */
-		ArrayList<VertexType> ancestorObjects 	= new ArrayList<VertexType>(ancestorIndices.length);
+		ArrayList<V> ancestorObjects 	= new ArrayList<V>(ancestorIndices.length);
 
 		/* convert each ancestor-index to an vertex object */
 		for (int ancestorIdx : ancestorIndices){
-			VertexType ancestorVertex = getVertex(ancestorIdx);
+			V ancestorVertex = getVertex(ancestorIdx);
 			ancestorObjects.add(ancestorVertex);
 		}
 		return ancestorObjects;
@@ -224,12 +224,12 @@ public final class SlimDirectedGraphView<VertexType> implements Serializable
 	 * @param The vertex to be searched.
 	 * @return True if the vertex can be found. False if not.
 	 */
-	private boolean isVertexInGraph(VertexType vertex){
+	private boolean isVertexInGraph(V vertex){
 		return mapper.getIndex(vertex) != -1;
 	}
 
 
-	public ArrayList<VertexType> getParents(VertexType t){
+	public ArrayList<V> getParents(V t){
 
 		/* get the index of the vertex */
 		int indexOfTerm 							= getVertexIndex(t);
@@ -237,17 +237,17 @@ public final class SlimDirectedGraphView<VertexType> implements Serializable
 		int[] parentIndices						= vertexParents[indexOfTerm];
 
 		/* init the return list of vertex-objects */
-		ArrayList<VertexType> parentObjects = new ArrayList<VertexType>(parentIndices.length);
+		ArrayList<V> parentObjects = new ArrayList<V>(parentIndices.length);
 
 		/* convert each parent-index to an vertex object */
 		for (int parentIdx : parentIndices){
-			VertexType parentVertex = getVertex(parentIdx);
+			V parentVertex = getVertex(parentIdx);
 			parentObjects.add(parentVertex);
 		}
 		return parentObjects;
 	}
 
-	public ArrayList<VertexType> getChildren(VertexType t){
+	public ArrayList<V> getChildren(V t){
 
 		/* get the index of the vertex */
 		int indexOfTerm 							= getVertexIndex(t);
@@ -255,11 +255,11 @@ public final class SlimDirectedGraphView<VertexType> implements Serializable
 		int[] childrenIndices					= vertexChildren[indexOfTerm];
 
 		/* init the return list of vertex-objects */
-		ArrayList<VertexType> childrenObjects 	= new ArrayList<VertexType>(childrenIndices.length);
+		ArrayList<V> childrenObjects 	= new ArrayList<V>(childrenIndices.length);
 
 		/* convert each child-index to an vertex object */
 		for (int childIdx : childrenIndices){
-			VertexType childVertex = getVertex(childIdx);
+			V childVertex = getVertex(childIdx);
 			childrenObjects.add(childVertex);
 		}
 		return childrenObjects;
