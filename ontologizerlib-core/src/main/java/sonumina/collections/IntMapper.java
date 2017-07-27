@@ -1,7 +1,9 @@
 package sonumina.collections;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Simple class that holds an int mapping for objects of the same type.
@@ -76,6 +78,22 @@ public final class IntMapper<T> implements Serializable
 	public T get(int i)
 	{
 		return (T)item[i];
+	}
+
+	/**
+	 * Return a list of objects corresponding to the given index.
+	 *
+	 * @param indices
+	 * @return a list of objects
+	 */
+	public List<T> get(int [] indices)
+	{
+		List<T> l = new ArrayList<T>(indices.length);
+		for (int i=0; i < indices.length; i++)
+		{
+			l.add(get(i));
+		}
+		return l;
 	}
 
 	/**
