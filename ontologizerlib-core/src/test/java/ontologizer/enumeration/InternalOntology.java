@@ -5,6 +5,7 @@ import static ontologizer.types.ByteString.EMPTY;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import ontologizer.association.AnnotationContext;
@@ -31,6 +32,7 @@ public class InternalOntology
 {
 	public Ontology graph;
 	public AssociationContainer assoc;
+	public List<Association> assocList;
 
 	/** Maps each item to a synonym */
 	public Map<ByteString,ByteString> synonymMap = new HashMap<ByteString,ByteString>();
@@ -108,6 +110,7 @@ public class InternalOntology
 
 		AnnotationContext ac = new AnnotationContext(synonymMap.keySet(), synonym2Item, new HashMap<ByteString,ByteString>());
 		assoc = new AssociationContainer(associations, ac);
+		assocList = associations;
 	}
 }
 
