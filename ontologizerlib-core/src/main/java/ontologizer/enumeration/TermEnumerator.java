@@ -161,6 +161,9 @@ public class TermEnumerator implements Iterable<TermID>
 			if (!graph.isRelevantTermID(termID))
 				continue;
 
+			if (!graph.termExists(termID))
+				continue;
+
 			if (evidences != null)
 			{
 				if (!evidences.contains(association.getEvidence()))
