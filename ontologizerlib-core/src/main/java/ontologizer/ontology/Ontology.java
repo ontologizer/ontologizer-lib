@@ -375,11 +375,7 @@ public class Ontology implements Iterable<Term>, IDirectedGraph<TermID>, Seriali
 		if (rootTerm.getID().id == goTermID.id)
 			return terms;
 
-		Term goTerm;
-		if (goTermID.equals(rootTerm.getIDAsString()))
-			goTerm = rootTerm;
-		else
-			goTerm = termContainer.get(goTermID);
+		Term goTerm = termContainer.get(goTermID);
 
 		Iterator<Edge<TermID,RelationType>> edgeIter = graph.getInEdges(goTerm.getID());
 		while (edgeIter.hasNext())
