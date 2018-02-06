@@ -71,9 +71,8 @@ public class AssociationResolver
 				currentTerm = terms.get(altID);
 			if (altID == null || currentTerm == null)
 			{
-				logger.log(Level.WARNING, "Skipping association of the item \"{}\" to {} because the term was not found! "
-						+ "Are the OBO file and the association file both up-to-date?",
-						new Object[] { assoc.getObjectSymbol(), currentTermID });
+				logger.log(Level.WARNING, "Skipping association of the item \"" + assoc.getObjectSymbol() + "\" to " + currentTermID + " because the term was not found! "
+						+ "Are the OBO file and the association file both up-to-date?");
 				unknown++;
 				return null;
 			} else
@@ -91,7 +90,7 @@ public class AssociationResolver
 
 		if (currentTerm.isObsolete())
 		{
-			logger.log(Level.WARNING, "Skipping association of the item \"{}\" to {} because the term is obsolete! "
+			logger.log(Level.WARNING, "Skipping association of the item \"" + assoc.getObjectSymbol() + "\" to " + currentTermID + " because the term is obsolete! "
 					+ "Are the OBO file and the association file both up-to-date?",
 					new Object[] { assoc.getObjectSymbol(), currentTermID });
 			obsolete++;
