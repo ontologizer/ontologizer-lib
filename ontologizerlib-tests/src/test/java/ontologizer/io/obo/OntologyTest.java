@@ -259,16 +259,16 @@ public class OntologyTest
 		assertEquals(5, slim.getNumberOfTerms());
 
 		Set<String> expectedTerms = new HashSet<String>(Arrays.asList("GO:0000002","GO:0000003"));
-		assertEquals(expectedTerms, termNames(slim.getTermChildren(new TermID("GO:0000001"))));
+		assertEquals(expectedTerms, termNames(slim.getTermChildren(tid("GO:0000001"))));
 
 		expectedTerms = new HashSet<String>(Arrays.asList("GO:0000007"));
-		assertEquals(expectedTerms, termNames(slim.getTermChildren(new TermID("GO:0000002"))));
+		assertEquals(expectedTerms, termNames(slim.getTermChildren(tid("GO:0000002"))));
 
 		expectedTerms = new HashSet<String>(Arrays.asList("GO:0000007"));
-		assertEquals(expectedTerms, termNames(slim.getTermChildren(new TermID("GO:0000003"))));
+		assertEquals(expectedTerms, termNames(slim.getTermChildren(tid("GO:0000003"))));
 
 		expectedTerms = new HashSet<String>(Arrays.asList("GO:0000010"));
-		assertEquals(expectedTerms, termNames(slim.getTermChildren(new TermID("GO:0000007"))));
+		assertEquals(expectedTerms, termNames(slim.getTermChildren(tid("GO:0000007"))));
 	}
 
 	private static <T> Set<T> set(Iterable<T> iterable)
