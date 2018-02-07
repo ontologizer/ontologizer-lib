@@ -1014,7 +1014,7 @@ public class DirectedGraph<V,ED> extends AbstractGraph<V> implements Iterable<V>
 		boolean reducedInIteration;
 
 
-		/* Here we also want to ensure that no redunancies are included */
+		/* Here we also want to ensure that no redundancies are included */
 
 		do
 		{
