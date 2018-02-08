@@ -236,29 +236,37 @@ public final class ByteString implements Serializable
 	{
 		if (obj instanceof ByteString)
 		{
-			ByteString bStr = (ByteString) obj;
-			if (bStr.bytes.length != bytes.length)
-				return false;
-			for (int i=0;i<bytes.length;i++)
-			{
-				if (bytes[i] != bStr.bytes[i])
-					return false;
-			}
-			return true;
+			return equals((ByteString)obj);
 		}
 		if (obj instanceof String)
 		{
-			String str = (String)obj;
-			if (str.length() != bytes.length)
-				return false;
-			for (int i=0;i<bytes.length;i++)
-			{
-				if (str.charAt(i) != bytes[i])
-					return false;
-			}
-			return true;
+			return equals((String)obj);
 		}
 		return super.equals(obj);
+	}
+
+	public boolean equals(ByteString bStr)
+	{
+		if (bStr.bytes.length != bytes.length)
+			return false;
+		for (int i=0;i<bytes.length;i++)
+		{
+			if (bytes[i] != bStr.bytes[i])
+				return false;
+		}
+		return true;
+	}
+
+	public boolean equals(String str)
+	{
+		if (str.length() != bytes.length)
+			return false;
+		for (int i=0;i<bytes.length;i++)
+		{
+			if (str.charAt(i) != bytes[i])
+				return false;
+		}
+		return true;
 	}
 
 	@Override
