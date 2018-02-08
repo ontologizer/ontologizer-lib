@@ -258,7 +258,7 @@ public final class ByteString implements Serializable
 			}
 			return true;
 		}
-		return equals(obj);
+		return super.equals(obj);
 	}
 
 	@Override
