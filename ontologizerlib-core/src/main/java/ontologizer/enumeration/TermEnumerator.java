@@ -158,9 +158,6 @@ public class TermEnumerator implements Iterable<TermID>
 		{
 			TermID termID = association.getTermID();
 
-			if (!graph.isRelevantTermID(termID))
-				continue;
-
 			if (!graph.termExists(termID))
 				continue;
 
@@ -205,17 +202,14 @@ public class TermEnumerator implements Iterable<TermID>
 
 			public boolean visited(TermID tid)
 			{
-				if (graph.isRelevantTermID(tid))
-				{
-					TermAnnotations termGenes = map.get(tid);
+				TermAnnotations termGenes = map.get(tid);
 
-					if (termGenes == null)
-					{
-						termGenes = new TermAnnotations();
-						map.put(tid,termGenes);
-					}
-					termGenes.totalAnnotated.add(geneName);
+				if (termGenes == null)
+				{
+					termGenes = new TermAnnotations();
+					map.put(tid,termGenes);
 				}
+				termGenes.totalAnnotated.add(geneName);
 				return true;
 			}
 		};
