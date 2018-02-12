@@ -139,6 +139,10 @@ public class OntologyDotWriter
 							String label;
 
 							RelationType relType = graph.getDirectRelation(src, dest);
+							if (relType == null)
+							{
+								relType = RelationType.UNKNOWN;
+							}
 							RelationMeaning relMeaning = relType.meaning();
 
 							relationName = relType.fancyName().toString();
