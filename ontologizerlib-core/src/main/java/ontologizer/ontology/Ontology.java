@@ -1133,6 +1133,23 @@ public class Ontology implements Iterable<Term>, IDirectedGraph<TermID>, Seriali
 	}
 
 	/**
+	 * From a given list of terms return those that are relevant.
+	 *
+	 * @param list
+	 * @return list of relevant terms.
+	 */
+	public List<TermID> filterRelevant(List<TermID> list)
+	{
+		List<TermID> relevantList = new ArrayList<TermID>();
+		for (TermID id : list)
+		{
+			if (isRelevantTermID(id))
+				relevantList.add(id);
+		}
+		return relevantList;
+	}
+
+	/**
 	 * Returns a redundant relation to this term.
 	 *
 	 * @param t term to check
