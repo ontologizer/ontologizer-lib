@@ -38,6 +38,18 @@ public final class IntMapper<T> implements Serializable
 		}
 	}
 
+	private IntMapper(T[] array)
+	{
+		item = new Object[array.length];
+		item2Index = new ObjectIntHashMap<T>(array.length);
+
+		for (int i=0; i < array.length; i++)
+		{
+			item[i] = array[i];
+			item2Index.put(array[i], i);
+		}
+	}
+
 	private <K> IntMapper(Iterable<K> iterable, int size, Map<K,T> map)
 	{
 		item = new Object[size];
@@ -155,6 +167,18 @@ public final class IntMapper<T> implements Serializable
 	public static <T> IntMapper<T> create(Iterable<T> iterable, int size)
 	{
 		return new IntMapper<T>(iterable, size);
+	}
+
+	/**
+	 * Create a new intmap from the given array. It is assumed that array
+	 * doesn't contain any duplicates.
+	 *
+	 * @param array
+	 * @return the created intmap.
+	 */
+	public static <T> IntMapper<T> create(T[] array)
+	{
+		return new IntMapper<T>(array);
 	}
 
 	/**
