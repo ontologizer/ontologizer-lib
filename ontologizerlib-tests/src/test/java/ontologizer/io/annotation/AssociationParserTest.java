@@ -343,4 +343,19 @@ public class AssociationParserTest extends TestBase
 		AssociationParser ap = new AssociationParser(new ParserFileInput(idsFile),new TermContainer(oboParser.getTermMap(), EMPTY, EMPTY));
 		assertEquals(21,ap.getAssociations().size());
 	}
+
+	///
+	/// S000007287\tGO:0005763,GO:0032543,GO:0042255,GO:0003735,GO:0032543,GO:0005762,GO:0003735,GO:0003735,GO:0042255
+	/// S000004660\tGO:0005739,GO:0006810,GO:0005743,GO:0016020,GO:0055085,GO:0005488
+	/// S000004660\tGO:0006810,GO:0005471,GO:0016021,GO:0006783,GO:0005743,GO:0005743
+	///
+	@Test
+	public void testIDSWithoutTermMap() throws IOException, OBOParserException
+	{
+		String idsFile = getTestCommentAsPath(".ids", TestSourceUtils.DECODE_TABS);
+
+		AssociationParser ap = new AssociationParser(new ParserFileInput(idsFile));
+		assertEquals(21,ap.getAssociations().size());
+	}
+
 }

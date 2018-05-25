@@ -292,7 +292,8 @@ public class AssociationParser
 						tid = new TermID(TermID.DEFAULT_PREFIX,id);
 					}
 
-					if (terms.get(tid) != null)
+					/* Accept only if parser is dumb (doesn't know about any terms) or if the term is known */
+					if (terms == null || terms.get(tid) != null)
 					{
 						Association assoc = new Association(new ByteString(fields[0]),tid.toString());
 						associations.add(assoc);
