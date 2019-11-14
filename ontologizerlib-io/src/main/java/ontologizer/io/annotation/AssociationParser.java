@@ -288,8 +288,15 @@ public class AssociationParser
 						tid = new TermID(annotatedTerms[i]);
 					} catch (IllegalArgumentException ex)
 					{
-						int id = new Integer(annotatedTerms[i]);
-						tid = new TermID(TermID.DEFAULT_PREFIX,id);
+						try
+						{
+							int id = new Integer(annotatedTerms[i]);
+							tid = new TermID(TermID.DEFAULT_PREFIX,id);
+						} catch (NumberFormatException e)
+						{
+							/* Ignore this faulty line */
+							continue;
+						}
 					}
 
 					/* Accept only if parser is dumb (doesn't know about any terms) or if the term is known */
